@@ -1,0 +1,11 @@
+{
+  "animations": [
+    {
+      "id": "animation",
+      "path": "animations/animation.json"
+    }
+  ],
+  "author": "MascotAnimator",
+  "version": "1.0",
+  "generator": "ativos_imagens"
+}

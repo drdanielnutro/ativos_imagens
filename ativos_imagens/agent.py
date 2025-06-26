@@ -529,19 +529,20 @@ def _create_mascot_animation_asset(asset_id: str, spec: dict, manager: AssetMana
 
         os.makedirs(target_path.parent, exist_ok=True)
 
-        result_path = animator.create_mascot_animation(
+        result_path = animator.create_mascot_animation_v2(
             prompt_details=prompt_details_png,
             animation_prompt=animation_prompt,
-            output_path=str(target_path)
+            output_path=str(target_path),
+            output_format="lottie"  # Usar formato .lottie por padrão
         )
         
-        file_size = os.path.getsize(target_path) / 1024
+        file_size = os.path.getsize(result_path) / 1024
 
         return f"""✅ Animação do mascote criada com sucesso!
 
 🆔 **ID:** {asset_id}
-📁 **Arquivo:** {spec.get('filename')}
-📂 **Local:** {target_path}
+📁 **Arquivo:** {os.path.basename(result_path)}
+📂 **Local:** {result_path}
 📊 **Tamanho:** {file_size:.1f} KB
 📝 **Descrição:** {spec.get('description')}
 🎬 **Prompt de Animação:** {animation_prompt}
