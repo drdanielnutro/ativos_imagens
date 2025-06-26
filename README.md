@@ -1,83 +1,83 @@
-# Projeto: Criador de Agentes de IA (Fábrica de Agentes)
+# README.md
 
-Este repositório é um sistema para a geração automática de agentes de IA utilizando o Google Agent Development Kit (ADK). Ele funciona como uma "fábrica" que traduz documentos de especificação em projetos de agentes Python completos e funcionais.
+# Projeto: Gerador Automatizado de Assets Digitais
 
-## Objetivo Principal
+Este projeto implementa um **Agente Único com Ferramentas** usando o Google Agent Development Kit (ADK).
 
-O objetivo é acelerar e padronizar o desenvolvimento de agentes de IA, permitindo que o foco seja na **especificação do problema** (o *o quê*), enquanto o sistema automatiza a **implementação do código** (o *como*).
+## Descrição
 
-## Como Funciona
+Sistema de geração automatizada de assets digitais (imagens PNG, vetores SVG, áudio MP3 e animações Lottie) para aplicações infantis. O agente atua como um "Diretor de Produção" orquestrando ferramentas especializadas de IA e processamento programático para criar recursos visuais e sonoros de alta qualidade com consistência garantida.
 
-O fluxo de trabalho é centrado em um agente mestre, o **"Engenheiro de Agentes de IA"**, cujas instruções estão detalhadas no arquivo `CLAUDE.md`. Este engenheiro executa o seguinte processo:
+## Configuração
 
-1.  **Análise da Arquitetura:** Ele lê o arquivo `docs/definicoes/documento_identificador_arquitetura.md` para determinar a estrutura de alto nível do agente a ser criado (por exemplo, um Agente Único com Ferramentas ou um Sistema Multiagente).
+1.  **Crie e ative um ambiente virtual Python:**
+    ```bash
+    python -m venv .venv
+    # No macOS/Linux
+    source .venv/bin/activate
+    # No Windows (CMD)
+    # .venv\Scripts\activate.bat
+    ```
 
-2.  **Análise da Implementação:** Em seguida, ele lê o `docs/definicoes/pipeline_completo.md` para extrair todos os detalhes técnicos necessários: as ferramentas a serem implementadas, os prompts específicos, a lógica do fluxo de trabalho e outras configurações.
+2.  **Instale as dependências:**
+    ```bash
+    pip install google-adk
+    ```
 
-3.  **Geração do Código:** Com base nas duas análises, o Engenheiro de IA gera um projeto de agente completo, incluindo a estrutura de pastas, o código Python, um arquivo `.env` de modelo e um `README.md` específico para o agente recém-criado.
+3.  **Configure sua chave de API:**
+    *   Abra o arquivo `.env` e substitua `SUA_CHAVE_API_AQUI` pela sua chave de API do Google Gemini.
+    *   Para obter uma chave, acesse: https://makersuite.google.com/app/apikey
 
-## Como Utilizar este Repositório
+## Execução
 
-Para criar um novo agente:
+1.  **Inicie o servidor de desenvolvimento do ADK:**
+    *   A partir do diretório raiz do projeto (que contém a pasta `ativos_imagens/`), execute:
+    ```bash
+    adk web
+    ```
 
-1.  **Defina seu Projeto:** Navegue até o diretório `docs/definicoes/`.
-2.  **Escreva as Especificações:** Edite os dois arquivos-chave:
-    *   `documento_identificador_arquitetura.md`: Descreva a arquitetura desejada.
-    *   `pipeline_completo.md`: Detalhe o plano de implementação completo.
-3.  **Execute o Engenheiro:** Utilize o "Engenheiro de Agentes de IA" (conforme definido em `CLAUDE.md`) para processar os arquivos de definição.
-4.  **Receba o Agente:** O sistema irá gerar um novo projeto de agente pronto para ser configurado e executado com o comando `adk web`.
+2.  **Interaja com o Agente:**
+    *   Abra a URL fornecida no terminal (geralmente `http://127.0.0.1:8000`) em seu navegador
+    *   No menu suspenso no canto superior esquerdo, selecione `ativos_imagens`
+    *   Comece a conversar com seu agente no chat
 
-## Estrutura de Arquivos Essenciais
+## Exemplo de Interação (Agente Mínimo)
 
--   `CLAUDE.md`: O "cérebro" do sistema. Contém a instrução de sistema que define o comportamento do Engenheiro de Agentes de IA.
--   `docs/definicoes/`: O "coração" de cada novo projeto. É aqui que as especificações do agente a ser construído são colocadas.
-    -   `documento_identificador_arquitetura.md`
-    -   `pipeline_completo.md`
+*   "Qual é o status do projeto?"
+*   "Olá! Você pode me informar sobre o sistema?"
 
 ## Estrutura do Projeto
 
 ```
 ativos_imagens/
-├── docs/
-│   ├── definicoes/
-│   │   └── documento_identificador_arquitetura.md
-│   └── deep_research/
-│       └── deep_research_ideia/
-│           └── gerando_ativos_rapidamente.md
-└── CLAUDE.md
+├── .env                    # Configuração da API (não commitado)
+├── README.md              # Este arquivo
+└── ativos_imagens/        # Pacote do agente
+    ├── __init__.py        # Inicializador do pacote
+    └── agent.py           # Agente principal e ferramentas
 ```
 
-## Documentação Principal
+## Status Atual
 
-### CLAUDE.md
-Contém as instruções do sistema para o Engenheiro de Agentes de IA, incluindo:
-- Protocolos de construção para Agente Único com Ferramentas (AUF)
-- Protocolos de construção para Sistema Multiagente (SMA)
-- Diretrizes de desenvolvimento usando Google Agent Development Kit (ADK)
+Este é um **agente mínimo de teste** com apenas uma ferramenta de demonstração (`get_project_status`). As ferramentas completas do pipeline serão adicionadas após a validação desta estrutura base:
 
-### Documento de Estratégia de Geração de Ativos
-Em `docs/deep_research/deep_research_ideia/gerando_ativos_rapidamente.md`:
-- Pipeline de produção "Vector-First" para criação rápida de ativos
-- Estratégias de animação com movimento impulsionado por predefinições
-- Matrizes de prompts para geração via IA
-- Fluxos de trabalho de pós-produção automatizados
+- [ ] Ferramenta de Geração de Imagens PNG (mascote PROF e sprites)
+- [ ] Ferramenta de Geração Vetorial SVG (ícones e padrões)
+- [ ] Ferramenta de Geração de Áudio MP3 (efeitos sonoros)
+- [ ] Ferramenta de Geração de Animações Lottie (IA-vetorizada e programática)
 
-## Objetivo do Projeto
+## Próximos Passos
 
-Criar um sistema completo de geração de ativos digitais priorizando:
-- **Velocidade** acima da perfeição
-- **Automação** via ferramentas de IA
-- **Consistência** visual e técnica
-- **Escalabilidade** para produção em massa
+1. Testar o agente mínimo para validar a estrutura
+2. Implementar as ferramentas específicas do pipeline
+3. Adicionar lógica de orquestração para executar o pipeline completo
+4. Implementar tratamento de erros e logging
+5. Otimizar para produção
 
-## Tecnologias e Ferramentas
+## Troubleshooting
 
-- **Geração de Vetores**: Recraft, SVG.io, MagicShot.ai
-- **Geração de Imagens**: Leonardo.ai, getimg.ai
-- **Animações**: LottieFiles, conversores SVG-para-Lottie
-- **Áudio**: ElevenLabs, MyEdit
-- **Otimização**: FFmpeg, pngquant, SVGO
-
-## Licença
-
-Este projeto está sob desenvolvimento. Direitos reservados.
+Se encontrar problemas:
+- Verifique se a chave API está corretamente configurada no `.env`
+- Certifique-se de que o ambiente virtual está ativado
+- Confirme que está executando `adk web` no diretório correto
+- Verifique os logs do terminal para mensagens de erro detalhadas

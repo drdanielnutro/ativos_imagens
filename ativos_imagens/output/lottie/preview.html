@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Animações Lottie</title>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .animations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .animation-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .animation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .animation-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .player-container {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            margin-bottom: 15px;
+        }
+        
+        lottie-player {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        button.secondary {
+            background: #2196F3;
+        }
+        
+        button.secondary:hover {
+            background: #1976D2;
+        }
+        
+        .info {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .error {
+            color: #f44336;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .background-selector {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .bg-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .bg-option:hover {
+            border-color: #333;
+        }
+        
+        .bg-option.active {
+            border-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎨 Visualizador de Animações Lottie</h1>
+        <p class="subtitle">Animações geradas programaticamente para aplicação infantil</p>
+        <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <p style="color: #856404; font-size: 14px; margin: 0;">
+                ⚠️ <strong>Importante:</strong> Para visualizar as animações, execute um servidor HTTP local:<br>
+                <code style="background: #ffeaa7; padding: 2px 6px; border-radius: 3px;">python -m http.server 8000</code><br>
+                Depois acesse: <a href="http://localhost:8000/preview.html" style="color: #856404;">http://localhost:8000/preview.html</a>
+            </p>
+        </div>
+    </div>
+    
+    <div class="animations-grid" id="animationsGrid">
+        <!-- As animações serão carregadas dinamicamente -->
+    </div>
+    
+    <script>
+        // Lista de animações disponíveis
+        const animations = [
+            {
+                name: 'loading_spinner',
+                title: 'Loading Spinner',
+                description: 'Spinner circular animado com rotação contínua'
+            },
+            {
+                name: 'success_checkmark',
+                title: 'Success Checkmark',
+                description: 'Checkmark sendo desenhado com efeito bounce'
+            },
+            {
+                name: 'touch_ripple',
+                title: 'Touch Ripple',
+                description: 'Efeito de ondulação para feedback de toque'
+            }
+        ];
+        
+        // Cores de fundo disponíveis
+        const backgroundColors = ['#ffffff', '#f0f0f0', '#333333', '#4CAF50', '#2196F3'];
+        
+        // Função para criar um card de animação
+        function createAnimationCard(animation) {
+            const card = document.createElement('div');
+            card.className = 'animation-card';
+            
+            card.innerHTML = `
+                <h3 class="animation-title">${animation.title}</h3>
+                <div class="player-container" id="player-${animation.name}">
+                    <lottie-player
+                        id="lottie-${animation.name}"
+                        background="transparent"
+                        speed="1"
+                        loop
+                        autoplay
+                    ></lottie-player>
+                </div>
+                <div class="controls">
+                    <button onclick="playAnimation('${animation.name}')">▶️ Play</button>
+                    <button onclick="pauseAnimation('${animation.name}')" class="secondary">⏸️ Pause</button>
+                    <button onclick="restartAnimation('${animation.name}')" class="secondary">🔄 Restart</button>
+                </div>
+                <div class="background-selector" id="bg-${animation.name}">
+                    ${backgroundColors.map((color, index) => 
+                        `<div class="bg-option ${index === 0 ? 'active' : ''}" 
+                             style="background-color: ${color}" 
+                             onclick="changeBackground('${animation.name}', '${color}', this)">
+                        </div>`
+                    ).join('')}
+                </div>
+                <p class="info">
+                    <strong>${animation.name}.json</strong><br>
+                    ${animation.description}
+                </p>
+            `;
+            
+            return card;
+        }
+        
+        // Funções de controle
+        function getPlayer(animationName) {
+            const container = document.getElementById(`player-${animationName}`);
+            return container.querySelector('lottie-player');
+        }
+        
+        function playAnimation(animationName) {
+            const player = getPlayer(animationName);
+            if (player) player.play();
+        }
+        
+        function pauseAnimation(animationName) {
+            const player = getPlayer(animationName);
+            if (player) player.pause();
+        }
+        
+        function restartAnimation(animationName) {
+            const player = getPlayer(animationName);
+            if (player) {
+                player.stop();
+                player.play();
+            }
+        }
+        
+        function changeBackground(animationName, color, element) {
+            const container = document.getElementById(`player-${animationName}`);
+            container.style.backgroundColor = color;
+            
+            // Atualizar classe active
+            const bgSelector = document.getElementById(`bg-${animationName}`);
+            bgSelector.querySelectorAll('.bg-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+        
+        // Carregar todas as animações
+        function loadAnimations() {
+            const grid = document.getElementById('animationsGrid');
+            
+            animations.forEach(animation => {
+                const card = createAnimationCard(animation);
+                grid.appendChild(card);
+            });
+        }
+        
+        // Verificar se há erros no carregamento
+        window.addEventListener('error', function(e) {
+            if (e.target.tagName === 'LOTTIE-PLAYER') {
+                const container = e.target.parentElement;
+                container.innerHTML = '<p class="error">❌ Erro ao carregar animação</p>';
+            }
+        }, true);
+        
+        // Inicializar
+        loadAnimations();
+    </script>
+</body>
+</html>

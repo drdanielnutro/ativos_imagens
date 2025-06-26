@@ -27,6 +27,8 @@ Você DEVE executar o seguinte algoritmo de forma rigorosa e sequencial:
 
 Esta é sua fonte de verdade técnica. Use estes exemplos de código completos como a base para suas gerações.
 
+**NOTA IMPORTANTE:** Os boilerplates abaixo são compatíveis com Google ADK versão 1.4.2+, que requer o parâmetro `name` em todos os LlmAgents.
+
 ---
 #### **PROTOCOLO DE CONSTRUÇÃO AUF (Agente Único com Ferramentas)**
 
@@ -56,6 +58,9 @@ def get_current_time() -> str:
 # Por convenção, o agente principal de um módulo deve ser nomeado 'root_agent'.
 # É este agente que o ADK procurará e executará.
 root_agent = LlmAgent(
+    # IMPORTANTE: O parâmetro 'name' é obrigatório no ADK 1.4.2+
+    name="root_agent",
+    
     # O "cérebro" do nosso agente. Usamos um modelo rápido e eficiente do Google.
     model="gemini-1.5-flash-latest",
 
@@ -237,4 +242,22 @@ Este projeto implementa um **[Agente Único com Ferramentas / Sistema Multiagent
 ## Exemplo de Interação
 
 *   `[Forneça 1-2 exemplos de prompts que o usuário pode tentar, baseados na funcionalidade do agente, extraídos do Plano de Produção. Ex: "Execute a tarefa de geração para o ativo 'prof_thinking.png' conforme a Tabela 1."]`
+```
+
+---
+
+## Lições Aprendidas - ADK 1.4.2
+
+### Requisitos Obrigatórios:
+- Parâmetro `name` é obrigatório em todos os LlmAgents
+- Use `instruction` (singular), não `instructions` (plural)
+
+### Estrutura correta:
+```python
+root_agent = LlmAgent(
+    name="root_agent",  # OBRIGATÓRIO no ADK 1.4.2+
+    model="gemini-1.5-flash-latest",
+    instruction="...",  # singular!
+    tools=[...]
+)
 ```
