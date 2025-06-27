@@ -331,9 +331,9 @@ class MascotAnimator:
 
     def create_mascot_animation_v2(self, prompt_details: dict, animation_prompt: str, output_path: str, output_format: str = "lottie") -> str:
         """
-        Pipeline otimizado usando potrace diretamente para vetorização.
+        Pipeline otimizado usando lottie_convert.py com modo trace para vetorização.
         """
-        print(f"--- Iniciando Pipeline v2 de Animação Lottie para: {os.path.basename(output_path)} ---")
+        print(f"--- Iniciando Pipeline v2 de Animação Lottie (modo trace) para: {os.path.basename(output_path)} ---")
 
         transparent_png_path = None
         video_path = None
@@ -354,25 +354,87 @@ class MascotAnimator:
                 if frame_count == 0:
                     raise RuntimeError("Nenhum frame foi extraído do vídeo.")
                 
-                # Etapa 4: Vetorizar frames (usando potrace diretamente)
-                svg_dir = os.path.join(tmpdir, "svgs")
-                os.makedirs(svg_dir)
-                self._vectorize_frames(frames_dir, svg_dir, frame_count)
+                # Etapa 4: Usar lottie_convert.py com modo trace
+                print("INFO (MascotAnimator): Etapa 4 - Vetorizando com lottie_convert.py (modo trace)...")
                 
-                # Etapa 5: Compilar SVGs em um objeto Lottie
-                # Usamos 12 FPS, que é o target_fps de _extract_frames
-                animation = self._compile_lottie(svg_dir, frame_count, 12)
+                # Verificar disponibilidade do modo trace
+                lottie_convert_path = os.path.join(os.path.dirname(sys.executable), "lottie_convert.py")
+                check_cmd = [lottie_convert_path, "--help"]
+                check_result = subprocess.run(check_cmd, capture_output=True, text=True)
                 
-                # Etapa 6: Salvar arquivo JSON Lottie
-                exporters.export_lottie(animation, output_path)
+                if "trace" not in check_result.stdout:
+                    print("AVISO: Modo trace não disponível! Instalando lottie[trace]...")
+                    install_cmd = [sys.executable, "-m", "pip", "install", "lottie[trace]"]
+                    subprocess.run(install_cmd, check=True)
                 
-                # Etapa 7: Otimizar o JSON gerado
-                self._optimize_json(output_path)
+                # Coletar todos os frames
+                frame_files = []
+                for i in range(frame_count):
+                    frame_path = os.path.join(frames_dir, f"frame_{i:04d}.png")
+                    if os.path.exists(frame_path):
+                        frame_files.append(frame_path)
                 
-                # Etapa Final: Converter para formato .lottie se solicitado
+                if not frame_files:
+                    raise ValueError("Nenhum frame encontrado para processar")
+                
+                # Criar GIF temporário com todos os frames
+                temp_gif = os.path.join(tmpdir, "all_frames.gif")
+                print(f"INFO: Criando GIF temporário com {len(frame_files)} frames...")
+                
+                # Usar PIL para criar o GIF
+                pil_images = []
+                for frame_path in frame_files:
+                    img = Image.open(frame_path)
+                    pil_images.append(img)
+                
+                # Salvar como GIF animado
+                pil_images[0].save(
+                    temp_gif,
+                    save_all=True,
+                    append_images=pil_images[1:],
+                    duration=83,  # ~12 FPS (1000ms / 12fps = 83ms por frame)
+                    loop=0,
+                    optimize=False  # Não otimizar GIF, queremos qualidade máxima
+                )
+                
+                print(f"GIF criado: {temp_gif} ({os.path.getsize(temp_gif) / 1024:.1f} KB)")
+                
+                # Criar Lottie temporário
+                temp_lottie = os.path.join(tmpdir, "animation_temp.json")
+                
+                # Comando para converter GIF em Lottie com vetorização trace
+                cmd = [
+                    lottie_convert_path,         # Usar caminho completo
+                    temp_gif,                    # Entrada: GIF com todos os frames
+                    temp_lottie,                 # Saída: arquivo JSON Lottie
+                    "--input-format", "bmp",     # Formato de entrada (funciona para GIF também)
+                    "--output-format", "lottie", # Formato de saída
+                    "--bmp-mode", "trace",       # Modo trace com Potrace para vetorização suave
+                    "--bmp-n-colors", "8",       # Limitar paleta para 8 cores
+                    "--optimize", "2",           # Otimização máxima do JSON
+                ]
+                
+                print(f"Executando comando de vetorização com modo trace...")
+                print(f"Comando: {' '.join(cmd)}")
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                
+                if result.returncode != 0:
+                    print(f"ERRO: {result.stderr}")
+                    raise RuntimeError(f"Erro na vetorização: {result.stderr}")
+                
+                print("Vetorização com modo trace concluída com sucesso!")
+                
+                # Copiar para o destino
+                shutil.copy2(temp_lottie, output_path)
+                
+                # Log do tamanho
+                json_size = os.path.getsize(output_path) / 1024
+                print(f"Tamanho do JSON gerado: {json_size:.1f} KB")
+                
+                # Converter para formato .lottie se solicitado
                 if output_format == "lottie":
                     final_path = self._create_dotlottie(output_path)
-                    # Remover JSON original se a conversão foi bem-sucedida
+                    # Remover JSON original se conversão foi bem-sucedida
                     if final_path.endswith('.lottie') and os.path.exists(output_path):
                         os.remove(output_path)
                     print(f"--- Pipeline v2 concluído! Arquivo salvo em: {final_path} ---")
