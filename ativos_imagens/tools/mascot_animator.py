@@ -15,6 +15,9 @@ from lottie import exporters
 import replicate
 import requests
 
+import sys
+from PIL import Image
+
 # Importa a ImageGenerator para reutilizar a lógica de geração de PNG e remoção de fundo
 from .image_generator import ImageGenerator
 
@@ -207,23 +210,8 @@ class MascotAnimator:
             ], check=True, capture_output=True)
             
             # Otimizar SVG com SVGO
-            try:
-                svgo_cmd = [
-                    "svgo",
-                    svg_path,
-                    "-o", svg_path,
-                    "--config", '{"plugins":[{"name":"preset-default","params":{"overrides":{"removeViewBox":false}}}]}'
-                ]
-                
-                svgo_result = subprocess.run(svgo_cmd, capture_output=True, text=True)
-                
-                if svgo_result.returncode == 0:
-                    print(f"Frame {i} otimizado com SVGO")
-                else:
-                    print(f"Aviso: Não foi possível otimizar frame {i} com SVGO")
-                    
-            except Exception as e:
-                print(f"SVGO não disponível ou erro: {e}")
+            # Removido: A otimização principal de tamanho virá da compressão Lottie.
+            # Se necessário, SVGO pode ser reintroduzido como uma etapa separada e opcional.
             
         print("INFO (MascotAnimator): Vetorização de todos os frames concluída.")
 
@@ -240,11 +228,13 @@ class MascotAnimator:
             svg_path = os.path.join(svg_dir, f"frame_{i:04d}.svg")
             
             try:
-                layer = lottie_svg.parse_svg_file(svg_path)
-                layer.in_point = i
-                layer.out_point = i + 1
-                layer.ao = 0  # Auto-orient off para otimização
-                animation.add_layer(layer)
+                # parse_svg_file retorna um objeto Animation, precisamos de suas camadas
+                parsed_animation = lottie_svg.parse_svg_file(svg_path)
+                for layer in parsed_animation.layers:
+                    layer.in_point = i
+                    layer.out_point = i + 1
+                    layer.ao = 0  # Auto-orient off para otimização
+                    animation.add_layer(layer)
             except Exception as e:
                 print(f"AVISO: Erro ao processar frame {i}: {e}")
                 # Continua com os outros frames
@@ -253,86 +243,98 @@ class MascotAnimator:
         return animation
 
     def _optimize_json(self, json_path: str) -> str:
-        """Otimiza o arquivo JSON Lottie usando python-lottie."""
-        print("INFO (MascotAnimator): Otimizando JSON com python-lottie...")
-        
-        optimized_path = json_path.replace('.json', '_optimized.json')
-        
-        try:
-            cmd = [
-                "lottie_convert.py",
-                json_path,
-                optimized_path,
-                "--optimize", "2"
-            ]
-            
-            result = subprocess.run(cmd, capture_output=True, text=True)
-            
-            if result.returncode == 0:
-                # Substituir arquivo original pelo otimizado
-                os.replace(optimized_path, json_path)
-                print("JSON otimizado com sucesso")
-                return json_path
-            else:
-                print(f"Erro ao otimizar JSON: {result.stderr}")
-                return json_path
-                
-        except Exception as e:
-            print(f"Erro na otimização: {e}")
-            return json_path
+        """Otimiza o arquivo JSON Lottie. (Esta função agora é um no-op, a otimização principal é feita em _create_dotlottie)."""
+        print("INFO (MascotAnimator): Otimização de JSON com python-lottie não é mais necessária aqui. A otimização principal é feita na conversão para .lottie.")
+        return json_path
 
     def _create_dotlottie(self, json_path: str) -> str:
-        """Converte JSON para formato .lottie (ZIP comprimido)."""
-        print("INFO (MascotAnimator): Convertendo para formato .lottie...")
+        """
+        Converte JSON para formato .lottie (ZIP comprimido) com otimizações máximas.
         
+        Args:
+            json_path: Caminho do arquivo JSON Lottie
+            
+        Returns:
+            Caminho do arquivo .lottie criado
+        """
+        print("INFO (MascotAnimator): Iniciando conversão para formato .lottie...")
+
         lottie_path = json_path.replace('.json', '.lottie')
-        
+
         try:
-            # Ler o JSON
+            # Passo 1: Ler e minificar o JSON
+            print("  - Lendo e minificando JSON...")
             with open(json_path, 'r') as f:
-                animation_data = f.read()
-            
-            # Criar arquivo .lottie (ZIP)
-            with zipfile.ZipFile(lottie_path, 'w', zipfile.ZIP_DEFLATED) as zf:
-                # Criar manifest
-                manifest = {
-                    "animations": [{
-                        "id": "animation",
-                        "path": "animations/animation.json"
-                    }],
-                    "author": "MascotAnimator",
-                    "version": "1.0",
-                    "generator": "ativos_imagens"
-                }
-                
-                # Adicionar manifest
-                zf.writestr('manifest.json', json.dumps(manifest, indent=2))
-                
-                # Adicionar animação
-                zf.writestr('animations/animation.json', animation_data)
-            
-            # Verificar tamanho
-            original_size = os.path.getsize(json_path) / 1024  # KB
-            compressed_size = os.path.getsize(lottie_path) / 1024  # KB
-            reduction = ((original_size - compressed_size) / original_size) * 100
-            
-            print(f"Arquivo .lottie criado: {lottie_path}")
-            print(f"Tamanho original: {original_size:.1f} KB")
-            print(f"Tamanho comprimido: {compressed_size:.1f} KB")
-            print(f"Redução: {reduction:.1f}%")
-            
+                animation_data = json.load(f)
+
+            minified_json = json.dumps(animation_data, separators=(',', ':'))
+
+            # Passo 2: Criar estrutura do dotLottie
+            print("  - Criando estrutura dotLottie...")
+            manifest = {
+                "animations": [{
+                    "id": "a",
+                    "path": "a.json"
+                }],
+                "version": "1.0"
+            }
+
+            # Passo 3: Criar arquivo ZIP com compressão máxima
+            print("  - Comprimindo com ZIP_DEFLATED nível 9...")
+            with zipfile.ZipFile(
+                lottie_path,
+                'w',
+                compression=zipfile.ZIP_DEFLATED,
+                compresslevel=9
+            ) as zf:
+                zf.writestr(
+                    'manifest.json',
+                    json.dumps(manifest, separators=(',', ':')),
+                    compress_type=zipfile.ZIP_DEFLATED
+                )
+                zf.writestr(
+                    'a.json',
+                    minified_json,
+                    compress_type=zipfile.ZIP_DEFLATED
+                )
+
+            # Passo 4: Análise detalhada de tamanhos
+            original_size = os.path.getsize(json_path)
+            compressed_size = os.path.getsize(lottie_path)
+
+            print(f"\n Análise de Compressão:")
+            print(f"  - JSON original: {original_size:,} bytes ({original_size/1024:.1f} KB)")
+            print(f"  - JSON minificado: {len(minified_json):,} bytes ({len(minified_json)/1024:.1f} KB)")
+            print(f"  - .lottie final: {compressed_size:,} bytes ({compressed_size/1024:.1f} KB)")
+
+            reduction_percent = ((original_size - compressed_size) / original_size) * 100
+            print(f"  - Redução total: {reduction_percent:.1f}%")
+
+            # Passo 5: Validação do objetivo
+            size_kb = compressed_size / 1024
+            if size_kb <= 100:
+                print(f"\n✅ SUCESSO: Arquivo .lottie com {size_kb:.1f} KB (< 100 KB)")
+            else:
+                print(f"\n⚠️ AVISO: Arquivo ainda grande: {size_kb:.1f} KB")
+                print("  Sugestões para reduzir mais:")
+                print("  - Diminuir --bmp-n-colors para 4 ou 2")
+                print("  - Reduzir número de frames")
+                print("  - Simplificar a animação")
+
             return lottie_path
-            
+
         except Exception as e:
-            print(f"Erro ao criar .lottie: {e}")
+            print(f"❌ ERRO ao criar .lottie: {str(e)}")
+            import traceback
+            traceback.print_exc()
             return json_path
 
     def create_mascot_animation_v2(self, prompt_details: dict, animation_prompt: str, output_path: str, output_format: str = "lottie") -> str:
         """
-        Pipeline otimizado usando lottie_convert.py diretamente para vetorização.
+        Pipeline otimizado usando potrace diretamente para vetorização.
         """
         print(f"--- Iniciando Pipeline v2 de Animação Lottie para: {os.path.basename(output_path)} ---")
-        
+
         transparent_png_path = None
         video_path = None
         
@@ -352,61 +354,31 @@ class MascotAnimator:
                 if frame_count == 0:
                     raise RuntimeError("Nenhum frame foi extraído do vídeo.")
                 
-                # Etapa 4: Vetorizar e criar Lottie diretamente com lottie_convert.py
-                print("INFO (MascotAnimator): Etapa 4 - Vetorizando frames e criando Lottie com lottie_convert.py...")
+                # Etapa 4: Vetorizar frames (usando potrace diretamente)
+                svg_dir = os.path.join(tmpdir, "svgs")
+                os.makedirs(svg_dir)
+                self._vectorize_frames(frames_dir, svg_dir, frame_count)
                 
-                # Coletar todos os frames
-                frame_files = []
-                for i in range(frame_count):
-                    frame_path = os.path.join(frames_dir, f"frame_{i:04d}.png")
-                    if os.path.exists(frame_path):
-                        frame_files.append(frame_path)
+                # Etapa 5: Compilar SVGs em um objeto Lottie
+                # Usamos 12 FPS, que é o target_fps de _extract_frames
+                animation = self._compile_lottie(svg_dir, frame_count, 12)
                 
-                if not frame_files:
-                    raise ValueError("Nenhum frame encontrado para processar")
+                # Etapa 6: Salvar arquivo JSON Lottie
+                exporters.export_lottie(animation, output_path)
                 
-                # Criar Lottie temporário
-                temp_lottie = os.path.join(tmpdir, "animation_temp.json")
+                # Etapa 7: Otimizar o JSON gerado
+                self._optimize_json(output_path)
                 
-                # Criar um arquivo de entrada dummy (lottie_convert.py precisa de um arquivo de entrada mesmo quando usando --bmp-frame-files)
-                dummy_input = os.path.join(tmpdir, "dummy.png")
-                shutil.copy2(frame_files[0], dummy_input)
-                
-                cmd = [
-                    "lottie_convert.py",
-                    dummy_input,                 # Arquivo de entrada
-                    temp_lottie,                 # Arquivo de saída
-                    "--input-format", "bmp",     # Especificar formato de entrada
-                    "--output-format", "lottie", # Especificar formato de saída
-                    "--bmp-mode", "polygon",     # Usar polygon (disponível) ao invés de trace
-                    "--bmp-n-colors", "8",      # Limitar cores para reduzir tamanho
-                    "--bmp-frame-files", *frame_files,  # Todos os frames
-                    "--optimize", "2",          # Otimização máxima
-                    "--fps", "12",              # 12 FPS
-                ]
-                
-                print(f"Executando comando de vetorização com {len(frame_files)} frames...")
-                result = subprocess.run(cmd, capture_output=True, text=True)
-                
-                if result.returncode != 0:
-                    print(f"ERRO: {result.stderr}")
-                    raise RuntimeError(f"Erro na vetorização: {result.stderr}")
-                
-                print("Vetorização e criação do Lottie concluídas com sucesso!")
-                
-                # Copiar para o destino
-                shutil.copy2(temp_lottie, output_path)
-                
-                # Converter para formato .lottie se solicitado
+                # Etapa Final: Converter para formato .lottie se solicitado
                 if output_format == "lottie":
                     final_path = self._create_dotlottie(output_path)
-                    # Remover JSON original se conversão foi bem-sucedida
-                    if final_path.endswith('.lottie'):
+                    # Remover JSON original se a conversão foi bem-sucedida
+                    if final_path.endswith('.lottie') and os.path.exists(output_path):
                         os.remove(output_path)
                     print(f"--- Pipeline v2 concluído! Arquivo salvo em: {final_path} ---")
                     return final_path
                 
-                print(f"--- Pipeline v2 concluído! Arquivo salvo em: {output_path} ---")
+                print(f"--- Pipeline v2 concluído! Arquivo JSON salvo em: {output_path} ---")
                 return output_path
         
         except Exception as e:
