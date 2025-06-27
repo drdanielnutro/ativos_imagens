@@ -1,0 +1,6 @@
+lottie==0.7.2
+pillow==11.2.1
+opencv-python-headless>=4.10
+replicate>=0.24
+requests>=2.31
+python-dotenv>=1.0 

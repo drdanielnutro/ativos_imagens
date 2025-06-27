@@ -164,6 +164,43 @@ class MascotAnimator:
         
         return saved_frame_count
 
+    def _subsample_every_other_frame(self, frames_dir: str, frame_count: int) -> int:
+        """
+        Remove metade dos frames mantendo apenas os de índice ímpar (ou par),
+        renomeando os remanescentes para que a sequência continue contígua
+        (frame_0000.png, frame_0001.png, ...).
+
+        Args:
+            frames_dir: diretório onde estão os PNGs extraídos.
+            frame_count: número total de frames atuais.
+
+        Returns:
+            Novo número de frames após subsampling.
+        """
+        print("INFO (MascotAnimator): Realizando subsampling – mantendo apenas metade dos frames…")
+
+        kept_index = 0
+        for original_idx in range(frame_count):
+            png_path = os.path.join(frames_dir, f"frame_{original_idx:04d}.png")
+            if not os.path.exists(png_path):
+                # Já pode ter sido removido/renomeado em iterações anteriores
+                continue
+
+            # Manter apenas os frames de índice ímpar (alternando)
+            if original_idx % 2 == 0:
+                # Remove este frame
+                os.remove(png_path)
+            else:
+                # Renomeia para posição compactada
+                new_path = os.path.join(frames_dir, f"frame_{kept_index:04d}.png")
+                os.rename(png_path, new_path)
+                kept_index += 1
+
+        print(f"INFO (MascotAnimator): Subsampling concluído. {kept_index} frames restantes.")
+        if kept_index < 6:
+            raise ValueError("Subsampling resultou em poucos frames; a animação pode ficar truncada.")
+        return kept_index
+
     def _vectorize_frames(self, frames_dir: str, svg_dir: str, frame_count: int) -> None:
         """Etapa 4: Vetoriza cada frame PNG para SVG usando Potrace."""
         print("INFO (MascotAnimator): Etapa 4 - Vetorizando frames para SVG...")
@@ -331,9 +368,9 @@ class MascotAnimator:
 
     def create_mascot_animation_v2(self, prompt_details: dict, animation_prompt: str, output_path: str, output_format: str = "lottie") -> str:
         """
-        Pipeline otimizado usando lottie_convert.py com modo trace para vetorização.
+        Pipeline otimizado usando lottie_convert.py com modo polygon (Potrace) para vetorização.
         """
-        print(f"--- Iniciando Pipeline v2 de Animação Lottie (modo trace) para: {os.path.basename(output_path)} ---")
+        print(f"--- Iniciando Pipeline v2 de Animação Lottie (modo polygon) para: {os.path.basename(output_path)} ---")
 
         transparent_png_path = None
         video_path = None
@@ -351,21 +388,21 @@ class MascotAnimator:
                 os.makedirs(frames_dir)
                 frame_count = self._extract_frames(video_path, frames_dir)
                 
+                # Subsampling: manter somente metade dos frames
+                frame_count = self._subsample_every_other_frame(frames_dir, frame_count)
+                
                 if frame_count == 0:
                     raise RuntimeError("Nenhum frame foi extraído do vídeo.")
                 
-                # Etapa 4: Usar lottie_convert.py com modo trace
-                print("INFO (MascotAnimator): Etapa 4 - Vetorizando com lottie_convert.py (modo trace)...")
+                # Etapa 4: Usar lottie_convert.py com modo polygon
+                print("INFO (MascotAnimator): Etapa 4 - Vetorizando com lottie_convert.py (modo polygon)...")
                 
-                # Verificar disponibilidade do modo trace
+                # Verificar disponibilidade do modo polygon (deve existir por padrão)
                 lottie_convert_path = os.path.join(os.path.dirname(sys.executable), "lottie_convert.py")
                 check_cmd = [lottie_convert_path, "--help"]
                 check_result = subprocess.run(check_cmd, capture_output=True, text=True)
-                
-                if "trace" not in check_result.stdout:
-                    print("AVISO: Modo trace não disponível! Instalando lottie[trace]...")
-                    install_cmd = [sys.executable, "-m", "pip", "install", "lottie[trace]"]
-                    subprocess.run(install_cmd, check=True)
+                if "polygon" not in check_result.stdout:
+                    print("⚠️  AVISO: Flag '--bmp-mode polygon' não encontrada na ajuda do lottie_convert.py. Verifique a instalação da biblioteca 'lottie'.")
                 
                 # Coletar todos os frames
                 frame_files = []
@@ -402,19 +439,19 @@ class MascotAnimator:
                 # Criar Lottie temporário
                 temp_lottie = os.path.join(tmpdir, "animation_temp.json")
                 
-                # Comando para converter GIF em Lottie com vetorização trace
+                # Comando para converter GIF em Lottie com vetorização polygon
                 cmd = [
                     lottie_convert_path,         # Usar caminho completo
                     temp_gif,                    # Entrada: GIF com todos os frames
                     temp_lottie,                 # Saída: arquivo JSON Lottie
                     "--input-format", "bmp",     # Formato de entrada (funciona para GIF também)
                     "--output-format", "lottie", # Formato de saída
-                    "--bmp-mode", "trace",       # Modo trace com Potrace para vetorização suave
+                    "--bmp-mode", "polygon",     # Modo polygon com Potrace para vetorização suave
                     "--bmp-n-colors", "8",       # Limitar paleta para 8 cores
                     "--optimize", "2",           # Otimização máxima do JSON
                 ]
                 
-                print(f"Executando comando de vetorização com modo trace...")
+                print(f"Executando comando de vetorização com modo polygon...")
                 print(f"Comando: {' '.join(cmd)}")
                 result = subprocess.run(cmd, capture_output=True, text=True)
                 
@@ -422,7 +459,7 @@ class MascotAnimator:
                     print(f"ERRO: {result.stderr}")
                     raise RuntimeError(f"Erro na vetorização: {result.stderr}")
                 
-                print("Vetorização com modo trace concluída com sucesso!")
+                print("Vetorização com modo polygon concluída com sucesso!")
                 
                 # Copiar para o destino
                 shutil.copy2(temp_lottie, output_path)
@@ -481,6 +518,9 @@ class MascotAnimator:
                 frames_dir = os.path.join(tmpdir, "frames")
                 os.makedirs(frames_dir)
                 frame_count = self._extract_frames(video_path, frames_dir)
+                
+                # Subsampling: manter somente metade dos frames
+                frame_count = self._subsample_every_other_frame(frames_dir, frame_count)
                 
                 if frame_count == 0:
                     raise RuntimeError("Nenhum frame foi extraído do vídeo.")
