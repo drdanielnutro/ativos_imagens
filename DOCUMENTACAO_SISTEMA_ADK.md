@@ -25,17 +25,19 @@ O sistema adota o padrão de arquitetura **AUF (Agente Único com Ferramentas)**
 
 A funcionalidade do sistema é distribuída entre vários arquivos e diretórios chave:
 
-| Arquivo/Diretório | Propósito |
-| :--- | :--- |
-| **`agent.py`** | **Orquestrador Central.** Define o `root_agent`, sua instrução de sistema e as ferramentas que ele pode usar (`check_asset_inventory`, `create_asset`). É o ponto de entrada para todas as solicitações do usuário. |
-| **`tools/asset_manager.py`** | **Gerenciador de Inventário.** Contém a classe `AssetManager`, responsável por carregar e fornecer as especificações detalhadas de cada ativo que pode ser gerado (descrições, prompts, nomes de arquivos). |
-| **`tools/image_generator.py`** | **Gerador de Imagens PNG.** Contém a lógica para interagir com APIs de imagem (provavelmente Recraft ou Replicate) para gerar imagens PNG. Inclui funcionalidades críticas como a remoção de fundo, que é executada em um subprocesso isolado para garantir estabilidade (`test_isolated_bg_removal.py`). |
-| **`tools/svg_generator.py`** | **Gerador de Vetores SVG.** Implementa a lógica para criar arquivos SVG. Possui um sistema de fallback: primeiro tenta gerar um SVG diretamente via API (ex: Recraft); se falhar, executa um pipeline secundário que gera um PNG e o vetoriza. |
-| **`tools/mascot_animator.py`** | **Gerador de Animações Lottie.** Orquestra o pipeline mais complexo do sistema para criar animações de mascote. Este processo envolve múltiplas chamadas de API e etapas de processamento. |
-| **`test_*.py`** | **Suíte de Testes.** Um conjunto de scripts de teste que validam a funcionalidade de cada componente de forma isolada (`test_isolated_bg_removal.py`) e de ponta a ponta (`test_pipeline_mascote.py`). Eles são cruciais para garantir a integridade do sistema. |
-| **`CLAUDE.md`** | **Documento de Meta-Arquitetura.** Descreve, para um "Engenheiro de Agentes de IA", como construir sistemas ADK. É a "constituição" que define os padrões de design (AUF vs. SMA) seguidos neste projeto. |
-| **`prompts_*.md`** | **Banco de Prompts.** Arquivos Markdown que contêm os prompts de texto detalhados e estruturados usados pelas ferramentas para gerar ativos específicos, como os emblemas de conquistas (`prompts_achievement_badges.md`). |
-| **`README.md` / `COMO_EXECUTAR.md`** | **Documentação do Usuário.** Fornecem instruções claras sobre como configurar o ambiente, instalar dependências e executar o agente usando o servidor web do ADK. |
+| Arquivo/Diretório                          | Propósito                                                                                                                                                                                                                                                                                                 |
+| :----------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`agent.py`**                             | **Orquestrador Central.** Define o `root_agent`, sua instrução de sistema e as ferramentas que ele pode usar (`check_asset_inventory`, `create_asset`). É o ponto de entrada para todas as solicitações do usuário.                                                                                       |
+| **`tools/asset_manager.py`**               | **Gerenciador de Inventário.** Contém a classe `AssetManager`, responsável por carregar e fornecer as especificações detalhadas de cada ativo que pode ser gerado (descrições, prompts, nomes de arquivos).                                                                                               |
+| **`tools/image_generator.py`**             | **Gerador de Imagens PNG.** Contém a lógica para interagir com APIs de imagem (provavelmente Recraft ou Replicate) para gerar imagens PNG. Inclui funcionalidades críticas como a remoção de fundo, que é executada em um subprocesso isolado para garantir estabilidade (`test_isolated_bg_removal.py`). |
+| **`tools/svg_generator.py`**               | **Gerador de Vetores SVG.** Implementa a lógica para criar arquivos SVG. Possui um sistema de fallback: primeiro tenta gerar um SVG diretamente via API (ex: Recraft); se falhar, executa um pipeline secundário que gera um PNG e o vetoriza.                                                            |
+| **`tools/mascot_animator.py`**             | **Gerador de Animações Lottie.** Orquestra o pipeline mais complexo do sistema para criar animações de mascote. Este processo envolve múltiplas chamadas de API e etapas de processamento.                                                                                                                |
+| **`test_*.py`**                            | **Suíte de Testes.** Um conjunto de scripts de teste que validam a funcionalidade de cada componente de forma isolada (`test_isolated_bg_removal.py`) e de ponta a ponta (`test_pipeline_mascote.py`). Eles são cruciais para garantir a integridade do sistema.                                          |
+| **`CLAUDE.md`**                            | **Documento de Meta-Arquitetura.** Descreve, para um "Engenheiro de Agentes de IA", como construir sistemas ADK. É a "constituição" que define os padrões de design (AUF vs. SMA) seguidos neste projeto.                                                                                                 |
+| **`prompts_*.md`**                         | **Banco de Prompts.** Arquivos Markdown que contêm os prompts de texto detalhados e estruturados usados pelas ferramentas para gerar ativos específicos, como os emblemas de conquistas (`prompts_achievement_badges.md`).                                                                                |
+| **`README.md` / `COMO_EXECUTAR.md`**       | **Documentação do Usuário.** Fornecem instruções claras sobre como configurar o ambiente, instalar dependências e executar o agente usando o servidor web do ADK.                                                                                                                                         |
+| **`ativos_imagens/resources/definicoes/`** | **Cópia interna do inventário.** Mantém o agente autossuficiente em distribuições `pip install`. É atualizada pelo script `sync_inventory.py`.                                                                                                                                                            |
+| **`ativos_imagens/sync_inventory.py`**     | **Script utilitário.** Copia `docs/definicoes/ativos_a_serem_criados.md` para a pasta `resources/` interna. Execute-o sempre que editar o inventário.                                                                                                                                                     |
 
 ## 4. Fluxos de Trabalho Detalhados
 
@@ -87,3 +89,8 @@ Para executar o sistema, siga os passos definidos em `COMO_EXECUTAR.md`:
 3.  **Configurar** a chave da API do Google no arquivo `.env`.
 4.  **Iniciar** o servidor web do ADK com o comando `adk web`.
 5.  **Acessar** a interface em `http://127.0.0.1:8000` e selecionar o agente `ativos_imagens`.
+
+**Sincronizar inventário interno**
+```bash
+python -m ativos_imagens.sync_inventory  # executa na raiz sempre que atualizar o Markdown de inventário
+```

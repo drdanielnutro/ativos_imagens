@@ -5,6 +5,7 @@ import os
 import re
 from typing import Dict, List, Optional, Tuple
 from pathlib import Path
+import importlib.resources as pkg_res
 
 
 class AssetManager:
@@ -14,7 +15,16 @@ class AssetManager:
     
     def __init__(self, project_root: Optional[str] = None):
         self.project_root = Path(project_root) if project_root else Path.cwd()
+        # Caminho para documentação original (editável)
         self.docs_path = self.project_root / "docs" / "definicoes"
+
+        # Caminho para cópia embutida no pacote (auto-contida)
+        try:
+            resources_pkg = __package__.split('.')[0] + '.resources.definicoes'
+            self.pkg_inventory_path = Path(pkg_res.files(resources_pkg))
+        except (ModuleNotFoundError, AttributeError):
+            # resources não existe (primeira instalação) – ficará None
+            self.pkg_inventory_path = None
         self.asset_specs = {}
         self.checklist_status = {}
         self.asset_capabilities = {
@@ -28,7 +38,13 @@ class AssetManager:
         
     def load_asset_inventory(self):
         """Lê o inventário de ativos do arquivo Markdown e popula as especificações."""
-        inventory_path = self.docs_path / "ativos_a_serem_criados.md"
+        # Prioridade 1: arquivo embutido no pacote
+        if self.pkg_inventory_path and (self.pkg_inventory_path / "ativos_a_serem_criados.md").exists():
+            inventory_path = self.pkg_inventory_path / "ativos_a_serem_criados.md"
+        else:
+            # Fallback para docs/definicoes (repositório de desenvolvimento)
+            inventory_path = self.docs_path / "ativos_a_serem_criados.md"
+
         if not inventory_path.exists():
             return {}
             

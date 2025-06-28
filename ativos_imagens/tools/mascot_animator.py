@@ -27,6 +27,24 @@ class MascotAnimator:
     usando um pipeline completo de Imagem-para-Vídeo-para-Vetor.
     """
     VIDEO_GEN_MODEL = "bytedance/seedance-1-lite"
+    DEFAULT_BMP_COLORS = "8"  # Número padrão de cores para vetorização
+
+    VERBOSE_SUBPROCESS = True  # Exibir stdout/stderr das ferramentas externas
+
+    # Helper para rodar comandos e printar saída
+    def _run_cmd(self, cmd: list[str]):
+        """Executa subprocess.run exibindo stdout/stderr se VERBOSE_SUBPROCESS."""
+        import subprocess, shlex
+        print(f"EXEC ⟩ {shlex.join(cmd)}")
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if self.VERBOSE_SUBPROCESS:
+            if result.stdout:
+                print(result.stdout)
+            if result.stderr:
+                print(result.stderr)
+        if result.returncode != 0:
+            raise subprocess.CalledProcessError(result.returncode, cmd, result.stdout, result.stderr)
+        return result
 
     def _get_transparent_mascot_png(self, prompt_details: dict) -> str:
         """
@@ -216,9 +234,7 @@ class MascotAnimator:
             # Converter PNG para PNM usando ImageMagick ou PIL
             try:
                 # Opção 1: Usar ImageMagick convert
-                subprocess.run([
-                    "convert", png_path, pnm_path
-                ], check=True, capture_output=True, text=True)
+                self._run_cmd(["convert", png_path, pnm_path])
             except (subprocess.CalledProcessError, FileNotFoundError):
                 # Opção 2: Usar PIL/Pillow como fallback
                 from PIL import Image
@@ -227,10 +243,7 @@ class MascotAnimator:
             
             # Agora converter PNM para PBM otimizado
             try:
-                result = subprocess.run([
-                    "mkbitmap", "-f", "2", "-s", "2", "-t", "0.48", 
-                    "-o", pbm_path, pnm_path
-                ], check=True, capture_output=True, text=True)
+                self._run_cmd(["mkbitmap", "-f", "2", "-s", "2", "-t", "0.48", "-o", pbm_path, pnm_path])
             except subprocess.CalledProcessError as e:
                 print(f"ERROR: mkbitmap falhou para frame {i}")
                 print(f"ERROR: Return code: {e.returncode}")
@@ -239,16 +252,18 @@ class MascotAnimator:
                 raise
             
             # Vetorizar com parâmetros otimizados
-            subprocess.run([
+            self._run_cmd([
                 "potrace", pbm_path, "-s", 
                 "-o", svg_path,
                 "--turdsize", "10",      # Remove detalhes pequenos
                 "--opttolerance", "0.2"  # Otimiza curvas
-            ], check=True, capture_output=True)
+            ])
             
-            # Otimizar SVG com SVGO
-            # Removido: A otimização principal de tamanho virá da compressão Lottie.
-            # Se necessário, SVGO pode ser reintroduzido como uma etapa separada e opcional.
+            # Otimizar SVG com SVGO (se instalado)
+            try:
+                self._run_cmd(["svgo", "--multipass", svg_path])
+            except FileNotFoundError:
+                print("WARN: SVGO não encontrado. Pulando otimização de SVG.")
             
         print("INFO (MascotAnimator): Vetorização de todos os frames concluída.")
 
@@ -279,9 +294,28 @@ class MascotAnimator:
                 
         return animation
 
-    def _optimize_json(self, json_path: str) -> str:
-        """Otimiza o arquivo JSON Lottie. (Esta função agora é um no-op, a otimização principal é feita em _create_dotlottie)."""
-        print("INFO (MascotAnimator): Otimização de JSON com python-lottie não é mais necessária aqui. A otimização principal é feita na conversão para .lottie.")
+    def _optimize_json(self, json_path: str, level: int = 2) -> str:
+        """Aplica python-lottie --optimize ao JSON gerado."""
+        import subprocess, sys, os, shutil
+
+        lottie_convert_path = os.path.join(os.path.dirname(sys.executable), "lottie_convert.py")
+        if not os.path.exists(lottie_convert_path):
+            print("WARN: lottie_convert.py não encontrado. Pulando otimização JSON.")
+            return json_path
+
+        temp_out = json_path.replace(".json", "_opt.json")
+        try:
+            self._run_cmd([
+                lottie_convert_path, json_path, temp_out,
+                "--input-format", "lottie",
+                "--output-format", "lottie",
+                "--optimize", str(level)
+            ])
+
+            shutil.move(temp_out, json_path)
+            print("INFO (MascotAnimator): JSON otimizado com python-lottie (level %s)." % level)
+        except subprocess.CalledProcessError as e:
+            print(f"WARN: Otimização JSON falhou: {e.stderr}\nContinuando com arquivo original.")
         return json_path
 
     def _create_dotlottie(self, json_path: str) -> str:
@@ -400,7 +434,7 @@ class MascotAnimator:
                 # Verificar disponibilidade do modo polygon (deve existir por padrão)
                 lottie_convert_path = os.path.join(os.path.dirname(sys.executable), "lottie_convert.py")
                 check_cmd = [lottie_convert_path, "--help"]
-                check_result = subprocess.run(check_cmd, capture_output=True, text=True)
+                check_result = self._run_cmd(check_cmd)
                 if "polygon" not in check_result.stdout:
                     print("⚠️  AVISO: Flag '--bmp-mode polygon' não encontrada na ajuda do lottie_convert.py. Verifique a instalação da biblioteca 'lottie'.")
                 
@@ -447,13 +481,13 @@ class MascotAnimator:
                     "--input-format", "bmp",     # Formato de entrada (funciona para GIF também)
                     "--output-format", "lottie", # Formato de saída
                     "--bmp-mode", "polygon",     # Modo polygon com Potrace para vetorização suave
-                    "--bmp-n-colors", "8",       # Limitar paleta para 8 cores
+                    "--bmp-n-colors", self.DEFAULT_BMP_COLORS,       # Limitar paleta
                     "--optimize", "2",           # Otimização máxima do JSON
                 ]
                 
                 print(f"Executando comando de vetorização com modo polygon...")
                 print(f"Comando: {' '.join(cmd)}")
-                result = subprocess.run(cmd, capture_output=True, text=True)
+                result = self._run_cmd(cmd)
                 
                 if result.returncode != 0:
                     print(f"ERRO: {result.stderr}")
@@ -471,9 +505,7 @@ class MascotAnimator:
                 # Converter para formato .lottie se solicitado
                 if output_format == "lottie":
                     final_path = self._create_dotlottie(output_path)
-                    # Remover JSON original se conversão foi bem-sucedida
-                    if final_path.endswith('.lottie') and os.path.exists(output_path):
-                        os.remove(output_path)
+                    # Mantemos o JSON original para inspeção
                     print(f"--- Pipeline v2 concluído! Arquivo salvo em: {final_path} ---")
                     return final_path
                 
@@ -536,15 +568,13 @@ class MascotAnimator:
                 # Etapa 6: Salvar arquivo final
                 exporters.export_lottie(animation, output_path)
                 
-                # Otimizar o JSON gerado
-                self._optimize_json(output_path)
+                # Otimizar JSON gerado com python-lottie (level 2)
+                self._optimize_json(output_path, level=2)
                 
                 # Converter para formato .lottie se solicitado
                 if output_format == "lottie":
                     final_path = self._create_dotlottie(output_path)
-                    # Remover JSON original se conversão foi bem-sucedida
-                    if final_path.endswith('.lottie'):
-                        os.remove(output_path)
+                    # Mantemos o JSON original para inspeção
                     print(f"--- Pipeline Lottie concluído! Arquivo salvo em: {final_path} ---")
                     return final_path
                 

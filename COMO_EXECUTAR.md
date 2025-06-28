@@ -26,7 +26,13 @@ source .venv312/bin/activate
 .venv312\Scripts\Activate.ps1
 ```
 
-### 3. Verifique se o google-adk está instalado:
+### 3. (Opcional) Sincronizar inventário interno
+Se você alterou `docs/definicoes/ativos_a_serem_criados.md`, copie a atualização para dentro do pacote para que o agente continue autossuficiente:
+```bash
+python -m ativos_imagens.sync_inventory
+```
+
+### 4. Verifique se o google-adk está instalado:
 ```bash
 pip list | grep google-adk
 ```
@@ -36,12 +42,12 @@ Se não estiver instalado:
 pip install google-adk
 ```
 
-### 4. Execute o servidor ADK:
+### 5. Execute o servidor ADK:
 ```bash
 adk web
 ```
 
-### 5. Acesse o agente:
+### 6. Acesse o agente:
 - Abra seu navegador
 - Acesse: `http://127.0.0.1:8000`
 - No menu dropdown (canto superior esquerdo), selecione: `ativos_imagens`

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ativos_imagens"
+version = "0.0.0"
+description = "Gerador Automatizado de Assets Digitais (ADK)"
+authors = [ { name = "Instituto Recriare" } ]
+readme = "README.md"
+requires-python = ">=3.9"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ativos_imagens*"] 

@@ -3,4 +3,8 @@ pillow==11.2.1
 opencv-python-headless>=4.10
 replicate>=0.24
 requests>=2.31
-python-dotenv>=1.0 
+python-dotenv>=1.0
+lxml>=4.9
+scour>=0.38
+pytest>=8.0
+google-adk>=1.5

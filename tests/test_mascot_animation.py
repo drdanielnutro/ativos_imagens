@@ -6,10 +6,16 @@ Testa o pipeline completo: PNG → Vídeo → Frames → SVG → Lottie
 
 import sys
 import os
+import importlib
+import pytest
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from ativos_imagens.tools.mascot_animator import MascotAnimator
 from ativos_imagens.agent import API_CALL_TRACKER, reset_api_limits
+
+# Pular todo o módulo se o Google ADK não estiver instalado
+if importlib.util.find_spec("google.adk") is None:  # pragma: no cover
+    pytest.skip("Google ADK não instalado – pulando teste de pipeline completo", allow_module_level=True)
 
 def test_mascot_animation():
     """Testa a criação de uma animação Lottie do mascote."""
@@ -50,17 +56,22 @@ def test_mascot_animation():
         
         print(f"\n📝 Resultado: {result}")
         
-        # Verificar se arquivo foi criado
-        if os.path.exists(output_path):
-            file_size = os.path.getsize(output_path) / 1024
+        # Verificar se arquivo .lottie ou .json foi criado
+        result_file = output_path
+        lottie_path = output_path.replace('.json', '.lottie')
+        if os.path.exists(lottie_path):
+            result_file = lottie_path
+
+        if os.path.exists(result_file):
+            file_size = os.path.getsize(result_file) / 1024
             print(f"\n✅ TESTE PASSOU!")
-            print(f"  - Arquivo criado: {output_path}")
+            print(f"  - Arquivo criado: {result_file}")
             print(f"  - Tamanho: {file_size:.1f} KB")
             
-            # Mostrar primeiras linhas do arquivo
-            with open(output_path, 'r') as f:
-                content = f.read(200)
-                print(f"  - Conteúdo (preview): {content[:100]}...")
+            if result_file.endswith('.json'):
+                with open(result_file, 'r') as f:
+                    content = f.read(200)
+                    print(f"  - Conteúdo (preview): {content[:100]}...")
         else:
             print("\n❌ TESTE FALHOU: Arquivo não foi criado")
             
@@ -76,12 +87,13 @@ def test_mascot_animation():
         print(f"  - Replicate: {API_CALL_TRACKER.get('replicate_calls', 0)}")
         
         # Limpeza
-        if os.path.exists(output_path):
-            try:
-                os.remove(output_path)
-                print(f"  - Arquivo de teste removido: {output_path}")
-            except:
-                pass
+        for path in (output_path, output_path.replace('.json', '.lottie')):
+            if os.path.exists(path):
+                try:
+                    os.remove(path)
+                    print(f"  - Arquivo de teste removido: {path}")
+                except:
+                    pass
 
 
 def test_basic_imports():
