@@ -2,58 +2,60 @@
 
 Este guia fornece instruções passo a passo para executar o agente de geração de assets digitais.
 
-## 🚀 Passos Rápidos
+## 🚀 Passos para Execução
 
-### 1. Navegue até o diretório do projeto:
-```bash
-cd /Users/institutorecriare/VSCodeProjects/criador_agentes/ativos_imagens
-```
+### 1. Navegue até o diretório raiz do projeto
+Certifique-se de que você está no diretório principal que contém o arquivo `pyproject.toml`.
 
-### 2. Ative o ambiente virtual Python:
+### 2. Ative o ambiente virtual Python
+*Nota: O nome da pasta do ambiente virtual pode ser `venv` ou `.venv`.*
 
 **macOS/Linux:**
 ```bash
-source .venv312/bin/activate
+source venv/bin/activate
 ```
 
 **Windows (CMD):**
 ```bash
-.venv312\Scripts\activate.bat
+venv\Scripts\activate.bat
 ```
 
 **Windows (PowerShell):**
 ```bash
-.venv312\Scripts\Activate.ps1
+venv\Scripts\Activate.ps1
 ```
 
-### 3. (Opcional) Sincronizar inventário interno
-Se você alterou `docs/definicoes/ativos_a_serem_criados.md`, copie a atualização para dentro do pacote para que o agente continue autossuficiente:
+### 3. Instale todas as dependências
+Este comando garante que todas as bibliotecas necessárias, incluindo o `google-adk`, sejam instaladas.
+```bash
+pip install -r requirements.txt
+```
+
+### 4. (Opcional) Verifique a instalação com testes
+Este comando valida se todos os módulos do sistema de agentes estão configurados corretamente.
+```bash
+pytest test_multi_agent.py -q --disable-warnings
+```
+
+### 5. (Opcional) Sincronize o inventário de ativos
+Se você modificou a lista de ativos em `docs/definicoes/ativos_a_serem_criados.md`, execute este comando para atualizar o sistema.
 ```bash
 python -m ativos_imagens.sync_inventory
 ```
 
-### 4. Verifique se o google-adk está instalado:
-```bash
-pip list | grep google-adk
-```
-
-Se não estiver instalado:
-```bash
-pip install google-adk
-```
-
-### 5. Execute o servidor ADK:
+### 6. Execute o servidor ADK
+*Importante: Execute este comando a partir do **diretório raiz** do projeto.*
 ```bash
 adk web
 ```
 
-### 6. Acesse o agente:
-- Abra seu navegador
-- Acesse: `http://127.0.0.1:8000`
-- No menu dropdown (canto superior esquerdo), selecione: `ativos_imagens`
+### 7. Acesse o agente
+- Abra seu navegador e acesse: `http://127.0.0.1:8000`
+- No menu dropdown no canto superior esquerdo, selecione o agente: `ativos_imagens`
 - Teste com prompts como:
   - "Qual é o status do projeto?"
   - "Olá! Me fale sobre o sistema"
+  - "Crie o ativo SFX-01"
 
 ## 🛑 Para parar o servidor:
 Pressione `Ctrl+C` no terminal
