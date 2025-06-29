@@ -48,7 +48,7 @@ def test_mascot_animation():
         
         print("\n🚀 Iniciando pipeline de animação...")
         
-        result = animator.create_mascot_animation_v2(
+        result = animator.create_mascot_animation(
             prompt_details=prompt_details,
             animation_prompt=animation_prompt,
             output_path=output_path,

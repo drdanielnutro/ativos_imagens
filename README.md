@@ -22,11 +22,24 @@ Sistema de geração automatizada de assets digitais (imagens PNG, vetores SVG, 
 2.  **Instale as dependências:**
     ```bash
     pip install google-adk
+    
+    # Para funcionalidade de áudio:
+    pip install pydub replicate
+    
+    # Para outras funcionalidades opcionais:
+    pip install pillow rembg[gpu,cli] lottie potrace-wheel
     ```
+    
+    **Nota**: Para geração de áudio, você também precisa ter o FFmpeg instalado no sistema:
+    - macOS: `brew install ffmpeg`
+    - Ubuntu/Debian: `sudo apt install ffmpeg`
+    - Windows: Baixe de https://ffmpeg.org/download.html
 
-3.  **Configure sua chave de API:**
-    *   Abra o arquivo `.env` e substitua `SUA_CHAVE_API_AQUI` pela sua chave de API do Google Gemini.
-    *   Para obter uma chave, acesse: https://makersuite.google.com/app/apikey
+3.  **Configure suas chaves de API:**
+    *   Abra o arquivo `.env` e configure:
+        - `GOOGLE_API_KEY`: Sua chave de API do Google Gemini (obtenha em https://makersuite.google.com/app/apikey)
+        - `REPLICATE_API_TOKEN`: Sua chave da Replicate (obtenha em https://replicate.com/account/api-tokens)
+        - `RECRAFT_API_TOKEN`: (Opcional) Para geração avançada de imagens
 
 ## Execução
 
@@ -41,10 +54,30 @@ Sistema de geração automatizada de assets digitais (imagens PNG, vetores SVG, 
     *   No menu suspenso no canto superior esquerdo, selecione `ativos_imagens`
     *   Comece a conversar com seu agente no chat
 
-## Exemplo de Interação (Agente Mínimo)
+## Exemplos de Interação
 
+### Comandos Básicos
 *   "Qual é o status do projeto?"
-*   "Olá! Você pode me informar sobre o sistema?"
+*   "Mostre o inventário de ativos"
+*   "Verifique o inventário"
+
+### Geração de Ativos
+
+#### 🎵 Áudio (Efeitos Sonoros)
+*   "Crie o ativo SFX-01" (som de clique de botão)
+*   "Gere o efeito sonoro de sucesso"
+*   "Crie todos os efeitos sonoros"
+*   "Crie o processing_loop.mp3"
+
+#### 🎬 Animações Lottie
+*   "Crie o ativo LOAD-01" (spinner de carregamento)
+*   "Gere a animação de feedback FBK-02"
+*   "Crie todas as animações de loading"
+
+#### 🎨 Vetores SVG
+*   "Crie o ícone da câmera"
+*   "Gere o ativo UI-03" (padrão de nuvens)
+*   "Crie todos os ícones SVG"
 
 ## Estrutura do Projeto
 
@@ -59,12 +92,12 @@ ativos_imagens/
 
 ## Status Atual
 
-Este é um **agente mínimo de teste** com apenas uma ferramenta de demonstração (`get_project_status`). As ferramentas completas do pipeline serão adicionadas após a validação desta estrutura base:
+O agente está **totalmente funcional** com todas as ferramentas do pipeline implementadas:
 
-- [ ] Ferramenta de Geração de Imagens PNG (mascote PROF e sprites)
-- [ ] Ferramenta de Geração Vetorial SVG (ícones e padrões)
-- [ ] Ferramenta de Geração de Áudio MP3 (efeitos sonoros)
-- [ ] Ferramenta de Geração de Animações Lottie (IA-vetorizada e programática)
+- [x] Ferramenta de Geração de Imagens PNG (mascote PROF e sprites)
+- [x] Ferramenta de Geração Vetorial SVG (ícones e padrões)
+- [x] Ferramenta de Geração de Áudio MP3 (efeitos sonoros)
+- [x] Ferramenta de Geração de Animações Lottie (IA-vetorizada e programática)
 
 ## Próximos Passos
 

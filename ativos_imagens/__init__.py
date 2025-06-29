@@ -9,7 +9,18 @@ try:
     import pkg_resources
     # Tenta localizar o módulo google.adk sem importá-lo totalmente
     if importlib.util.find_spec("google.adk") is not None:
-        from . import agent  # noqa: F401
+        # Tenta importar o novo orquestrador multi-agente da pasta agentes_ativos
+        try:
+            from .agentes_ativos import orchestrator  # noqa: F401
+            from .agentes_ativos.orchestrator import root_agent  # noqa: F401
+        except ImportError:
+            # Se falhar, tenta o agente único anterior da pasta agente_antigo
+            try:
+                from .agente_antigo import agent  # noqa: F401
+                from .agente_antigo.agent import root_agent  # noqa: F401
+            except ImportError:
+                # Não conseguiu importar nenhum agente
+                pass
     else:
         # ADK não disponível – expõe apenas submódulos tools.
         pass

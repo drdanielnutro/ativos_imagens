@@ -243,7 +243,7 @@ class AssetManager:
         """
         Verifica se o agente tem ferramentas para criar este tipo
         """
-        creatable_types = ["lottie_programmatic", "svg"]
+        creatable_types = ["lottie_programmatic", "svg", "audio", "lottie_mascote"]
         return asset_type in creatable_types
         
     def can_create_asset(self, asset_id: str) -> Tuple[bool, str]:
@@ -339,13 +339,16 @@ class AssetManager:
             
         creatable = {
             "lottie_programmatic": [],
-            "svg": []
+            "svg": [],
+            "audio": [],
+            "lottie_mascote": []
         }
         
         for asset_id, spec in self.asset_specs.items():
             asset_type = spec.get("type")
             if self.can_create_asset_type(asset_type):
-                creatable[asset_type].append(asset_id)
+                if asset_type in creatable:
+                    creatable[asset_type].append(asset_id)
                 
         return creatable
         

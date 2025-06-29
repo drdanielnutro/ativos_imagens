@@ -33,18 +33,24 @@ class MascotAnimator:
 
     # Helper para rodar comandos e printar saída
     def _run_cmd(self, cmd: list[str]):
-        """Executa subprocess.run exibindo stdout/stderr se VERBOSE_SUBPROCESS."""
+        """Executa comandos externos, exibindo saída em tempo real se VERBOSE_SUBPROCESS."""
         import subprocess, shlex
         print(f"EXEC ⟩ {shlex.join(cmd)}")
-        result = subprocess.run(cmd, capture_output=True, text=True)
         if self.VERBOSE_SUBPROCESS:
+            process = subprocess.Popen(cmd)
+            code = process.wait()
+            if code != 0:
+                raise subprocess.CalledProcessError(code, cmd)
+            return subprocess.CompletedProcess(cmd, code)
+        else:
+            result = subprocess.run(cmd, capture_output=True, text=True)
             if result.stdout:
                 print(result.stdout)
             if result.stderr:
                 print(result.stderr)
-        if result.returncode != 0:
-            raise subprocess.CalledProcessError(result.returncode, cmd, result.stdout, result.stderr)
-        return result
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, cmd, result.stdout, result.stderr)
+            return result
 
     def _get_transparent_mascot_png(self, prompt_details: dict) -> str:
         """
@@ -114,7 +120,8 @@ class MascotAnimator:
         with open(png_path, "rb") as image_file:
             api_input = {
                 "image": image_file,
-                "prompt": f"{animation_prompt}, solid blue background color #0047bb",
+                # Prompt enriquecido com contexto do Professor Virtual
+                "prompt": self._enrich_animation_prompt(animation_prompt),
                 "duration": 5,  # Seedance aceita apenas 5 ou 10 
                 "resolution": "480p", 
                 "fps": 24,  # Geramos com mais FPS para ter mais de onde extrair
@@ -148,6 +155,50 @@ class MascotAnimator:
                 f.write(response.content)
             
             return video_temp_path
+    
+    def _enrich_animation_prompt(self, base_prompt: str) -> str:
+        """
+        Enriquece o prompt de animação com contexto do Professor Virtual.
+        Baseado nas especificações do agente gerador de prompts.
+        """
+        # Contexto do Professor Virtual
+        context = "Educational owl mascot animation for Brazilian children's learning app Professor Virtual"
+        
+        # Características do mascote Prof
+        mascot_details = "friendly owl character with round shapes, large expressive eyes, warm blue (#4A90F2) and orange (#FF8A3D) colors"
+        
+        # Estilo de animação apropriado para crianças
+        animation_style = "smooth child-friendly animation, gentle movements, encouraging gestures, educational context"
+        
+        # Background consistente com a marca
+        background = "solid blue background color #0047bb matching Professor Virtual brand"
+        
+        # Mapeamento de prompts específicos baseado no conteúdo
+        enrichments = {
+            "breathing": "subtle chest movement, natural idle animation, alive and friendly presence",
+            "wave": "welcoming gesture, warm greeting for children, friendly teacher-like wave",
+            "jump": "playful bounce with squash and stretch, excited but controlled movement",
+            "thinking": "thoughtful expression, educational moment, lightbulb moment visualization",
+            "celebration": "joyful but not overwhelming, positive reinforcement, learning achievement celebration"
+        }
+        
+        # Adicionar enriquecimento específico se encontrado
+        specific_enrichment = ""
+        for key, value in enrichments.items():
+            if key in base_prompt.lower():
+                specific_enrichment = f", {value}"
+                break
+        
+        # Montar prompt final otimizado
+        enriched_prompt = f"{context}: {base_prompt}"
+        enriched_prompt += f", {mascot_details}"
+        enriched_prompt += f", {animation_style}"
+        enriched_prompt += specific_enrichment
+        enriched_prompt += f", {background}"
+        enriched_prompt += ", suitable for 7-11 year old children"
+        enriched_prompt += ", professional educational quality"
+        
+        return enriched_prompt
 
     def _extract_frames(self, video_path: str, frames_dir: str, target_fps: int = 12) -> int:
         """Etapa 4: Extrai frames do vídeo na taxa de quadros desejada."""
@@ -400,134 +451,6 @@ class MascotAnimator:
             traceback.print_exc()
             return json_path
 
-    def create_mascot_animation_v2(self, prompt_details: dict, animation_prompt: str, output_path: str, output_format: str = "lottie") -> str:
-        """
-        Pipeline otimizado usando lottie_convert.py com modo polygon (Potrace) para vetorização.
-        """
-        print(f"--- Iniciando Pipeline v2 de Animação Lottie (modo polygon) para: {os.path.basename(output_path)} ---")
-
-        transparent_png_path = None
-        video_path = None
-        
-        try:
-            with tempfile.TemporaryDirectory() as tmpdir:
-                # Etapa 1: Gerar PNG transparente do mascote
-                transparent_png_path = self._get_transparent_mascot_png(prompt_details)
-                
-                # Etapa 2: Gerar vídeo a partir da imagem
-                video_path = self._generate_video_from_file(transparent_png_path, animation_prompt)
-                
-                # Etapa 3: Extrair frames do vídeo
-                frames_dir = os.path.join(tmpdir, "frames")
-                os.makedirs(frames_dir)
-                frame_count = self._extract_frames(video_path, frames_dir)
-                
-                # Subsampling: manter somente metade dos frames
-                frame_count = self._subsample_every_other_frame(frames_dir, frame_count)
-                
-                if frame_count == 0:
-                    raise RuntimeError("Nenhum frame foi extraído do vídeo.")
-                
-                # Etapa 4: Usar lottie_convert.py com modo polygon
-                print("INFO (MascotAnimator): Etapa 4 - Vetorizando com lottie_convert.py (modo polygon)...")
-                
-                # Verificar disponibilidade do modo polygon (deve existir por padrão)
-                lottie_convert_path = os.path.join(os.path.dirname(sys.executable), "lottie_convert.py")
-                check_cmd = [lottie_convert_path, "--help"]
-                check_result = self._run_cmd(check_cmd)
-                if "polygon" not in check_result.stdout:
-                    print("⚠️  AVISO: Flag '--bmp-mode polygon' não encontrada na ajuda do lottie_convert.py. Verifique a instalação da biblioteca 'lottie'.")
-                
-                # Coletar todos os frames
-                frame_files = []
-                for i in range(frame_count):
-                    frame_path = os.path.join(frames_dir, f"frame_{i:04d}.png")
-                    if os.path.exists(frame_path):
-                        frame_files.append(frame_path)
-                
-                if not frame_files:
-                    raise ValueError("Nenhum frame encontrado para processar")
-                
-                # Criar GIF temporário com todos os frames
-                temp_gif = os.path.join(tmpdir, "all_frames.gif")
-                print(f"INFO: Criando GIF temporário com {len(frame_files)} frames...")
-                
-                # Usar PIL para criar o GIF
-                pil_images = []
-                for frame_path in frame_files:
-                    img = Image.open(frame_path)
-                    pil_images.append(img)
-                
-                # Salvar como GIF animado
-                pil_images[0].save(
-                    temp_gif,
-                    save_all=True,
-                    append_images=pil_images[1:],
-                    duration=83,  # ~12 FPS (1000ms / 12fps = 83ms por frame)
-                    loop=0,
-                    optimize=False  # Não otimizar GIF, queremos qualidade máxima
-                )
-                
-                print(f"GIF criado: {temp_gif} ({os.path.getsize(temp_gif) / 1024:.1f} KB)")
-                
-                # Criar Lottie temporário
-                temp_lottie = os.path.join(tmpdir, "animation_temp.json")
-                
-                # Comando para converter GIF em Lottie com vetorização polygon
-                cmd = [
-                    lottie_convert_path,         # Usar caminho completo
-                    temp_gif,                    # Entrada: GIF com todos os frames
-                    temp_lottie,                 # Saída: arquivo JSON Lottie
-                    "--input-format", "bmp",     # Formato de entrada (funciona para GIF também)
-                    "--output-format", "lottie", # Formato de saída
-                    "--bmp-mode", "polygon",     # Modo polygon com Potrace para vetorização suave
-                    "--bmp-n-colors", self.DEFAULT_BMP_COLORS,       # Limitar paleta
-                    "--optimize", "2",           # Otimização máxima do JSON
-                ]
-                
-                print(f"Executando comando de vetorização com modo polygon...")
-                print(f"Comando: {' '.join(cmd)}")
-                result = self._run_cmd(cmd)
-                
-                if result.returncode != 0:
-                    print(f"ERRO: {result.stderr}")
-                    raise RuntimeError(f"Erro na vetorização: {result.stderr}")
-                
-                print("Vetorização com modo polygon concluída com sucesso!")
-                
-                # Copiar para o destino
-                shutil.copy2(temp_lottie, output_path)
-                
-                # Log do tamanho
-                json_size = os.path.getsize(output_path) / 1024
-                print(f"Tamanho do JSON gerado: {json_size:.1f} KB")
-                
-                # Converter para formato .lottie se solicitado
-                if output_format == "lottie":
-                    final_path = self._create_dotlottie(output_path)
-                    # Mantemos o JSON original para inspeção
-                    print(f"--- Pipeline v2 concluído! Arquivo salvo em: {final_path} ---")
-                    return final_path
-                
-                print(f"--- Pipeline v2 concluído! Arquivo JSON salvo em: {output_path} ---")
-                return output_path
-        
-        except Exception as e:
-            # Re-raise com contexto adicional
-            raise RuntimeError(f"Erro no pipeline v2 de animação: {str(e)}") from e
-        
-        finally:
-            # Limpeza dos arquivos temporários principais
-            if transparent_png_path and os.path.exists(transparent_png_path):
-                try:
-                    os.remove(transparent_png_path)
-                except:
-                    pass  # Ignore erros de limpeza
-            if video_path and os.path.exists(video_path):
-                try:
-                    os.remove(video_path)
-                except:
-                    pass  # Ignore erros de limpeza
 
     def create_mascot_animation(self, prompt_details: dict, animation_prompt: str, output_path: str, output_format: str = "lottie") -> str:
         """

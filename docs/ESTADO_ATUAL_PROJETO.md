@@ -23,7 +23,7 @@ O agente evoluiu de um protótipo mínimo para um sistema completo de produção
 ```
 ativos_imagens/
 ├── .env                          # Configurações de API (Gemini + Replicate)
-├── .venv312/                     # Ambiente virtual Python 3.12
+├── venv/                         # Ambiente virtual Python
 ├── README.md                     # Documentação básica
 ├── COMO_EXECUTAR.md             # Guia de execução detalhado
 ├── ativos_imagens/              # Pacote principal do agente

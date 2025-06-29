@@ -1,4 +1,4 @@
-#!/usr/bin/env -S .venv312/bin/python
+#!/usr/bin/env python
 """
 Script de teste: geração de áudio MP3 a partir de um prompt de texto.
 

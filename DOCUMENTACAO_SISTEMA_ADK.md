@@ -1,7 +1,7 @@
 # Documentação do Sistema: Gerador de Ativos de IA
 
-**Versão:** 1.0
-**Data:** 26 de Junho de 2025
+**Versão:** 2.0
+**Data:** 01 de Julho de 2025
 
 ## 1. Visão Geral do Sistema
 
@@ -11,45 +11,48 @@ Este projeto implementa um **Gerador Automatizado de Ativos Digitais**, um siste
 *   Gráficos vetoriais (SVG)
 *   Animações complexas (JSON/Lottie)
 
-A arquitetura foi projetada para ser robusta e extensível, utilizando um agente de IA central que delega tarefas a um conjunto de ferramentas especializadas. Essas ferramentas, por sua vez, interagem com APIs de IA generativa de ponta para executar as tarefas de criação.
+A arquitetura foi projetada para ser robusta e extensível, adotando um **Sistema Multi-Agente**: um orquestrador central delega tarefas a agentes especializados, que por sua vez interagem com APIs de IA generativa de ponta para executar as tarefas de criação.
 
-## 2. Arquitetura do Agente
+## 2. Arquitetura do Sistema Multi-Agente (SMA)
 
-O sistema adota o padrão de arquitetura **AUF (Agente Único com Ferramentas)**, um dos modelos preconizados para o desenvolvimento com ADK.
+Este sistema evoluiu para uma arquitetura **SMA (Sistema Multi-Agente)**, separando responsabilidades em um orquestrador central e agentes especializados:
 
-*   **Agente Orquestrador (`root_agent`):** No coração do sistema (`agent.py`) está um `LlmAgent` do ADK. Este agente utiliza o modelo `gemini-1.5-flash-latest` para compreender as intenções do usuário, analisar os pedidos e decidir qual ferramenta utilizar para cumprir a tarefa. Ele é o cérebro do sistema.
+- **Orquestrador (`root_agent`)**: definido em `ativos_imagens/agentes_ativos/orchestrator.py`, coordena delegação de tarefas e integra agentes especializados e funções utilitárias.
+- **Agentes Especializados**: módulos independentes que executam funcionalidades de negócio específicas:
+  - `asset_validator_agent` (valida inventário, gera relatórios e identifica prioridades)
+  - `asset_creator_agent` (cria áudio, animações Lottie, SVG e mascote)
 
-*   **Caixa de Ferramentas (`tools`):** O agente tem acesso a um conjunto de `FunctionTool`. Cada ferramenta é uma função Python que encapsula uma capacidade de negócio específica (ex: criar um SVG, gerar uma animação). Essa abordagem desacopla a lógica de orquestração da lógica de execução, tornando o sistema mais modular e fácil de manter.
+A integração entre orquestrador e agentes é feita via `AgentTool`, e há funções utilitárias expostas como `FunctionTool` para visão geral do sistema (`get_system_overview`) e status rápido (`get_quick_status`).
 
 ## 3. Componentes Principais (Análise de Arquivos)
 
-A funcionalidade do sistema é distribuída entre vários arquivos e diretórios chave:
+A funcionalidade do sistema está organizada nos principais arquivos e diretórios abaixo:
 
 | Arquivo/Diretório                          | Propósito                                                                                                                                                                                                                                                                                                 |
 | :----------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`agent.py`**                             | **Orquestrador Central.** Define o `root_agent`, sua instrução de sistema e as ferramentas que ele pode usar (`check_asset_inventory`, `create_asset`). É o ponto de entrada para todas as solicitações do usuário.                                                                                       |
-| **`tools/asset_manager.py`**               | **Gerenciador de Inventário.** Contém a classe `AssetManager`, responsável por carregar e fornecer as especificações detalhadas de cada ativo que pode ser gerado (descrições, prompts, nomes de arquivos).                                                                                               |
-| **`tools/image_generator.py`**             | **Gerador de Imagens PNG.** Contém a lógica para interagir com APIs de imagem (provavelmente Recraft ou Replicate) para gerar imagens PNG. Inclui funcionalidades críticas como a remoção de fundo, que é executada em um subprocesso isolado para garantir estabilidade (`test_isolated_bg_removal.py`). |
-| **`tools/svg_generator.py`**               | **Gerador de Vetores SVG.** Implementa a lógica para criar arquivos SVG. Possui um sistema de fallback: primeiro tenta gerar um SVG diretamente via API (ex: Recraft); se falhar, executa um pipeline secundário que gera um PNG e o vetoriza.                                                            |
-| **`tools/mascot_animator.py`**             | **Gerador de Animações Lottie.** Orquestra o pipeline mais complexo do sistema para criar animações de mascote. Este processo envolve múltiplas chamadas de API e etapas de processamento.                                                                                                                |
-| **`test_*.py`**                            | **Suíte de Testes.** Um conjunto de scripts de teste que validam a funcionalidade de cada componente de forma isolada (`test_isolated_bg_removal.py`) e de ponta a ponta (`test_pipeline_mascote.py`). Eles são cruciais para garantir a integridade do sistema.                                          |
-| **`CLAUDE.md`**                            | **Documento de Meta-Arquitetura.** Descreve, para um "Engenheiro de Agentes de IA", como construir sistemas ADK. É a "constituição" que define os padrões de design (AUF vs. SMA) seguidos neste projeto.                                                                                                 |
-| **`prompts_*.md`**                         | **Banco de Prompts.** Arquivos Markdown que contêm os prompts de texto detalhados e estruturados usados pelas ferramentas para gerar ativos específicos, como os emblemas de conquistas (`prompts_achievement_badges.md`).                                                                                |
-| **`README.md` / `COMO_EXECUTAR.md`**       | **Documentação do Usuário.** Fornecem instruções claras sobre como configurar o ambiente, instalar dependências e executar o agente usando o servidor web do ADK.                                                                                                                                         |
-| **`ativos_imagens/resources/definicoes/`** | **Cópia interna do inventário.** Mantém o agente autossuficiente em distribuições `pip install`. É atualizada pelo script `sync_inventory.py`.                                                                                                                                                            |
-| **`ativos_imagens/sync_inventory.py`**     | **Script utilitário.** Copia `docs/definicoes/ativos_a_serem_criados.md` para a pasta `resources/` interna. Execute-o sempre que editar o inventário.                                                                                                                                                     |
+| **`ativos_imagens/README_ESTRUTURA.md`**           | Descreve a organização atual do código (agente_antigo vs. agentes_ativos)                                                        |
+| **`ativos_imagens/agentes_ativos/orchestrator.py`** | Orquestrador principal (`root_agent`), coordena agentes especializados e funções utilitárias                                      |
+| **`ativos_imagens/agentes_ativos/asset_validator.py`** | Agente especializado em validar inventário e gerar relatórios e prioridades                                                    |
+| **`ativos_imagens/agentes_ativos/asset_creator.py`**   | Agente especializado em criar ativos (áudio, Lottie, SVG e mascote)                                                           |
+| **`ativos_imagens/tools/asset_manager.py`**          | Gerenciador de inventário interno e checklist                                                                                |
+| **`ativos_imagens/tools/image_generator.py`**         | Gera imagens PNG, incluindo remoção de fundo                                                                                 |
+| **`ativos_imagens/tools/svg_generator.py`**           | Cria vetores SVG programáticos com fallback de vetorização                                                                  |
+| **`ativos_imagens/tools/lottie_programmatic.py`**     | Gera animações Lottie programaticamente                                                                                     |
+| **`test_multi_agent.py`**                             | Teste de importação e validação do sistema multi-agente                                                                      |
+| **`agente_antigo/`**                                  | Código legado do agente único original (AUF), mantido para referência                                                        |
 
 ## 4. Fluxos de Trabalho Detalhados
 
-### 4.1. Fluxo Principal de Criação de Ativo
+### 4.1. Fluxo de Trabalho Multi-Agente
 
-1.  **Entrada do Usuário:** O usuário interage com a interface web do ADK (iniciada com `adk web`) e envia um comando, como: `"Crie o ícone da câmera"`.
-2.  **Interpretação do Agente:** O `root_agent` recebe o texto. Seu LLM, guiado pela instrução de sistema, entende que a intenção é criar um ativo e que a ferramenta apropriada é `create_asset`.
-3.  **Chamada da Ferramenta:** O agente invoca a função `create_asset`, passando o identificador do ativo que ele extraiu do prompt (ex: `ICO-01`).
-4.  **Consulta ao Inventário:** A função `create_asset` utiliza o `AssetManager` para obter as especificações completas do `ICO-01` (prompt, tipo, nome do arquivo).
-5.  **Delegação para o Módulo Correto:** Com base no tipo de ativo (SVG), a função chama o orquestrador específico, `_create_svg_asset`.
-6.  **Execução da Geração:** O `_create_svg_asset` executa sua lógica, chamando as APIs externas necessárias.
-7.  **Retorno do Resultado:** O caminho do arquivo gerado ou uma mensagem de status (sucesso/erro) é retornado em cascata até a interface do usuário.
+1.  **Entrada do Usuário:** Usuário envia um comando na interface web do ADK, por exemplo:
+    - `Escaneie o projeto e mostre o status` → delega ao `asset_validator_agent`.
+    - `Crie o ativo SFX-01` → delega ao `asset_creator_agent`.
+2.  **Interpretação do Orquestrador:** O `root_agent` recebe o comando e, baseado em sua instrução de sistema, escolhe o agente especializado adequado.
+3.  **Chamada ao Agente Especializado:** O orquestrador invoca o agente correspondente via `AgentTool`.
+4.  **Processamento do Agente:** O agente especializado executa seu pipeline interno (validação, criação ou geração de relatórios).
+5.  **Retorno ao Orquestrador:** O resultado (caminho de arquivo, relatório ou status) é enviado de volta ao `root_agent`.
+6.  **Resposta ao Usuário:** O `root_agent` formata e apresenta a resposta final na interface do ADK.
 
 ### 4.2. Pipeline de Animação de Mascote (Lottie)
 
@@ -74,7 +77,7 @@ O sistema depende das seguintes APIs para sua funcionalidade:
 
 ## 6. Robustez e Tratamento de Erros
 
-O sistema foi projetado com mecanismos de proteção para garantir uma operação confiável, conforme evidenciado em `test_svg_system.py`:
+O sistema foi projetado com mecanismos de proteção para garantir uma operação confiável, conforme evidenciado em `test_multi_agent.py`:
 
 *   **Limite de Chamadas de API:** O sistema rastreia o número de chamadas de API por sessão para evitar custos inesperados e atingir os limites de taxa (`rate limits`).
 *   **Detecção de Erros Persistentes:** O código está preparado para identificar e lidar com erros de API recorrentes (ex: `402 Payment Required`, `429 Rate Limit`), parando as tentativas para evitar desperdício de recursos.
@@ -82,15 +85,28 @@ O sistema foi projetado com mecanismos de proteção para garantir uma operaçã
 
 ## 7. Configuração e Execução
 
-Para executar o sistema, siga os passos definidos em `COMO_EXECUTAR.md`:
+Para executar o sistema multi-agente, siga os passos em `COMO_EXECUTAR.md`:
 
-1.  **Navegar** para o diretório raiz do projeto.
-2.  **Ativar** o ambiente virtual Python (`source .venv312/bin/activate`).
-3.  **Configurar** a chave da API do Google no arquivo `.env`.
-4.  **Iniciar** o servidor web do ADK com o comando `adk web`.
-5.  **Acessar** a interface em `http://127.0.0.1:8000` e selecionar o agente `ativos_imagens`.
+1. Navegue até o diretório raiz do projeto.
+2. Ative o ambiente virtual Python:
+   ```bash
+   source venv/bin/activate
+   ```
+3. Instale as dependências do projeto:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. (Opcional) Sincronize o inventário interno:
+   ```bash
+   python -m ativos_imagens.sync_inventory
+   ```
+5. Inicie o servidor web do ADK:
+   ```bash
+   adk web
+   ```
+6. Acesse `http://127.0.0.1:8000` e selecione o agente `ativos_imagens`.
 
-**Sincronizar inventário interno**
+Para validar a instalação e configuração, execute:
 ```bash
-python -m ativos_imagens.sync_inventory  # executa na raiz sempre que atualizar o Markdown de inventário
+python test_multi_agent.py
 ```
