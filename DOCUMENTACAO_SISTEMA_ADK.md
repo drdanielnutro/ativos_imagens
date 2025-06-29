@@ -108,5 +108,5 @@ Para executar o sistema multi-agente, siga os passos em `COMO_EXECUTAR.md`:
 
 Para validar a instalação e configuração, execute:
 ```bash
-python test_multi_agent.py
+pytest test_multi_agent.py -q --disable-warnings
 ```
