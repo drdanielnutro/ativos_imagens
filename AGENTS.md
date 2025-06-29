@@ -1,86 +1,80 @@
-<!--
-Este arquivo serve como documentação para o Codex Cloud (ADK) sobre o agente
-"ativos_imagens" e sua estrutura interna. Ele será automaticamente incluído como
-contexto em sessões do Codex CLI para orientar o comportamento do agente.
--->
-# AGENTS
+# AGENTS.md (root)
 
-Este documento descreve o agente *Gerador Automatizado de Assets Digitais*,
-suas ferramentas e a estrutura do projeto, para uso com o Google Agent
-Development Kit (ADK).
+> **Audience:** any Codex/Gemini/Claude agent or human contributor that operates at the repository root.
+>
+> **Goal:** describe *where* agents may act and *which checks* must pass **before** proposing a patch or opening a PR.
 
-## Visão Geral do Projeto
+---
 
-O projeto implementa um **Agente Único com Ferramentas** para geração
-automatizada de ativos digitais (PNG, SVG, Lottie e em breve MP3) voltados
-para aplicações infantis. O agente atua como um "Diretor de Produção",
-orquestrando módulos especializados que utilizam IA e lógicas programáticas.
+## 1  Scope
 
-## Estrutura de Diretórios
+| Path / Pattern               | Permission   | Notes                                     |
+| ---------------------------- | ------------ | ----------------------------------------- |
+| `/src/**`, `/tests/**`       | ✅ EDIT       | main application & unit/integration tests |
+| `*.md`, `/docs/**`           | ⚠️ EDIT       | keep docs concise; no large media embeds  |
+| `/data/**`, `*.csv`, `*.png` | ❌ READ‑ONLY  | production data & binary assets           |
+| Files > 1 MB                 | ❌ PROHIBITED | commit history must stay lightweight      |
 
-```
-.
-├── AGENTS.md                # Este arquivo de instruções para o Codex Cloud
-├── README.md                # Descrição geral e instruções de setup/execução
-└── ativos_imagens/          # Pacote principal do agente e tools
-    ├── agent.py             # Agente de produção com orquestração de tools
-    ├── agent_minimal.py     # Versão mínima do agente para testes/debug
-    ├── sync_inventory.py    # Sincroniza inventário de ativos (docs → resources)
-    ├── resources/definicoes/ # Definições de ativos carregadas pelo AssetManager
-    ├── tools/               # Ferramentas especializadas de geração de assets
-    │   ├── asset_manager.py
-    │   ├── image_generator.py
-    │   ├── svg_generator.py
-    │   ├── lottie_programmatic.py
-    │   └── mascot_animator.py
-    └── output/              # Exemplos de saída (PNG, SVG e Lottie gerados)
+*Deeper* AGENTS.md files override these rules for their subtree.
+
+---
+
+## 2  Environment
+
+```bash
+# 🔒 Pin the sandbox Python version
+CODEX_ENV_PYTHON_VERSION=3.11
 ```
 
-## Ferramentas Disponíveis
+Agents must run in **network‑disabled mode** unless the AGENTS.md inside that subtree explicitly allows network calls.
 
-| Ferramenta                  | Localização                  | Função                                              |
-| --------------------------- | ---------------------------- | --------------------------------------------------- |
-| AssetManager                | tools/asset_manager.py       | Gerencia inventário, checklist e paths dos ativos   |
-| ImageGenerator              | tools/image_generator.py     | Gera imagens PNG via IA e opcional remoção de fundo |
-| SVGGenerator                | tools/svg_generator.py       | Gera vetores SVG programáticos ou assistidos por IA |
-| LottieProgrammaticGenerator | tools/lottie_programmatic.py | Cria animações Lottie programaticamente             |
-| MascotAnimator              | tools/mascot_animator.py     | Cria animações Lottie para mascote via IA           |
+---
 
-## Comportamento do Agente
+## 3  Setup pipeline (MUST succeed)
 
-- **get_project_status()**: retorna status do projeto e lista de tools ativas.
-- **create_asset(asset_id: str)**: orquestra a chamada ao AssetManager para
-  buscar especificações e invocar a tool correta conforme o tipo do ativo.
-- Carrega variáveis de ambiente do arquivo `.env`:
-  - `GOOGLE_API_KEY` para chamadas ao ADK/Google Gemini
-  - `REPLICATE_API_TOKEN` para chamadas à API do Replicate
-- Controla limites de API via `API_CALL_TRACKER` e previne loops de erro com
-  `ErrorTracker`.
-- Caso ferramentas não estejam disponíveis, exibe alertas e instruções de
-  instalação.
+Agents **must** execute the steps below **locally** and only submit a patch when every command exits with `0`.
 
-## Fluxo de Uso no Codex Cloud
+```bash
+# 1. Self‑contained bootstrap
+./setup.sh          # installs Poetry/venv, ADK, Replicate, etc.
 
-1. Selecione o agente **ativos_imagens** no painel de agentes do ADK.
-2. Faça perguntas ou comandos ao agente:
-   - Ex: "Qual é o status do projeto?"
-   - Ex: "Crie o ativo 'LOAD-01' do inventário."
-3. O agente retornará informações formatadas e criará os arquivos em
-   `ativos_imagens/output/`, organizados por tipo.
-4. Para atualizar o inventário de ativos após editar as definições em
-   `docs/definicoes/ativos_a_serem_criados.md`, execute:
-   ```bash
-   python -m ativos_imagens.sync_inventory
-   ```
+# 2. Static analysis
+ruff check .        # lint (PEP 8 + Ruff rules)
+mypy src            # type‑checking
 
-## Observações
+# 3. Tests
+pytest -q --disable-warnings
+```
 
-- Mantenha `docs/definicoes/ativos_a_serem_criados.md` sempre sincronizado
-  executando `sync_inventory.py`.
-- Antes de rodar o agente em um ambiente novo, instale as dependências
-  Python listadas em `requirements.txt` **e** execute `./startup.sh` (ou
-  configure o *script de configuração* do Codex Cloud) para instalar
-  utilitários de linha de comando essenciais como *ImageMagick*, *Potrace*,
-  *mkbitmap* etc.
-- Novas ferramentas de geração de áudio MP3 (SFX) serão adicionadas em breve.
-- O agente está em fase de desenvolvimento e feedback é bem-vindo.
+> ✅ If all steps turn green, the patch may be submitted.
+> ❌ If *any* step fails, the agent **must** fix the code and retry.
+
+---
+
+## 4  Style & Conventions
+
+* Black formatting (PEP 8 default line length = 88).
+* Typing mandatory for all new/edited functions.
+* Commit messages: `<type>(<scope>): <subject>` (Conventional Commits).
+
+---
+
+## 5  DO NOT
+
+* alter git history (no force‑push),
+* commit secrets (.env, tokens, certificates),
+* exceed API rate‑limits,
+* generate Lottie JSONs > 500 kB without prior compression.
+
+---
+
+## 6  Useful snippets
+
+```bash
+# Run a local web server (if needed)
+poetry run python -m http.server 8000
+```
+
+---
+
+> **Remember:** explicit instructions in a task prompt overrule AGENTS.md. When in doubt, ask for clarification instead of guessing.
