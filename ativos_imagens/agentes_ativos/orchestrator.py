@@ -3,7 +3,8 @@ Agente Orquestrador Principal - Sistema Multi-Agente de Produção de Ativos
 """
 
 from google.adk.agents import LlmAgent
-from google.adk.tools import AgentTool, FunctionTool
+from google.adk.tools.agent_tool import AgentTool
+from google.adk.tools import FunctionTool
 import datetime
 import os
 

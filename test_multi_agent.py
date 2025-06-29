@@ -15,21 +15,22 @@ def test_imports():
     
     # Teste 1: Importar orchestrator
     try:
-        from ativos_imagens import orchestrator
+        from ativos_imagens.agentes_ativos import orchestrator
         tests.append(("✅", "Orchestrator importado com sucesso"))
     except ImportError as e:
         tests.append(("❌", f"Erro ao importar orchestrator: {e}"))
     
     # Teste 2: Verificar agentes
     try:
-        from ativos_imagens.agents import asset_validator_agent, asset_creator_agent
+        from ativos_imagens.agentes_ativos.asset_validator import asset_validator_agent
+        from ativos_imagens.agentes_ativos.asset_creator import asset_creator_agent
         tests.append(("✅", "Agentes especializados importados"))
     except ImportError as e:
         tests.append(("❌", f"Erro ao importar agentes: {e}"))
     
     # Teste 3: Verificar root_agent
     try:
-        from ativos_imagens.orchestrator import root_agent
+        from ativos_imagens.agentes_ativos.orchestrator import root_agent
         if root_agent:
             tests.append(("✅", f"Root agent criado: {root_agent.name}"))
         else:
@@ -39,7 +40,7 @@ def test_imports():
     
     # Teste 4: Verificar ferramentas do orchestrator
     try:
-        from ativos_imagens.orchestrator import root_agent
+        from ativos_imagens.agentes_ativos.orchestrator import root_agent
         if hasattr(root_agent, 'tools'):
             tool_names = [tool.__class__.__name__ for tool in root_agent.tools]
             tests.append(("✅", f"Ferramentas: {', '.join(tool_names)}"))
