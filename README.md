@@ -2,11 +2,20 @@
 
 # Projeto: Gerador Automatizado de Assets Digitais
 
-Este projeto implementa um **Agente Único com Ferramentas** usando o Google Agent Development Kit (ADK).
+Este projeto implementa um **Sistema Multi-Agente** usando o Google Agent Development Kit (ADK).
 
 ## Descrição
 
-Sistema de geração automatizada de assets digitais (imagens PNG, vetores SVG, áudio MP3 e animações Lottie) para aplicações infantis. O agente atua como um "Diretor de Produção" orquestrando ferramentas especializadas de IA e processamento programático para criar recursos visuais e sonoros de alta qualidade com consistência garantida.
+Sistema de geração automatizada de assets digitais (imagens PNG, vetores SVG, áudio MP3 e animações Lottie) para aplicações infantis. O sistema utiliza múltiplos agentes especializados coordenados por um orquestrador principal.
+
+## Estrutura de Arquivos Importantes
+
+### 📁 Arquivos de Definição
+Os arquivos de inventário e checklist devem estar localizados em:
+- `docs/definicoes/ativos_a_serem_criados.md` - Lista completa de ativos com especificações
+- `docs/definicoes/checklist_ativos_criados.md` - Status de cada ativo (criado ou não)
+
+**⚠️ IMPORTANTE:** Não mova estes arquivos para outro local, pois o sistema está configurado para lê-los deste diretório.
 
 ## Configuração
 
@@ -90,14 +99,22 @@ ativos_imagens/
     └── agent.py           # Agente principal e ferramentas
 ```
 
-## Status Atual
+## Status Atual do Projeto
 
-O agente está **totalmente funcional** com todas as ferramentas do pipeline implementadas:
+O desenvolvimento do sistema de geração de assets está em andamento. As ferramentas individuais para cada tipo de ativo (imagens, vetores, áudio, animações) foram implementadas e são funcionais.
 
 - [x] Ferramenta de Geração de Imagens PNG (mascote PROF e sprites)
 - [x] Ferramenta de Geração Vetorial SVG (ícones e padrões)
 - [x] Ferramenta de Geração de Áudio MP3 (efeitos sonoros)
-- [x] Ferramenta de Geração de Animações Lottie (IA-vetorizada e programática)
+- [x] Ferramenta de Geração de Animações WebP (substituindo Lottie para animações de mascote)
+
+A orquestração completa via sistema multi-agente está em fase de desenvolvimento e integração.
+
+### Estratégia de Desenvolvimento Atual (Plano B)
+
+Atualmente, para permitir a geração e validação contínua dos assets enquanto o sistema multi-agente está sendo finalizado, utilizamos um **fluxo de trabalho manual baseado em scripts**. Este "Plano B" permite invocar diretamente as ferramentas de geração (como `mascot_animator.py`, `image_generator.py`, etc.) através do script `ativos_imagens/geracao_manual/gerador_manual.py`.
+
+Este método é uma solução temporária para garantir a produção de ativos e a validação do pipeline de geração, e será substituído pela orquestração automatizada dos agentes assim que o sistema estiver totalmente operacional.
 
 ## Próximos Passos
 

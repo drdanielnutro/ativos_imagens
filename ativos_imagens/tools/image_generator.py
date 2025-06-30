@@ -64,30 +64,48 @@ class ImageGenerator:
         Returns:
             A URL da nova imagem com fundo transparente.
         """
+        import tempfile
+
         # Modelo lucataco/remove-bg - mais estável e simples
         model_id = "lucataco/remove-bg:95fcc2a26d3899cd6c2691c900465aaeff466285a65c14638cc5f36f34befaf1"
         print(f"INFO: Removendo fundo da imagem: {image_url}")
 
-        # Parâmetro único conforme documentação
-        api_input = {
-            "image": image_url
-        }
+        # Baixar a imagem para um arquivo temporário
+        response = requests.get(image_url)
+        response.raise_for_status()
 
-        # O modelo pode retornar FileOutput, extrair URL
-        result = replicate.run(model_id, input=api_input)
-        
-        # Tratar FileOutput para extrair URL
-        if hasattr(result, 'url'):
-            return result.url
-        elif isinstance(result, str):
-            return result
-        else:
-            return str(result)
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_image_file:
+            temp_image_file.write(response.content)
+            temp_image_path = temp_image_file.name
 
-    def generate_png(self, asset_type: Literal['mascote', 'generico'], prompt_details: Dict[str, str], model_name: str = "stability-ai/sdxl", remove_bg: bool = True) -> str:
+        try:
+            with open(temp_image_path, "rb") as f:
+                api_input = {
+                    "image": f
+                }
+                result = replicate.run(model_id, input=api_input)
+            
+            # Tratar FileOutput para extrair URL
+            if hasattr(result, 'url'):
+                return result.url
+            elif isinstance(result, str):
+                return result
+            else:
+                return str(result)
+        finally:
+            # Garantir que o arquivo temporário seja removido
+            os.unlink(temp_image_path)
+
+    def generate_png(self, asset_type: Literal['mascote', 'generico'], prompt_details: Dict[str, str], output_path: str, model_name: str = "stability-ai/sdxl", remove_bg: bool = True) -> str:
         """Gera uma imagem PNG, opcionalmente remove o fundo, e a salva em disco."""
-        # Importar função de verificação do agent
-        from ..agent import check_api_limit, API_CALL_TRACKER
+        try:
+            # Importar função de verificação do agent (se disponível)
+            from ..agent import check_api_limit, API_CALL_TRACKER
+        except ModuleNotFoundError:
+            # Fallback para uso manual: funções dummy
+            print("AVISO: Módulo 'agent' não encontrado. Usando funções dummy para controle de API.")
+            check_api_limit = lambda x: True
+            API_CALL_TRACKER = {'replicate_calls': 0} # Dicionário dummy
         
         # Verificar limite de API
         if not check_api_limit('replicate'):
@@ -126,13 +144,7 @@ class ImageGenerator:
             response.raise_for_status()
             img = Image.open(io.BytesIO(response.content))
             
-            output_dir = "outputs/png"
-            os.makedirs(output_dir, exist_ok=True)
-            
-            base_name = prompt_details.get('filename_base', 'generic_asset')
-            output_filename = f"{base_name}.png"
-            output_path = os.path.join(output_dir, output_filename)
-            
+            # Salvar no caminho de saída fornecido
             img.save(output_path)
 
             return output_path

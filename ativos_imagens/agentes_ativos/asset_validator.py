@@ -20,10 +20,10 @@ except ImportError:
 
 def scan_project_structure() -> str:
     """
-    Escaneia a estrutura completa do projeto e retorna status detalhado de todos os ativos.
+    Retorna status detalhado de todos os ativos baseado no checklist.
     
     Returns:
-        str: Relatório detalhado com status de cada ativo (✅ Completo, ⚠️ Placeholder, ❌ Ausente)
+        str: Relatório detalhado com status de cada ativo (✅ Completo, ⏳ Em progresso, ❌ Pendente)
     """
     if not AssetManager:
         return "❌ Erro: AssetManager não disponível"
@@ -33,35 +33,21 @@ def scan_project_structure() -> str:
         manager.load_asset_inventory()
         manager.load_checklist_status()
         
-        # Diretórios a escanear
-        scan_paths = [
-            Path(__file__).parent.parent.parent / "professor_virtual" / "assets",
-            Path(__file__).parent.parent / "output",
-            Path(__file__).parent.parent.parent / "generated_audio"
-        ]
-        
-        # Mapear arquivos existentes
-        found_files = {}
-        for base_path in scan_paths:
-            if base_path.exists():
-                for file_path in base_path.rglob("*"):
-                    if file_path.is_file() and not file_path.name.startswith('.'):
-                        rel_path = str(file_path.relative(base_path))
-                        file_size = file_path.stat().st_size
-                        found_files[file_path.name] = {
-                            "path": str(file_path),
-                            "size": file_size,
-                            "status": "✅" if file_size > 0 else "⚠️"
-                        }
+        # Contar status
+        total_assets = len(manager.asset_specs)
+        completed = sum(1 for status in manager.checklist_status.values() if status.get('completed'))
+        in_progress = sum(1 for status in manager.checklist_status.values() if status.get('in_progress'))
+        pending = total_assets - completed - in_progress
         
         # Gerar relatório
-        report = f"""## 📊 Escaneamento Completo do Projeto - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+        report = f"""## 📊 Status dos Ativos - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 ### 📈 Resumo Geral
-- **Total de Ativos Catalogados:** {len(manager.asset_specs)}
-- **Arquivos Encontrados:** {len(found_files)}
-- **Arquivos Completos (>0B):** {sum(1 for f in found_files.values() if f['status'] == '✅')}
-- **Placeholders (0B):** {sum(1 for f in found_files.values() if f['status'] == '⚠️')}
+- **Total de Ativos:** {total_assets}
+- **Completos:** {completed} (✅)
+- **Em Progresso:** {in_progress} (⏳)
+- **Pendentes:** {pending} (❌)
+- **Taxa de Conclusão:** {(completed/total_assets*100):.1f}%
 
 ### 📁 Status por Categoria
 """
@@ -73,23 +59,24 @@ def scan_project_structure() -> str:
             if category not in categories:
                 categories[category] = []
             
-            filename = spec.get('filename')
-            if filename in found_files:
-                file_info = found_files[filename]
-                status = file_info['status']
-                size_str = f"{file_info['size']/1024:.1f}KB" if file_info['size'] > 0 else "0B"
-                location = file_info['path']
+            # Determinar status do checklist
+            checklist_item = manager.checklist_status.get(asset_id, {})
+            if checklist_item.get('completed'):
+                status = "✅"
+                status_text = "Completo"
+            elif checklist_item.get('in_progress'):
+                status = "⏳"
+                status_text = "Em progresso"
             else:
                 status = "❌"
-                size_str = "N/A"
-                location = "Não encontrado"
+                status_text = "Pendente"
             
             categories[category].append({
                 'id': asset_id,
-                'filename': filename,
+                'filename': spec.get('filename'),
                 'status': status,
-                'size': size_str,
-                'location': location
+                'status_text': status_text,
+                'description': spec.get('description', 'N/A')
             })
         
         # Formatar por categoria
@@ -99,14 +86,14 @@ def scan_project_structure() -> str:
             report += f"\n#### {category} ({complete}/{total})\n"
             
             for asset in sorted(assets, key=lambda x: x['id']):
-                report += f"- {asset['status']} **{asset['id']}**: `{asset['filename']}` ({asset['size']})\n"
-                if asset['status'] != '❌':
-                    report += f"  > Local: {asset['location']}\n"
+                report += f"- {asset['status']} **{asset['id']}**: `{asset['filename']}` - {asset['status_text']}\n"
+                if asset['description'] != 'N/A':
+                    report += f"  > {asset['description']}\n"
         
         return report
         
     except Exception as e:
-        return f"❌ Erro ao escanear projeto: {str(e)}"
+        return f"❌ Erro ao gerar relatório: {str(e)}"
 
 
 def update_checklist_status(asset_id: str, new_status: str = "completed") -> str:
@@ -322,13 +309,12 @@ def identify_priorities() -> str:
         return f"❌ Erro ao identificar prioridades: {str(e)}"
 
 
-def sync_checklist_with_files() -> str:
+def get_pending_assets_summary() -> str:
     """
-    Sincroniza o checklist com os arquivos encontrados no sistema.
-    Detecta novos arquivos criados e atualiza automaticamente o status.
+    Retorna um resumo dos ativos pendentes organizados por tipo.
     
     Returns:
-        str: Relatório de sincronização com mudanças detectadas
+        str: Resumo dos ativos que ainda precisam ser criados
     """
     if not AssetManager:
         return "❌ Erro: AssetManager não disponível"
@@ -338,62 +324,45 @@ def sync_checklist_with_files() -> str:
         manager.load_asset_inventory()
         manager.load_checklist_status()
         
-        # Escanear arquivos existentes
-        scan_paths = [
-            Path(__file__).parent.parent.parent / "professor_virtual" / "assets",
-            Path(__file__).parent.parent / "output",
-            Path(__file__).parent.parent.parent / "generated_audio"
-        ]
-        
-        found_files = {}
-        for base_path in scan_paths:
-            if base_path.exists():
-                for file_path in base_path.rglob("*"):
-                    if file_path.is_file() and not file_path.name.startswith('.'):
-                        found_files[file_path.name] = {
-                            "path": str(file_path),
-                            "size": file_path.stat().st_size
-                        }
-        
-        # Detectar mudanças
-        changes = []
+        # Filtrar apenas pendentes
+        pending_by_type = {}
         for asset_id, spec in manager.asset_specs.items():
-            filename = spec.get('filename')
-            current_status = manager.checklist_status.get(asset_id, {}).get('completed', False)
-            
-            if filename in found_files and found_files[filename]['size'] > 0:
-                if not current_status:
-                    # Arquivo existe mas não está marcado como completo
-                    manager.update_checklist_status(asset_id, 'completed')
-                    changes.append(f"✅ {asset_id} ({filename}) - Detectado e marcado como completo")
-            elif filename in found_files and found_files[filename]['size'] == 0:
-                if current_status:
-                    # Regressão: arquivo era completo mas agora é placeholder
-                    changes.append(f"⚠️ {asset_id} ({filename}) - REGRESSÃO DETECTADA! Arquivo zerado")
-            elif not filename in found_files and current_status:
-                # Arquivo marcado como completo mas não existe
-                changes.append(f"❌ {asset_id} ({filename}) - Marcado como completo mas não encontrado!")
+            if not manager.checklist_status.get(asset_id, {}).get('completed'):
+                asset_type = spec.get('type', 'unknown')
+                if asset_type not in pending_by_type:
+                    pending_by_type[asset_type] = []
+                pending_by_type[asset_type].append({
+                    'id': asset_id,
+                    'filename': spec.get('filename'),
+                    'description': spec.get('description', 'N/A')
+                })
         
         # Gerar relatório
-        report = f"""## 🔄 Sincronização de Checklist - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+        report = f"""## 📋 Ativos Pendentes - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-### 📊 Resumo
-- **Arquivos Escaneados:** {len(found_files)}
-- **Mudanças Detectadas:** {len(changes)}
-
-### 📝 Detalhes das Mudanças
+### 📊 Resumo por Tipo
 """
         
-        if changes:
-            for change in changes:
-                report += f"- {change}\n"
-        else:
-            report += "- Nenhuma mudança detectada. Checklist está sincronizado.\n"
+        total_pending = 0
+        for asset_type, assets in sorted(pending_by_type.items()):
+            count = len(assets)
+            total_pending += count
+            report += f"\n#### {asset_type.upper()} ({count} pendentes)\n"
+            
+            for asset in assets[:5]:  # Mostrar apenas os 5 primeiros
+                report += f"- **{asset['id']}**: `{asset['filename']}`\n"
+                if asset['description'] != 'N/A':
+                    report += f"  > {asset['description']}\n"
+            
+            if count > 5:
+                report += f"  ... e mais {count - 5} ativos\n"
+        
+        report += f"\n### 💡 Total de Ativos Pendentes: {total_pending}"
         
         return report
         
     except Exception as e:
-        return f"❌ Erro ao sincronizar: {str(e)}"
+        return f"❌ Erro ao gerar resumo: {str(e)}"
 
 
 # Criar o agente validador
@@ -422,6 +391,6 @@ Use suas ferramentas para fornecer informações precisas sobre o estado do proj
         FunctionTool(update_checklist_status),
         FunctionTool(generate_progress_report),
         FunctionTool(identify_priorities),
-        FunctionTool(sync_checklist_with_files)
+        FunctionTool(get_pending_assets_summary)
     ]
 )

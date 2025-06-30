@@ -1,0 +1,68 @@
+# Definição de Geração de Ativos
+
+Este arquivo serve como a fonte única da verdade para a geração programática de ativos. Cada linha define um ativo, a ferramenta usada para criá-lo e os parâmetros exatos necessários para a geração.
+
+| ID         | Ferramenta          | Parâmetros (JSON como string)                                                                                                                               |
+| :--------- | :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SFX-01     | audio_generator     | `{"filename": "button_tap.mp3", "duration": 0.5, "model": "stable-audio", "prompt": "Professional sound design for children's educational app: gentle satisfying button tap sound, Material Design inspired UI feedback, soft but crisp tactile response, warm wooden percussion quality, child-friendly mobile interface sound, exactly 0.5 seconds, non-startling, encouraging interaction", "negative_prompt": "loud, sharp, metallic, echo, harsh, aggressive, annoying, repetitive fatigue"}` |
+| SFX-02     | audio_generator     | `{"filename": "success.mp3", "duration": 1.5, "model": "musicgen", "prompt": "Children's educational app success sound: bright cheerful completion chime, celebratory but not overwhelming, harmonious major chord progression, magical sparkle quality like Mario coin collection, Brazilian warmth and joy, encouraging achievement feeling, 1.5 seconds duration, mobile-optimized"}` |
+| SFX-03     | audio_generator     | `{"filename": "error_gentle.mp3", "duration": 1.0, "model": "musicgen", "prompt": "Educational app gentle error indication: soft musical warning for children 7-11 years, helpful not startling, descending two-note melody with rounded smooth tone, xylophone or marimba quality, encouraging to try again, non-alarming supportive feedback, exactly 1 second"}` |
+| SFX-04     | audio_generator     | `{"filename": "notification.mp3", "duration": 1.0, "model": "musicgen", "prompt": "Child-friendly notification bell for educational app: gentle school bell inspired but softer, pleasant triangular chime, warm resonance, attention-getting without startling, Brazilian school context, friendly reminder quality, exactly 1 second duration"}` |
+| SFX-05     | audio_generator     | `{"filename": "achievement.mp3", "duration": 2.5, "model": "musicgen", "prompt": "Educational achievement celebration fanfare: triumphant orchestral sound for children, brief celebratory fanfare, positive reinforcement for learning milestones, uplifting major key progression, Brazilian festive spirit without stereotypes, encouraging continued learning, 2.5 seconds duration"}` |
+| SFX-06     | audio_generator     | `{"filename": "camera_shutter.mp3", "duration": 0.5, "model": "stable-audio", "prompt": "Modern smartphone camera capture sound for kids app: contemporary digital camera shutter click, crisp but not mechanical, friendly photo-taking feedback, familiar mobile phone camera sound, clean and satisfying, exactly 0.5 seconds", "negative_prompt": "old mechanical camera, film advance, electronic beep, harsh click"}` |
+| SFX-07     | audio_generator     | `{"filename": "page_transition.mp3", "duration": 0.5, "model": "stable-audio", "prompt": "Smooth page turn transition for educational app: gentle paper sliding swoosh, airy page flip sound, book page turning quality, light and swift movement, story-time feeling, non-distracting navigation feedback, exactly 0.5 seconds", "negative_prompt": "harsh whoosh, windy, noisy, heavy bass, sharp swoosh"}` |
+| SFX-08     | audio_generator     | `{"filename": "pop_up.mp3", "duration": 0.5, "model": "stable-audio", "prompt": "Playful bubble pop for children's interface: cartoon soap bubble bursting, light and delightful pop sound, fun interaction feedback, bouncy and soft quality, game-like satisfaction, child-appropriate playfulness, exactly 0.5 seconds", "negative_prompt": "loud pop, aggressive burst, sharp crack, balloon pop"}` |
+| SFX-09     | audio_generator     | `{"filename": "processing_loop.mp3", "duration": 3.0, "model": "stable-audio", "prompt": "Ambient thinking/processing loop for educational app: soft electronic thinking sound, gentle pulsing hum, AI assistant processing indication, soothing continuous background, seamless 3-second loop, calming waiting music, child-friendly technology sound", "negative_prompt": "harsh buzz, loud hum, distracting, annoying, anxiety-inducing"}` |
+| MAS-01     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "happy", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-02     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "curious", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-03     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "encouraging", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-04     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "excited", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-05     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "explaining", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-06     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "thinking", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-07     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "welcoming", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-08     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "celebrating", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-09     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "sleeping", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-10     | image_generator     | `{"asset_type": "mascote", "prompt_details": {"action": "surprised", "objects_location": "nearby", "background_color": "a clean white background"}}` |
+| MAS-ANI-01 | mascot_animator     | {"animation_prompt": "subtle breathing motion, seamless loop, character is mostly still", "prompt_details": {"action": "standing still, friendly pose", "objects_location": "book under arm"}, "remove_background": false} |
+| MAS-ANI-02 | mascot_animator     | {"animation_prompt": "a happy jump with a little squash and stretch", "prompt_details": {"action": "in a ready-to-jump pose", "objects_location": "nearby"}, "remove_background": false} |
+| MAS-ANI-03 | mascot_animator     | {"animation_prompt": "a friendly wave to the user", "prompt_details": {"action": "with one arm raised", "objects_location": "nearby"}, "remove_background": false} |
+| MAS-ANI-04 | mascot_animator     | {"animation_prompt": "tapping chin thoughtfully, a lightbulb appears and glows above head", "prompt_details": {"action": "hand on chin, looking curious", "objects_location": "nearby"}, "remove_background": false} |
+| MAS-ANI-05 | mascot_animator     | {"animation_prompt": "jumping for joy, with confetti exploding around", "prompt_details": {"action": "with arms open wide", "objects_location": "nearby"}, "remove_background": false} |
+| UI-01      | svg_generator       | `{"svg_type": "pattern", "style": "dots", "size": [100, 100]}` |
+| UI-02      | svg_generator       | `{"svg_type": "pattern", "style": "stars", "size": [100, 100]}` |
+| UI-03      | svg_generator       | `{"svg_type": "pattern", "style": "clouds", "size": [100, 100]}` |
+| UI-04      | svg_generator       | `{"svg_type": "pattern", "style": "school", "size": [100, 100]}` |
+| UI-05      | image_generator     | `{"asset_type": "generico", "prompt_details": {"description": "Smooth, soft, blue-purple gradient mesh background (1920x1080)"}}` |
+| UI-06      | image_generator     | `{"asset_type": "generico", "prompt_details": {"description": "Smooth, soft, orange-pink gradient mesh background (1920x1080)"}}` |
+| UI-07      | image_generator     | `{"asset_type": "generico", "prompt_details": {"description": "single, bright, sparkling star particle, on a transparent background (64x64)"}}` |
+| UI-08      | image_generator     | `{"asset_type": "generico", "prompt_details": {"description": "A spritesheet of colorful confetti pieces, various shapes and colors, on a transparent background (512x512)"}}` |
+| UI-09      | svg_generator       | `{"svg_type": "decorative", "style": "bubble", "size": [100, 100]}` |
+| UI-10      | svg_generator       | `{"svg_type": "decorative", "style": "rainbow", "size": [100, 100]}` |
+| LOAD-01    | lottie_programmatic | `{"animation_type": "loading", "style": "spinner", "duration": 2.0, "loop": true}` |
+| LOAD-02    | lottie_programmatic | `{"animation_type": "loading", "style": "bounce", "duration": 1.5, "loop": true}` |
+| LOAD-03    | lottie_programmatic | `{"animation_type": "loading", "style": "wave", "duration": 2.0, "loop": true}` |
+| LOAD-04    | lottie_programmatic | `{"animation_type": "loading", "style": "thinking", "duration": 3.0, "loop": true}` |
+| LOAD-05    | lottie_programmatic | `{"animation_type": "loading", "style": "camera", "duration": 1.5, "loop": true}` |
+| LOAD-06    | lottie_programmatic | `{"animation_type": "loading", "style": "ai", "duration": 2.5, "loop": true}` |
+| ACH-01     | lottie_programmatic | `{"animation_type": "achievement", "style": "unlock", "duration": 2.0}` |
+| ACH-02     | lottie_programmatic | `{"animation_type": "achievement", "style": "level_up", "duration": 3.0}` |
+| ACH-03     | lottie_programmatic | `{"animation_type": "achievement", "style": "star_burst", "duration": 1.5}` |
+| ACH-04     | svg_generator       | `{"svg_type": "frame", "style": "badge_frame", "custom_params": {"level": "bronze"}}` |
+| ACH-05     | svg_generator       | `{"svg_type": "frame", "style": "badge_frame", "custom_params": {"level": "silver"}}` |
+| ACH-06     | svg_generator       | `{"svg_type": "frame", "style": "badge_frame", "custom_params": {"level": "gold"}}` |
+| ACH-07     | image_generator     | `{"asset_type": "generico", "prompt_details": {"description": "a soft, circular, golden glow effect for a badge, on a transparent background"}}` |
+| THM-01     | svg_generator       | `{"svg_type": "themed", "style": "holiday_decorations"}` |
+| THM-02     | svg_generator       | `{"svg_type": "themed", "style": "seasonal_pattern_spring"}` |
+| THM-03     | svg_generator       | `{"svg_type": "themed", "style": "seasonal_pattern_autumn"}` |
+| THM-04     | svg_generator       | `{"svg_type": "themed", "style": "birthday_elements"}` |
+| THM-05     | svg_generator       | `{"svg_type": "themed", "style": "space_theme"}` |
+| FBK-01     | lottie_programmatic | `{"animation_type": "feedback", "style": "ripple", "duration": 0.5, "loop": false}` |
+| FBK-02     | lottie_programmatic | `{"animation_type": "feedback", "style": "checkmark", "duration": 1.0, "loop": false}` |
+| FBK-03     | lottie_programmatic | `{"animation_type": "feedback", "style": "shake", "duration": 0.5, "loop": false}` |
+| FBK-04     | lottie_programmatic | `{"animation_type": "feedback", "style": "pulse", "duration": 2.0, "loop": true}` |
+| ICO-01     | svg_generator       | `{"svg_type": "icon", "style": "camera_fun", "size": [24, 24]}` |
+| ICO-02     | svg_generator       | `{"svg_type": "icon", "style": "microphone_fun", "size": [24, 24]}` |
+| ICO-03     | svg_generator       | `{"svg_type": "icon", "style": "history_fun", "size": [24, 24]}` |
+| ICO-04     | svg_generator       | `{"svg_type": "icon", "style": "achievements_fun", "size": [24, 24]}` |
+| ICO-05     | svg_generator       | `{"svg_type": "icon", "style": "settings_fun", "size": [24, 24]}` |
+| ICO-06     | svg_generator       | `{"svg_type": "icon", "style": "help_fun", "size": [24, 24]}` |

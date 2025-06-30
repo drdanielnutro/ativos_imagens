@@ -7,6 +7,9 @@ import replicate
 import requests
 import os
 import logging
+from dotenv import load_dotenv
+
+load_dotenv() # Carrega as variáveis do .env
 from pydub import AudioSegment
 import tempfile
 from typing import Optional, Dict, Union
@@ -33,69 +36,7 @@ class AudioEffectGenerator:
         }
     }
     
-    # Mapeamento de IDs de ativos para configurações com prompts otimizados
-    # Baseado nas especificações do Professor Virtual para crianças brasileiras 7-11 anos
-    AUDIO_CONFIGS = {
-        "SFX-01": {
-            "filename": "button_tap.mp3",
-            "duration": 0.5,
-            "model": "stable-audio",
-            "prompt": "Professional sound design for children's educational app: gentle satisfying button tap sound, Material Design inspired UI feedback, soft but crisp tactile response, warm wooden percussion quality, child-friendly mobile interface sound, exactly 0.5 seconds, non-startling, encouraging interaction",
-            "negative_prompt": "loud, sharp, metallic, echo, harsh, aggressive, annoying, repetitive fatigue"
-        },
-        "SFX-02": {
-            "filename": "success.mp3",
-            "duration": 1.5,
-            "model": "musicgen",
-            "prompt": "Children's educational app success sound: bright cheerful completion chime, celebratory but not overwhelming, harmonious major chord progression, magical sparkle quality like Mario coin collection, Brazilian warmth and joy, encouraging achievement feeling, 1.5 seconds duration, mobile-optimized"
-        },
-        "SFX-03": {
-            "filename": "error_gentle.mp3",
-            "duration": 1.0,
-            "model": "musicgen",
-            "prompt": "Educational app gentle error indication: soft musical warning for children 7-11 years, helpful not startling, descending two-note melody with rounded smooth tone, xylophone or marimba quality, encouraging to try again, non-alarming supportive feedback, exactly 1 second"
-        },
-        "SFX-04": {
-            "filename": "notification.mp3",
-            "duration": 1.0,
-            "model": "musicgen",
-            "prompt": "Child-friendly notification bell for educational app: gentle school bell inspired but softer, pleasant triangular chime, warm resonance, attention-getting without startling, Brazilian school context, friendly reminder quality, exactly 1 second duration"
-        },
-        "SFX-05": {
-            "filename": "achievement.mp3",
-            "duration": 2.5,
-            "model": "musicgen",
-            "prompt": "Educational achievement celebration fanfare: triumphant orchestral sound for children, brief celebratory fanfare, positive reinforcement for learning milestones, uplifting major key progression, Brazilian festive spirit without stereotypes, encouraging continued learning, 2.5 seconds duration"
-        },
-        "SFX-06": {
-            "filename": "camera_shutter.mp3",
-            "duration": 0.5,
-            "model": "stable-audio",
-            "prompt": "Modern smartphone camera capture sound for kids app: contemporary digital camera shutter click, crisp but not mechanical, friendly photo-taking feedback, familiar mobile phone camera sound, clean and satisfying, exactly 0.5 seconds",
-            "negative_prompt": "old mechanical camera, film advance, electronic beep, harsh click"
-        },
-        "SFX-07": {
-            "filename": "page_transition.mp3",
-            "duration": 0.5,
-            "model": "stable-audio",
-            "prompt": "Smooth page turn transition for educational app: gentle paper sliding swoosh, airy page flip sound, book page turning quality, light and swift movement, story-time feeling, non-distracting navigation feedback, exactly 0.5 seconds",
-            "negative_prompt": "harsh whoosh, windy, noisy, heavy bass, sharp swoosh"
-        },
-        "SFX-08": {
-            "filename": "pop_up.mp3",
-            "duration": 0.5,
-            "model": "stable-audio",
-            "prompt": "Playful bubble pop for children's interface: cartoon soap bubble bursting, light and delightful pop sound, fun interaction feedback, bouncy and soft quality, game-like satisfaction, child-appropriate playfulness, exactly 0.5 seconds",
-            "negative_prompt": "loud pop, aggressive burst, sharp crack, balloon pop"
-        },
-        "SFX-09": {
-            "filename": "processing_loop.mp3",
-            "duration": 3.0,
-            "model": "stable-audio",
-            "prompt": "Ambient thinking/processing loop for educational app: soft electronic thinking sound, gentle pulsing hum, AI assistant processing indication, soothing continuous background, seamless 3-second loop, calming waiting music, child-friendly technology sound",
-            "negative_prompt": "harsh buzz, loud hum, distracting, annoying, anxiety-inducing"
-        }
-    }
+    
 
     def __init__(self, replicate_token: Optional[str] = None):
         """
@@ -110,40 +51,39 @@ class AudioEffectGenerator:
         
         self.client = replicate.Client(api_token=self.replicate_token)
 
-    def generate_sound_effect(self, asset_id: str, output_dir: str = "generated_audio") -> str:
+    def generate_sound_effect(self, filename: str, duration: float, model: str, prompt: str, negative_prompt: str = "", output_dir: str = "generated_audio") -> str:
         """
-        Gera um efeito sonoro baseado no ID do ativo.
+        Gera um efeito sonoro com base nos parâmetros fornecidos.
         
         Args:
-            asset_id: ID do ativo (ex: 'SFX-01', 'SFX-02')
-            output_dir: Diretório onde salvar o arquivo gerado
+            filename: Nome do arquivo de saída (ex: 'button_tap.mp3')
+            duration: Duração desejada do áudio em segundos.
+            model: Modelo de IA a ser usado ('stable-audio' ou 'musicgen').
+            prompt: Prompt de texto para a geração do áudio.
+            negative_prompt: Prompt negativo para a geração do áudio (opcional).
+            output_dir: Diretório onde salvar o arquivo gerado.
             
         Returns:
-            str: Caminho do arquivo gerado ou string vazia se falhar
+            str: Caminho do arquivo gerado ou string vazia se falhar.
         """
-        if asset_id not in self.AUDIO_CONFIGS:
-            logging.error(f"ID de ativo '{asset_id}' não encontrado nas configurações")
-            return ""
-        
-        config = self.AUDIO_CONFIGS[asset_id]
-        output_filename = os.path.join(output_dir, config["filename"])
+        output_filename = os.path.join(output_dir, filename)
         
         # Criar diretório se não existir
         os.makedirs(output_dir, exist_ok=True)
         
-        logging.info(f"Iniciando geração para '{asset_id}' ({config['filename']}) usando modelo '{config['model']}'")
+        logging.info(f"Iniciando geração para '{filename}' usando modelo '{model}'")
         
         try:
             # 1. Chamar a API da Replicate
             raw_audio_url = self._call_replicate_model(
-                prompt=config["prompt"],
-                duration=config["duration"],
-                model_choice=config["model"],
-                negative_prompt=config.get("negative_prompt", "")
+                prompt=prompt,
+                duration=duration,
+                model_choice=model,
+                negative_prompt=negative_prompt
             )
             
             if not raw_audio_url:
-                logging.error(f"Falha ao obter URL de áudio da Replicate para '{asset_id}'")
+                logging.error(f"Falha ao obter URL de áudio da Replicate para '{filename}'")
                 return ""
             
             # 2. Baixar o arquivo gerado para um local temporário
@@ -153,24 +93,25 @@ class AudioEffectGenerator:
                 
                 # 3. Processar conforme especificações
                 # Para processing_loop, criar versão seamless
-                if asset_id == "SFX-09":
+                # A lógica para SFX-09 agora é baseada no filename
+                if "processing_loop" in filename: # Assumindo que SFX-09 é o único com "processing_loop" no nome
                     processed_file_path = self.create_seamless_loop(
                         temp_file_path, 
                         output_filename, 
-                        config["duration"]
+                        duration
                     )
                 else:
                     processed_file_path = self._process_audio(
                         temp_file_path, 
                         output_filename, 
-                        config["duration"]
+                        duration
                     )
                 
                 logging.info(f"Arquivo '{processed_file_path}' gerado e processado com sucesso")
                 return processed_file_path
 
         except Exception as e:
-            logging.error(f"Erro ao gerar '{asset_id}': {e}", exc_info=True)
+            logging.error(f"Erro ao gerar '{filename}': {e}", exc_info=True)
             return ""
 
     def _call_replicate_model(self, prompt: str, duration: float, model_choice: str, negative_prompt: str = "") -> str:
@@ -209,9 +150,11 @@ class AudioEffectGenerator:
             
             output = self.client.run(model_info["identifier"], input=input_params)
             
-            # A saída pode ser uma lista ou string
-            if isinstance(output, list) and len(output) > 0:
-                return output[0]
+            # A saída pode ser um objeto FileOutput, uma lista ou string
+            if isinstance(output, replicate.helpers.FileOutput):
+                return str(output) # Converte FileOutput para string (URL)
+            elif isinstance(output, list) and len(output) > 0:
+                return str(output[0]) # Converte o primeiro item da lista para string (URL)
             elif isinstance(output, str):
                 return output
             else:
@@ -343,14 +286,4 @@ class AudioEffectGenerator:
             logging.error(f"Falha ao criar loop contínuo: {e}")
             raise
 
-    def get_asset_info(self, asset_id: str) -> Dict[str, Union[str, float]]:
-        """
-        Retorna informações sobre um ativo de áudio.
-        
-        Args:
-            asset_id: ID do ativo
-            
-        Returns:
-            Dict com informações do ativo ou dict vazio se não encontrado
-        """
-        return self.AUDIO_CONFIGS.get(asset_id, {})
+    

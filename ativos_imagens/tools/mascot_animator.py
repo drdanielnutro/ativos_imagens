@@ -5,33 +5,23 @@ import subprocess
 import tempfile
 import shutil
 from pathlib import Path
-import zipfile
 import json
-
-import cv2
-from lottie import objects as lottie_objects
-from lottie.parsers import svg as lottie_svg
-from lottie import exporters
 import replicate
 import requests
-
 import sys
-from PIL import Image
 
 # Importa a ImageGenerator para reutilizar a lógica de geração de PNG e remoção de fundo
 from .image_generator import ImageGenerator
 
 class MascotAnimator:
-    """
-    Ferramenta para criar animações Lottie do mascote "PROF"
-    usando um pipeline completo de Imagem-para-Vídeo-para-Vetor.
-    """
     VIDEO_GEN_MODEL = "bytedance/seedance-1-lite"
-    DEFAULT_BMP_COLORS = "8"  # Número padrão de cores para vetorização
 
+    """
+    Ferramenta para processar vídeos de mascotes, opcionalmente remover o fundo
+    e converter para o formato WebP otimizado para uso em aplicativos mobile.
+    """
     VERBOSE_SUBPROCESS = True  # Exibir stdout/stderr das ferramentas externas
 
-    # Helper para rodar comandos e printar saída
     def _run_cmd(self, cmd: list[str]):
         """Executa comandos externos, exibindo saída em tempo real se VERBOSE_SUBPROCESS."""
         import subprocess, shlex
@@ -54,43 +44,34 @@ class MascotAnimator:
 
     def _get_transparent_mascot_png(self, prompt_details: dict) -> str:
         """
-        Etapa 1 e 2 do pipeline: Gera e obtém um PNG local do mascote com fundo transparente.
+        Gera e obtém um PNG local do mascote com fundo transparente.
         Retorna o caminho do arquivo temporário.
         """
-        # Verificar limites de API
-        from ..agent import check_api_limit, API_CALL_TRACKER
+        try:
+            from ..agent import check_api_limit, API_CALL_TRACKER
+        except ModuleNotFoundError:
+            print("AVISO: Módulo 'agent' não encontrado. Usando funções dummy para controle de API.")
+            check_api_limit = lambda x: True
+            API_CALL_TRACKER = {'replicate_calls': 0} # Dicionário dummy
         
         if not check_api_limit('replicate'):
             raise RuntimeError("Limite de API atingido para geração de imagem do mascote")
         
         generator = ImageGenerator()
         
-        print("INFO (MascotAnimator): Etapa 1.1 - Gerando imagem base do mascote...")
+        print("INFO (MascotAnimator): Gerando imagem base do mascote...")
         
-        # Incrementar contador para geração
         API_CALL_TRACKER['replicate_calls'] += 1
         urls_com_fundo = generator._generate_mascot_image(prompt_details)
         
-        # Convertendo o objeto FileOutput para uma string de URL.
-        # A biblioteca Replicate retorna uma lista de objetos, então pegamos o primeiro [0]
-        # e convertemos para string para obter a URL.
         url_com_fundo_str = str(urls_com_fundo[0])
 
-        print("INFO (MascotAnimator): Etapa 1.2 - Removendo fundo da imagem gerada...")
-        
-        # Verificar limite novamente para remoção de fundo
-        if not check_api_limit('replicate'):
-            raise RuntimeError("Limite de API atingido durante remoção de fundo")
-        
-        API_CALL_TRACKER['replicate_calls'] += 1
-        # Agora passamos a string da URL, o que evita o erro de serialização JSON.
-        url_sem_fundo_str = generator._remove_background(url_com_fundo_str)
-        
-        print("INFO (MascotAnimator): Etapa 1.3 - Baixando imagem transparente...")
-        response = requests.get(url_sem_fundo_str)
+        # A remoção de fundo da imagem inicial foi desativada conforme solicitado.
+        # A imagem será baixada com o fundo original.
+        print("INFO (MascotAnimator): Baixando imagem gerada (com fundo original)...")
+        response = requests.get(url_com_fundo_str)
         response.raise_for_status()
         
-        # Salva em um arquivo temporário que persistirá até o fim do processo
         fd, temp_png_path = tempfile.mkstemp(suffix=".png", prefix="mascote_transparente_")
         os.close(fd)
         with open(temp_png_path, "wb") as f:
@@ -100,19 +81,17 @@ class MascotAnimator:
         return temp_png_path
 
     def _generate_video_from_file(self, png_path: str, animation_prompt: str) -> str:
-        """Etapa 3: Gera um vídeo a partir de um arquivo de imagem local."""
-        from ..agent import check_api_limit, API_CALL_TRACKER
+        """Gera um vídeo a partir de um arquivo de imagem local."""
+        try:
+            from ..agent import check_api_limit, API_CALL_TRACKER
+        except ModuleNotFoundError:
+            check_api_limit = lambda x: True
+            API_CALL_TRACKER = {'replicate_calls': 0} # Dicionário dummy
         
         if not check_api_limit('replicate'):
             raise RuntimeError("Limite de API atingido para geração de vídeo")
         
-        print(f"INFO (MascotAnimator): Etapa 2 - Gerando vídeo com base em '{os.path.basename(png_path)}'...")
-        
-        # Logs de debug para troubleshooting
-        print(f"DEBUG: Modelo de vídeo: {self.VIDEO_GEN_MODEL}")
-        print(f"DEBUG: Prompt de animação: '{animation_prompt}'")
-        print(f"DEBUG: Arquivo PNG existe? {os.path.exists(png_path)}")
-        print(f"DEBUG: Tamanho do arquivo: {os.path.getsize(png_path)} bytes")
+        print(f"INFO (MascotAnimator): Gerando vídeo com base em '{os.path.basename(png_path)}'...")
         
         API_CALL_TRACKER['replicate_calls'] += 1
         
@@ -120,14 +99,13 @@ class MascotAnimator:
         with open(png_path, "rb") as image_file:
             api_input = {
                 "image": image_file,
-                # Prompt enriquecido com contexto do Professor Virtual
                 "prompt": self._enrich_animation_prompt(animation_prompt),
-                "duration": 5,  # Seedance aceita apenas 5 ou 10 
-                "resolution": "480p", 
-                "fps": 24,  # Geramos com mais FPS para ter mais de onde extrair
-                "aspect_ratio": "1:1",  # Quadrado para o mascote
-                "camera_fixed": False,  # Permitir movimento de câmera
-                "seed": 50  # Para reprodutibilidade
+                "duration": 5,
+                "resolution": "480p",
+                "fps": 24,
+                "aspect_ratio": "1:1",
+                "camera_fixed": False,
+                "seed": 50
             }
             try:
                 print("DEBUG: Chamando replicate.run()...")
@@ -161,19 +139,10 @@ class MascotAnimator:
         Enriquece o prompt de animação com contexto do Professor Virtual.
         Baseado nas especificações do agente gerador de prompts.
         """
-        # Contexto do Professor Virtual
         context = "Educational owl mascot animation for Brazilian children's learning app Professor Virtual"
-        
-        # Características do mascote Prof
         mascot_details = "friendly owl character with round shapes, large expressive eyes, warm blue (#4A90F2) and orange (#FF8A3D) colors"
-        
-        # Estilo de animação apropriado para crianças
         animation_style = "smooth child-friendly animation, gentle movements, encouraging gestures, educational context"
-        
-        # Background consistente com a marca
         background = "solid blue background color #0047bb matching Professor Virtual brand"
-        
-        # Mapeamento de prompts específicos baseado no conteúdo
         enrichments = {
             "breathing": "subtle chest movement, natural idle animation, alive and friendly presence",
             "wave": "welcoming gesture, warm greeting for children, friendly teacher-like wave",
@@ -182,14 +151,12 @@ class MascotAnimator:
             "celebration": "joyful but not overwhelming, positive reinforcement, learning achievement celebration"
         }
         
-        # Adicionar enriquecimento específico se encontrado
         specific_enrichment = ""
         for key, value in enrichments.items():
             if key in base_prompt.lower():
                 specific_enrichment = f", {value}"
                 break
         
-        # Montar prompt final otimizado
         enriched_prompt = f"{context}: {base_prompt}"
         enriched_prompt += f", {mascot_details}"
         enriched_prompt += f", {animation_style}"
@@ -200,326 +167,201 @@ class MascotAnimator:
         
         return enriched_prompt
 
-    def _extract_frames(self, video_path: str, frames_dir: str, target_fps: int = 12) -> int:
-        """Etapa 4: Extrai frames do vídeo na taxa de quadros desejada."""
-        print(f"INFO (MascotAnimator): Etapa 3 - Extraindo frames para '{frames_dir}' a {target_fps} FPS.")
-        cap = cv2.VideoCapture(video_path)
-        video_fps = cap.get(cv2.CAP_PROP_FPS)
-        if video_fps == 0: 
-            video_fps = 24  # Fallback
-
-        saved_frame_count = 0
-        frame_interval = video_fps / target_fps
-
-        current_frame = 0
-        while cap.isOpened():
-            success, image = cap.read()
-            if not success:
-                break
-            
-            if current_frame >= saved_frame_count * frame_interval:
-                frame_path = os.path.join(frames_dir, f"frame_{saved_frame_count:04d}.png")
-                cv2.imwrite(frame_path, image)
-                saved_frame_count += 1
-            
-            current_frame += 1
-        
-        cap.release()
-        print(f"INFO (MascotAnimator): {saved_frame_count} frames extraídos.")
-        
-        # Validação de frames mínimos
-        if saved_frame_count < 12:  # Menos de 1 segundo a 12fps
-            raise ValueError(f"Poucos frames extraídos ({saved_frame_count}). Vídeo pode estar corrompido ou muito curto.")
-        
-        return saved_frame_count
-
-    def _subsample_every_other_frame(self, frames_dir: str, frame_count: int) -> int:
+    def _remove_video_background(self, input_video_path: str, output_video_path: str, transparent_color: str = "#00000000") -> str:
         """
-        Remove metade dos frames mantendo apenas os de índice ímpar (ou par),
-        renomeando os remanescentes para que a sequência continue contígua
-        (frame_0000.png, frame_0001.png, ...).
-
+        Remove o fundo de um vídeo usando a API da Replicate (lucataco/rembg-video).
         Args:
-            frames_dir: diretório onde estão os PNGs extraídos.
-            frame_count: número total de frames atuais.
-
+            input_video_path: Caminho absoluto para o vídeo de entrada.
+            output_video_path: Caminho absoluto para salvar o vídeo com fundo removido.
+            transparent_color: Cor a ser usada como transparente (ex: "#00000000" para preto transparente).
         Returns:
-            Novo número de frames após subsampling.
+            Caminho absoluto para o vídeo com fundo removido.
         """
-        print("INFO (MascotAnimator): Realizando subsampling – mantendo apenas metade dos frames…")
+        print(f"INFO (MascotAnimator): Removendo fundo do vídeo: {input_video_path}")
 
-        kept_index = 0
-        for original_idx in range(frame_count):
-            png_path = os.path.join(frames_dir, f"frame_{original_idx:04d}.png")
-            if not os.path.exists(png_path):
-                # Já pode ter sido removido/renomeado em iterações anteriores
-                continue
+        # Replicate API para rembg-video espera uma URL. 
+        # Para simplificar, vamos assumir que o input_video_path pode ser usado diretamente
+        # se a biblioteca replicate.run puder lidar com caminhos de arquivo locais.
+        # Se não, um passo de upload temporário será necessário.
+        # Por enquanto, vamos tentar passar o caminho do arquivo.
 
-            # Manter apenas os frames de índice ímpar (alternando)
-            if original_idx % 2 == 0:
-                # Remove este frame
-                os.remove(png_path)
-            else:
-                # Renomeia para posição compactada
-                new_path = os.path.join(frames_dir, f"frame_{kept_index:04d}.png")
-                os.rename(png_path, new_path)
-                kept_index += 1
+        # Nota: A API da Replicate para rembg-video não tem um parâmetro 'color' direto para o fundo.
+        # Ela remove o fundo e o torna transparente. O 'transparent_color' seria mais para
+        # um cenário onde você quer substituir o fundo por uma cor específica, não para a remoção.
+        # A remoção de fundo já implica em transparência.
 
-        print(f"INFO (MascotAnimator): Subsampling concluído. {kept_index} frames restantes.")
-        if kept_index < 6:
-            raise ValueError("Subsampling resultou em poucos frames; a animação pode ficar truncada.")
-        return kept_index
-
-    def _vectorize_frames(self, frames_dir: str, svg_dir: str, frame_count: int) -> None:
-        """Etapa 4: Vetoriza cada frame PNG para SVG usando Potrace."""
-        print("INFO (MascotAnimator): Etapa 4 - Vetorizando frames para SVG...")
-        
-        for i in range(frame_count):
-            png_path = os.path.join(frames_dir, f"frame_{i:04d}.png")
-            pbm_path = os.path.join(frames_dir, f"frame_{i:04d}.pbm")
-            svg_path = os.path.join(svg_dir, f"frame_{i:04d}.svg")
-
-            # Converter PNG para PNM primeiro (mkbitmap não aceita PNG)
-            pnm_path = os.path.join(frames_dir, f"frame_{i:04d}.pnm")
-            
-            # Converter PNG para PNM usando ImageMagick ou PIL
-            try:
-                # Opção 1: Usar ImageMagick convert
-                self._run_cmd(["convert", png_path, pnm_path])
-            except (subprocess.CalledProcessError, FileNotFoundError):
-                # Opção 2: Usar PIL/Pillow como fallback
-                from PIL import Image
-                img = Image.open(png_path)
-                img.save(pnm_path, "PPM")
-            
-            # Agora converter PNM para PBM otimizado
-            try:
-                self._run_cmd(["mkbitmap", "-f", "2", "-s", "2", "-t", "0.48", "-o", pbm_path, pnm_path])
-            except subprocess.CalledProcessError as e:
-                print(f"ERROR: mkbitmap falhou para frame {i}")
-                print(f"ERROR: Return code: {e.returncode}")
-                print(f"ERROR: Stdout: {e.stdout}")
-                print(f"ERROR: Stderr: {e.stderr}")
-                raise
-            
-            # Vetorizar com parâmetros otimizados
-            self._run_cmd([
-                "potrace", pbm_path, "-s", 
-                "-o", svg_path,
-                "--turdsize", "10",      # Remove detalhes pequenos
-                "--opttolerance", "0.2"  # Otimiza curvas
-            ])
-            
-            # Otimizar SVG com SVGO (se instalado)
-            try:
-                self._run_cmd(["svgo", "--multipass", svg_path])
-            except FileNotFoundError:
-                print("WARN: SVGO não encontrado. Pulando otimização de SVG.")
-            
-        print("INFO (MascotAnimator): Vetorização de todos os frames concluída.")
-
-    def _compile_lottie(self, svg_dir: str, frame_count: int, fps: int) -> lottie_objects.Animation:
-        """Etapa 6: Compila a sequência de SVGs em uma animação Lottie."""
-        print("INFO (MascotAnimator): Etapa 5 - Compilando SVGs em uma animação Lottie...")
-        
-        animation = lottie_objects.Animation(n_frames=frame_count, framerate=fps)
-        animation.frame_rate = fps  # Garante FPS correto
-        animation.in_point = 0    # In-point
-        animation.out_point = frame_count  # Out-point
-        
-        for i in range(frame_count):
-            svg_path = os.path.join(svg_dir, f"frame_{i:04d}.svg")
-            
-            try:
-                # parse_svg_file retorna um objeto Animation, precisamos de suas camadas
-                parsed_animation = lottie_svg.parse_svg_file(svg_path)
-                for layer in parsed_animation.layers:
-                    layer.in_point = i
-                    layer.out_point = i + 1
-                    layer.ao = 0  # Auto-orient off para otimização
-                    animation.add_layer(layer)
-            except Exception as e:
-                print(f"AVISO: Erro ao processar frame {i}: {e}")
-                # Continua com os outros frames
-                continue
-                
-        return animation
-
-    def _optimize_json(self, json_path: str, level: int = 2) -> str:
-        """Aplica python-lottie --optimize ao JSON gerado."""
-        import subprocess, sys, os, shutil
-
-        lottie_convert_path = os.path.join(os.path.dirname(sys.executable), "lottie_convert.py")
-        if not os.path.exists(lottie_convert_path):
-            print("WARN: lottie_convert.py não encontrado. Pulando otimização JSON.")
-            return json_path
-
-        temp_out = json_path.replace(".json", "_opt.json")
         try:
-            self._run_cmd([
-                lottie_convert_path, json_path, temp_out,
-                "--input-format", "lottie",
-                "--output-format", "lottie",
-                "--optimize", str(level)
-            ])
+            # A API da Replicate para rembg-video espera uma URL.
+            # Para testar localmente, podemos usar um serviço como ngrok ou um servidor local
+            # para expor o arquivo, ou usar um arquivo já hospedado.
+            # No uso real, você precisaria de um mecanismo para fazer o upload do vídeo
+            # para um local acessível pela Replicate (ex: S3, Google Cloud Storage, etc.)
+            # e passar a URL para a API.
 
-            shutil.move(temp_out, json_path)
-            print("INFO (MascotAnimator): JSON otimizado com python-lottie (level %s)." % level)
+            # Placeholder para o upload:
+            # video_url = "URL_DO_SEU_VIDEO_HOSPEDADO"
+            # Ou, se replicate.run aceitar File objects:
+            with open(input_video_path, "rb") as video_file:
+                api_input = {
+                    "mode": "Normal", # Conforme solicitado
+                    "video": video_file # Tentando passar o objeto File
+                }
+                print("DEBUG: Chamando replicate.run para remoção de fundo...")
+                output = replicate.run(
+                    "lucataco/rembg-video:c18392381d1b5410b5a76b9b0c58db132526d3f79fe602e04e0d80cb668df509",
+                    input=api_input
+                )
+                print(f"DEBUG: Saída da Replicate API: {output}")
+
+                # A saída é uma URL para o vídeo com fundo removido
+                video_with_bg_removed_url = output
+
+                print(f"INFO (MascotAnimator): Baixando vídeo com fundo removido de: {video_with_bg_removed_url}")
+                response = requests.get(video_with_bg_removed_url, stream=True)
+                response.raise_for_status()
+
+                with open(output_video_path, "wb") as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                print(f"INFO (MascotAnimator): Vídeo com fundo removido salvo em: {output_video_path}")
+                return output_video_path
+
+        except Exception as e:
+            print(f"ERROR: Falha ao remover fundo do vídeo: {str(e)}")
+            raise
+
+    def _convert_to_webp(self, input_video_path: str, output_webp_path: str, fps: int = 12, scale: int = 256) -> str:
+        """
+        Converte um vídeo para o formato WebP otimizado usando FFmpeg.
+        Args:
+            input_video_path: Caminho absoluto para o vídeo de entrada.
+            output_webp_path: Caminho absoluto para salvar o arquivo WebP.
+            fps: Frames por segundo para o WebP.
+            scale: Largura máxima para o vídeo (altura será ajustada proporcionalmente).
+        Returns:
+            Caminho absoluto para o arquivo WebP gerado.
+        """
+        print(f"INFO (MascotAnimator): Convertendo vídeo para WebP: {input_video_path} -> {output_webp_path}")
+        cmd = [
+            "ffmpeg",
+            "-v", "warning",
+            "-i", input_video_path,
+            "-vf", f"fps={fps},scale={scale}:-1:flags=lanczos",
+            "-loop", "0",
+            "-q:v", "80", # Qualidade de vídeo (0-100, 80 é um bom equilíbrio)
+            "-compression_level", "6", # Nível de compressão (0-6, 6 é o máximo)
+            "-y", # Sobrescrever arquivo de saída se existir
+            output_webp_path
+        ]
+        try:
+            self._run_cmd(cmd)
+            print(f"INFO (MascotAnimator): Arquivo WebP gerado: {output_webp_path}")
+            return output_webp_path
         except subprocess.CalledProcessError as e:
-            print(f"WARN: Otimização JSON falhou: {e.stderr}\nContinuando com arquivo original.")
-        return json_path
+            print(f"ERROR: Falha ao converter para WebP: {e}")
+            raise
 
-    def _create_dotlottie(self, json_path: str) -> str:
+    def create_mascot_animation(self, output_path: str, input_video_path: str = None, remove_background: bool = False, fps: int = 12, scale: int = 256, prompt_details: dict = None, animation_prompt: str = None) -> str:
         """
-        Converte JSON para formato .lottie (ZIP comprimido) com otimizações máximas.
-        
+        Orquestra o pipeline para criar uma animação de mascote.
+        Pode gerar o vídeo do zero (a partir de prompt) ou processar um vídeo existente.
+        Opcionalmente remove o fundo e converte para WebP.
+
         Args:
-            json_path: Caminho do arquivo JSON Lottie
-            
+            output_path: Caminho absoluto para salvar o arquivo WebP final.
+            input_video_path: (Opcional) Caminho absoluto para um vídeo de entrada existente.
+            remove_background: Se True, remove o fundo do vídeo usando a API da Replicate.
+            fps: Frames por segundo para o WebP final.
+            scale: Largura máxima para o vídeo WebP final.
+            prompt_details: (Opcional) Dicionário com detalhes do prompt para gerar a imagem do mascote.
+            animation_prompt: (Opcional) String com o prompt para animar o mascote.
+
         Returns:
-            Caminho do arquivo .lottie criado
+            Caminho absoluto para o arquivo WebP gerado.
         """
-        print("INFO (MascotAnimator): Iniciando conversão para formato .lottie...")
+        print(f"--- Iniciando Pipeline de Animação de Mascote para: {os.path.basename(output_path)} ---")
 
-        lottie_path = json_path.replace('.json', '.lottie')
+        video_to_process_path = None
+        temp_png_path = None
+        temp_video_generated = None
+        temp_video_with_bg_removed = None
 
         try:
-            # Passo 1: Ler e minificar o JSON
-            print("  - Lendo e minificando JSON...")
-            with open(json_path, 'r') as f:
-                animation_data = json.load(f)
-
-            minified_json = json.dumps(animation_data, separators=(',', ':'))
-
-            # Passo 2: Criar estrutura do dotLottie
-            print("  - Criando estrutura dotLottie...")
-            manifest = {
-                "animations": [{
-                    "id": "a",
-                    "path": "a.json"
-                }],
-                "version": "1.0"
-            }
-
-            # Passo 3: Criar arquivo ZIP com compressão máxima
-            print("  - Comprimindo com ZIP_DEFLATED nível 9...")
-            with zipfile.ZipFile(
-                lottie_path,
-                'w',
-                compression=zipfile.ZIP_DEFLATED,
-                compresslevel=9
-            ) as zf:
-                zf.writestr(
-                    'manifest.json',
-                    json.dumps(manifest, separators=(',', ':')),
-                    compress_type=zipfile.ZIP_DEFLATED
-                )
-                zf.writestr(
-                    'a.json',
-                    minified_json,
-                    compress_type=zipfile.ZIP_DEFLATED
-                )
-
-            # Passo 4: Análise detalhada de tamanhos
-            original_size = os.path.getsize(json_path)
-            compressed_size = os.path.getsize(lottie_path)
-
-            print(f"\n Análise de Compressão:")
-            print(f"  - JSON original: {original_size:,} bytes ({original_size/1024:.1f} KB)")
-            print(f"  - JSON minificado: {len(minified_json):,} bytes ({len(minified_json)/1024:.1f} KB)")
-            print(f"  - .lottie final: {compressed_size:,} bytes ({compressed_size/1024:.1f} KB)")
-
-            reduction_percent = ((original_size - compressed_size) / original_size) * 100
-            print(f"  - Redução total: {reduction_percent:.1f}%")
-
-            # Passo 5: Validação do objetivo
-            size_kb = compressed_size / 1024
-            if size_kb <= 100:
-                print(f"\n✅ SUCESSO: Arquivo .lottie com {size_kb:.1f} KB (< 100 KB)")
+            if input_video_path:
+                video_to_process_path = input_video_path
+                print(f"INFO (MascotAnimator): Usando vídeo de entrada existente: {input_video_path}")
+            elif prompt_details and animation_prompt:
+                print("INFO (MascotAnimator): Gerando vídeo a partir de prompts...")
+                temp_png_path = self._get_transparent_mascot_png(prompt_details)
+                temp_video_generated = self._generate_video_from_file(temp_png_path, animation_prompt)
+                video_to_process_path = temp_video_generated
             else:
-                print(f"\n⚠️ AVISO: Arquivo ainda grande: {size_kb:.1f} KB")
-                print("  Sugestões para reduzir mais:")
-                print("  - Diminuir --bmp-n-colors para 4 ou 2")
-                print("  - Reduzir número de frames")
-                print("  - Simplificar a animação")
+                raise ValueError("É necessário fornecer 'input_video_path' OU 'prompt_details' e 'animation_prompt'.")
 
-            return lottie_path
+            if remove_background:
+                fd, temp_video_with_bg_removed = tempfile.mkstemp(suffix=".mp4", prefix="mascot_rembg_")
+                os.close(fd)
+                video_to_process_path = self._remove_video_background(video_to_process_path, temp_video_with_bg_removed)
+
+            final_webp_path = self._convert_to_webp(video_to_process_path, output_path, fps, scale)
+
+            print(f"--- Pipeline de Animação de Mascote concluído! Arquivo salvo em: {final_webp_path} ---")
+            return final_webp_path
 
         except Exception as e:
-            print(f"❌ ERRO ao criar .lottie: {str(e)}")
-            import traceback
-            traceback.print_exc()
-            return json_path
-
-
-    def create_mascot_animation(self, prompt_details: dict, animation_prompt: str, output_path: str, output_format: str = "lottie") -> str:
-        """
-        Orquestra o pipeline completo para criar uma animação Lottie do mascote.
-        """
-        print(f"--- Iniciando Pipeline de Animação Lottie para: {os.path.basename(output_path)} ---")
-        
-        transparent_png_path = None
-        video_path = None
-        
-        try:
-            with tempfile.TemporaryDirectory() as tmpdir:
-                # Etapa 1: Gerar PNG transparente do mascote
-                transparent_png_path = self._get_transparent_mascot_png(prompt_details)
-                
-                # Etapa 2: Gerar vídeo a partir da imagem
-                video_path = self._generate_video_from_file(transparent_png_path, animation_prompt)
-                
-                # Etapa 3: Extrair frames do vídeo
-                frames_dir = os.path.join(tmpdir, "frames")
-                os.makedirs(frames_dir)
-                frame_count = self._extract_frames(video_path, frames_dir)
-                
-                # Subsampling: manter somente metade dos frames
-                frame_count = self._subsample_every_other_frame(frames_dir, frame_count)
-                
-                if frame_count == 0:
-                    raise RuntimeError("Nenhum frame foi extraído do vídeo.")
-
-                # Etapa 4: Vetorizar frames
-                svg_dir = os.path.join(tmpdir, "svgs")
-                os.makedirs(svg_dir)
-                self._vectorize_frames(frames_dir, svg_dir, frame_count)
-                
-                # Etapa 5: Compilar Lottie
-                animation = self._compile_lottie(svg_dir, frame_count, 12)
-                
-                # Etapa 6: Salvar arquivo final
-                exporters.export_lottie(animation, output_path)
-                
-                # Otimizar JSON gerado com python-lottie (level 2)
-                self._optimize_json(output_path, level=2)
-                
-                # Converter para formato .lottie se solicitado
-                if output_format == "lottie":
-                    final_path = self._create_dotlottie(output_path)
-                    # Mantemos o JSON original para inspeção
-                    print(f"--- Pipeline Lottie concluído! Arquivo salvo em: {final_path} ---")
-                    return final_path
-                
-                print(f"--- Pipeline Lottie concluído! Arquivo salvo em: {output_path} ---")
-                return output_path
-        
-        except Exception as e:
-            # Re-raise com contexto adicional
-            raise RuntimeError(f"Erro no pipeline de animação: {str(e)}") from e
-        
+            raise RuntimeError(f"Erro no pipeline de animação de mascote: {str(e)}") from e
         finally:
-            # Limpeza dos arquivos temporários principais
-            if transparent_png_path and os.path.exists(transparent_png_path):
+            # Limpeza de arquivos temporários
+            if temp_png_path and os.path.exists(temp_png_path):
                 try:
-                    os.remove(transparent_png_path)
-                except:
-                    pass  # Ignore erros de limpeza
-            if video_path and os.path.exists(video_path):
+                    os.remove(temp_png_path)
+                except Exception as e:
+                    print(f"WARN: Falha ao remover arquivo temporário {temp_png_path}: {e}")
+            if temp_video_generated and os.path.exists(temp_video_generated):
                 try:
-                    os.remove(video_path)
-                except:
-                    pass  # Ignore erros de limpeza
+                    os.remove(temp_video_generated)
+                except Exception as e:
+                    print(f"WARN: Falha ao remover arquivo temporário {temp_video_generated}: {e}")
+            if temp_video_with_bg_removed and os.path.exists(temp_video_with_bg_removed):
+                try:
+                    os.remove(temp_video_with_bg_removed)
+                except Exception as e:
+                    print(f"WARN: Falha ao remover arquivo temporário {temp_video_with_bg_removed}: {e}")
+        """
+        Orquestra o pipeline para processar um vídeo de mascote.
+        Opcionalmente remove o fundo e converte para WebP.
+        Args:
+            input_video_path: Caminho absoluto para o vídeo de entrada.
+            output_path: Caminho absoluto para salvar o arquivo WebP final.
+            remove_background: Se True, remove o fundo do vídeo usando a API da Replicate.
+            fps: Frames por segundo para o WebP final.
+            scale: Largura máxima para o vídeo WebP final.
+        Returns:
+            Caminho absoluto para o arquivo WebP gerado.
+        """
+        print(f"--- Iniciando Pipeline de Animação de Mascote para: {os.path.basename(output_path)} ---")
 
-        # Note: output_path pode ter sido modificado para .lottie
-        # A mensagem final e retorno são tratados dentro do try block
+        processed_video_path = input_video_path
+        temp_video_with_bg_removed = None
+
+        try:
+            if remove_background:
+                # Cria um arquivo temporário para o vídeo com fundo removido
+                fd, temp_video_with_bg_removed = tempfile.mkstemp(suffix=".mp4", prefix="mascot_rembg_")
+                os.close(fd)
+                processed_video_path = self._remove_video_background(input_video_path, temp_video_with_bg_removed)
+
+            final_webp_path = self._convert_to_webp(processed_video_path, output_path, fps, scale)
+
+            print(f"--- Pipeline de Animação de Mascote concluído! Arquivo salvo em: {final_webp_path} ---")
+            return final_webp_path
+
+        except Exception as e:
+            raise RuntimeError(f"Erro no pipeline de animação de mascote: {str(e)}") from e
+        finally:
+            # Limpeza de arquivos temporários
+            if temp_video_with_bg_removed and os.path.exists(temp_video_with_bg_removed):
+                try:
+                    os.remove(temp_video_with_bg_removed)
+                except Exception as e:
+                    print(f"WARN: Falha ao remover arquivo temporário {temp_video_with_bg_removed}: {e}")

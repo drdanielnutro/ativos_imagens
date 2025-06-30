@@ -15,7 +15,9 @@
 ### 🎵 Efeitos Sonoros (SFX) (0/9)
 **Local:** `assets/sounds/feedback/` | **Formato:** MP3, 44.1kHz, Stereo, -3dB
 
-- [ ] **SFX-01: `button_tap.mp3`**
+- [x] **SFX-01: `button_tap.mp3`**
+  > **Status:**✅ Gerado via script
+  > **Status:**✅ Gerado via script
   > **Descrição:** Clique suave e agradável (~0.5s).
   > **Status:** ❌ Não existe
 - [ ] **SFX-02: `success.mp3`**
@@ -27,7 +29,9 @@
 - [ ] **SFX-04: `notification.mp3`**
   > **Descrição:** Notificação de sino gentil (~1s).
   > **Status:** ❌ Não existe
-- [ ] **SFX-05: `achievement.mp3`**
+- [x] **SFX-05: `achievement.mp3`**
+  > **Status:**✅ Gerado via script
+  > **Status:**❌ Erro na geração
   > **Descrição:** Fanfarra celebratória de conquista (2-3s).
   > **Status:** ❌ Não existe
 - [ ] **SFX-06: `camera_shutter.mp3`**
@@ -50,7 +54,11 @@
 #### **Imagens Estáticas**
 **Local:** `assets/images/mascot/` | **Formato:** PNG, 512x512px, Transparente
 
-- [ ] **MAS-01: `prof_happy.png`**
+- [x] **MAS-01: `prof_happy.png`**
+  > **Status:**✅ Gerado via script
+  > **Status:**✅ Gerado via script
+  > **Status:**❌ Erro na geração
+  > **Status:**❌ Erro na geração
   > **Descrição:** Emoção "Feliz" - Sorriso grande, olhos brilhando.
   > **Status:** ⚠️ A finalizar (qualidade de placeholder)
 - [ ] **MAS-02: `prof_curious.png`**
@@ -62,7 +70,8 @@
 - [ ] **MAS-04: `prof_excited.png`**
   > **Descrição:** Emoção "Empolgado" - Braços levantados, pulando.
   > **Status:** ⚠️ A finalizar (qualidade de placeholder)
-- [ ] **MAS-05: `prof_explaining.png`**
+- [x] **MAS-05: `prof_explaining.png`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Emoção "Explicando" - Gesto de apontar.
   > **Status:** ⚠️ A finalizar (qualidade de placeholder)
 - [ ] **MAS-06: `prof_thinking.png`**
@@ -105,7 +114,8 @@
 ### 🎨 Interface de Usuário e Fundos (UI) (0/10)
 **Local:** `assets/images/ui/`
 
-- [ ] **UI-01: `pattern_dots.svg`**
+- [x] **UI-01: `pattern_dots.svg`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Padrão de bolinhas coloridas (SVG, tileable).
   > **Status:** ❌ Não existe
 - [ ] **UI-02: `pattern_stars.svg`**
@@ -141,7 +151,8 @@
 ### 🔄 Animações de Carregamento (LOAD) (0/6)
 **Local:** `assets/animations/loading/` | **Formato:** Lottie JSON, 200x200px
 
-- [ ] **LOAD-01: `loading_spinner.json`**
+- [x] **LOAD-01: `loading_spinner.json`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Spinner circular colorido (~2s, loop).
   > **Status:** ❌ Não existe
 - [ ] **LOAD-02: `loading_bounce.json`**

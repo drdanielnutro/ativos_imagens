@@ -9,3 +9,4 @@ scour>=0.38
 pytest>=8.0
 google-adk>=1.5
 pydub>=0.25.0
+audioop-lts>=0.2.1 

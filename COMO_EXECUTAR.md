@@ -43,13 +43,17 @@ Se você modificou a lista de ativos em `docs/definicoes/ativos_a_serem_criados.
 python -m ativos_imagens.sync_inventory
 ```
 
-### 6. Execute o servidor ADK
+### 6. Execute o servidor ADK (Modo Agente - Em Desenvolvimento)
+
 *Importante: Execute este comando a partir do **diretório raiz** do projeto.*
+
+Este modo ativa o sistema multi-agente completo, permitindo a interação via interface web do ADK. A orquestração via agentes está em fase de implementação e testes.
+
 ```bash
 adk web
 ```
 
-### 7. Acesse o agente
+### 7. Acesse o agente (Modo Agente)
 - Abra seu navegador e acesse: `http://127.0.0.1:8000`
 - No menu dropdown no canto superior esquerdo, selecione o agente: `ativos_imagens`
 - Teste com prompts como:
@@ -57,7 +61,22 @@ adk web
   - "Olá! Me fale sobre o sistema"
   - "Crie o ativo SFX-01"
 
-## 🛑 Para parar o servidor:
+### 8. Execução Manual de Ativos (Modo de Desenvolvimento - Funcional)
+
+Para gerar ativos individualmente ou em lotes, utilizando o pipeline de ferramentas diretamente via scripts Python. Este modo é totalmente funcional e é utilizado para desenvolvimento e validação enquanto o sistema multi-agente está sendo finalizado.
+
+*Importante: Execute este comando a partir do **diretório raiz** do projeto.*
+
+```bash
+python -m ativos_imagens.ativos_imagens.geracao_manual.gerador_manual <ASSET_ID_1> <ASSET_ID_2> ...
+```
+
+**Exemplo:**
+```bash
+python -m ativos_imagens.ativos_imagens.geracao_manual.gerador_manual MAS-ANI-04 SFX-01
+```
+
+## 🛑 Para parar o servidor (Modo Agente):
 Pressione `Ctrl+C` no terminal
 
 ## ✅ Verificação rápida da estrutura:

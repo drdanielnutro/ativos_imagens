@@ -33,8 +33,9 @@ A funcionalidade do sistema está organizada nos principais arquivos e diretóri
 | **`ativos_imagens/README_ESTRUTURA.md`**           | Descreve a organização atual do código (agente_antigo vs. agentes_ativos)                                                        |
 | **`ativos_imagens/agentes_ativos/orchestrator.py`** | Orquestrador principal (`root_agent`), coordena agentes especializados e funções utilitárias                                      |
 | **`ativos_imagens/agentes_ativos/asset_validator.py`** | Agente especializado em validar inventário e gerar relatórios e prioridades                                                    |
-| **`ativos_imagens/agentes_ativos/asset_creator.py`**   | Agente especializado em criar ativos (áudio, Lottie, SVG e mascote)                                                           |
+| **`ativos_imagens/agentes_ativos/asset_creator.py`**   | Agente especializado em criar ativos (áudio, SVG, mascote em WebP, e outras animações Lottie programáticas)                                                           |
 | **`ativos_imagens/tools/asset_manager.py`**          | Gerenciador de inventário interno e checklist                                                                                |
+| **`ativos_imagens/tools/mascot_animator.py`**          | Orquestra a criação de animações de mascote (imagem -> vídeo -> WebP) com remoção de fundo opcional |
 | **`ativos_imagens/tools/image_generator.py`**         | Gera imagens PNG, incluindo remoção de fundo                                                                                 |
 | **`ativos_imagens/tools/svg_generator.py`**           | Cria vetores SVG programáticos com fallback de vetorização                                                                  |
 | **`ativos_imagens/tools/lottie_programmatic.py`**     | Gera animações Lottie programaticamente                                                                                     |
@@ -54,16 +55,14 @@ A funcionalidade do sistema está organizada nos principais arquivos e diretóri
 5.  **Retorno ao Orquestrador:** O resultado (caminho de arquivo, relatório ou status) é enviado de volta ao `root_agent`.
 6.  **Resposta ao Usuário:** O `root_agent` formata e apresenta a resposta final na interface do ADK.
 
-### 4.2. Pipeline de Animação de Mascote (Lottie)
+### 4.2. Pipeline de Animação de Mascote (WebP)
 
-Este é o fluxo mais sofisticado, orquestrado pelo `MascotAnimator`:
+Este é o fluxo para animações de mascote, orquestrado pelo `MascotAnimator`:
 
-1.  **Geração do PNG Base:** Uma imagem de alta qualidade do mascote é gerada via API (ex: Recraft) com base em um prompt detalhado.
-2.  **Geração de Vídeo:** A imagem PNG é enviada para outra API (ex: Replicate) com um prompt de animação (ex: "respiração sutil, movimento de cabeça suave") para gerar um pequeno clipe de vídeo (MP4).
-3.  **Extração de Frames:** O vídeo é processado localmente (usando OpenCV) para extrair seus frames individuais como imagens.
-4.  **Vetorização dos Frames:** Cada frame é convertido de um formato raster (PNG) para um formato vetorial (SVG) usando um tracer como o `potrace`.
-5.  **Montagem do Lottie:** Os frames SVG são montados em uma única animação JSON no formato Lottie, que é leve e escalável.
-6.  **Otimização:** O arquivo Lottie final é otimizado para reduzir seu tamanho.
+1.  **Geração do PNG Base (Opcional):** Se um vídeo de entrada não for fornecido, uma imagem de alta qualidade do mascote é gerada via API (ex: Replicate) com base em um prompt detalhado. Esta imagem é gerada com seu fundo original.
+2.  **Geração de Vídeo (Opcional):** Se a imagem base foi gerada, ela é enviada para outra API (ex: Replicate) com um prompt de animação para gerar um pequeno clipe de vídeo (MP4). Este vídeo também terá o fundo original.
+3.  **Remoção de Fundo do Vídeo (Opcional):** Se solicitado (`remove_background=True`), o vídeo (seja ele gerado ou fornecido como entrada) tem seu fundo removido usando uma API especializada (ex: Replicate `lucataco/rembg-video`).
+4.  **Conversão para WebP:** O vídeo resultante (com ou sem fundo) é convertido para o formato WebP otimizado usando FFmpeg. Este formato é ideal para web e mobile devido ao seu tamanho reduzido e suporte à transparência.
 
 ## 5. APIs e Serviços Externos
 
