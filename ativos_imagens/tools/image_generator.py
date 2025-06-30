@@ -96,7 +96,7 @@ class ImageGenerator:
             # Garantir que o arquivo temporário seja removido
             os.unlink(temp_image_path)
 
-    def generate_png(self, asset_type: Literal['mascote', 'generico'], prompt_details: Dict[str, str], output_path: str, model_name: str = "stability-ai/sdxl", remove_bg: bool = True) -> str:
+    def generate_png(self, asset_type: Literal['mascote', 'generico'], prompt_details: Dict[str, str], output_path: str, model_name: str = "stability-ai/sdxl", remove_bg: bool = False) -> str:
         """Gera uma imagem PNG, opcionalmente remove o fundo, e a salva em disco."""
         try:
             # Importar função de verificação do agent (se disponível)

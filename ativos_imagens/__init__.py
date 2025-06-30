@@ -2,18 +2,14 @@
 Este arquivo __init__.py expõe o root_agent principal para que o Google ADK
 possa descobri-lo e carregá-lo.
 
-Ele tenta importar o `root_agent` do sistema multi-agente (preferencial)
-e, se falhar, tenta carregar o agente legado como um fallback.
+Agora usa o agente simplificado único que segue a mesma lógica do gerador manual.
 """
 
 try:
-    # Abordagem primária: carregar o orquestrador do sistema multi-agente
-    from .agentes_ativos.orchestrator import root_agent
-except ImportError:
-    try:
-        # Fallback: carregar o agente do sistema antigo se o novo falhar
-        from .agente_antigo.agent import root_agent
-    except ImportError:
-        # Se ambos falharem, o ADK não encontrará um agente para carregar,
-        # o que é o comportamento esperado se nenhum agente estiver configurado.
-        root_agent = None
+    # Carregar o agente simplificado
+    from .agente_antigo.agent import root_agent
+    print("INFO (__init__.py): root_agent carregado com sucesso de agente_antigo/agent.py")
+except ImportError as e:
+    # Se falhar, o ADK não encontrará um agente para carregar
+    print(f"ERRO (__init__.py): Não foi possível carregar o agente: {e}")
+    root_agent = None

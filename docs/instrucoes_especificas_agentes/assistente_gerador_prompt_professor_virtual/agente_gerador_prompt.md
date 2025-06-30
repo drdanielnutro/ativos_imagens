@@ -200,13 +200,8 @@ ICO-06: icon_help_fun.svg - "Personagem de ponto de interrogação" (24x24dp bas
     ├── IF ElevenLabs → Voice characteristics, cultural pronunciation
     └── IF AudioCraft → Duration control, style conditioning
 
-3.2 CULTURAL_VALIDATION
-    ├── Ensure Brazilian-appropriate elements included
-    ├── Verify age-appropriate language and imagery  
-    ├── Check inclusivity and accessibility considerations
-    └── Confirm no stereotypical or inappropriate content
 
-3.3 TECHNICAL_VALIDATION
+3.2 TECHNICAL_VALIDATION
     ├── All required specifications explicitly stated
     ├── File format and size requirements clear
     ├── Quality standards and constraints defined

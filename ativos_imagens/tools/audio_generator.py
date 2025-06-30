@@ -29,10 +29,6 @@ class AudioEffectGenerator:
         "stable-audio": {
             "identifier": "stackadoc/stable-audio-open-1.0:9aff84a639f96d0f7e6081cdea002d15133d0043727f849c40abdd166b7c75a8",
             "type": "sfx"
-        },
-        "musicgen": {
-            "identifier": "meta/musicgen:671ac645ce5e552cc63a54a2bbff63fcf798043055d2dac5fc9e36a837eedcfb",
-            "type": "tonal"
         }
     }
     
@@ -116,37 +112,20 @@ class AudioEffectGenerator:
 
     def _call_replicate_model(self, prompt: str, duration: float, model_choice: str, negative_prompt: str = "") -> str:
         """Chama o modelo Replicate apropriado com tratamento de erros."""
-        if model_choice not in self.MODELS:
-            raise ValueError(f"Modelo '{model_choice}' não suportado")
-
-        model_info = self.MODELS[model_choice]
-        logging.info(f"Chamando modelo '{model_choice}' com prompt: '{prompt[:80]}...'")
+        model_info = self.MODELS["stable-audio"] # Força o uso de stable-audio
+        logging.info(f"Chamando modelo 'stable-audio' com prompt: '{prompt[:80]}...'")
 
         try:
-            if model_choice == "stable-audio":
-                input_params = {
-                    "prompt": prompt,
-                    "seconds_total": int(duration),
-                    "seconds_start": 0,
-                    "cfg_scale": 7.0,
-                    "steps": 100,
-                    "seed": -1
-                }
-                if negative_prompt:
-                    input_params["negative_prompt"] = negative_prompt
-                    
-            elif model_choice == "musicgen":
-                input_params = {
-                    "prompt": prompt,
-                    "duration": int(max(duration, 1)),  # musicgen mínimo 1s
-                    "model_version": "stereo-melody-large",
-                    "output_format": "wav",
-                    "normalization_strategy": "loudness",
-                    "temperature": 1,
-                    "top_k": 250,
-                    "top_p": 0,
-                    "classifier_free_guidance": 3
-                }
+            input_params = {
+                "prompt": prompt,
+                "seconds_total": int(duration),
+                "seconds_start": 0,
+                "cfg_scale": 7.0,
+                "steps": 100,
+                "seed": -1
+            }
+            if negative_prompt:
+                input_params["negative_prompt"] = negative_prompt
             
             output = self.client.run(model_info["identifier"], input=input_params)
             

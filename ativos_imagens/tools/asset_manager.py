@@ -28,41 +28,68 @@ class AssetManager:
 
     def load_specifications(self) -> Dict:
         """Lê as especificações de geração do arquivo de definição principal."""
-        specs_path = self.data_path / "geracao_de_ativos.md"
-        if not specs_path.exists():
-            raise FileNotFoundError(f"Arquivo de definição de ativos não encontrado em: {specs_path}")
-
-        with open(specs_path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-
-        specs = {}
-        # Pula as duas primeiras linhas (cabeçalho da tabela)
-        for line in lines[2:]:
-            line = line.strip()
-            if not line.startswith('|'):
-                continue
-
-            parts = [p.strip() for p in line.split('|') if p.strip()]
-            if len(parts) < 3:
-                continue
-
-            asset_id, tool, params_str = parts[0], parts[1], parts[2]
-            
-            try:
-                # Remove as crases e converte a string JSON em um dicionário Python
-                params_json = json.loads(params_str.strip('`'))
-                specs[asset_id] = {
-                    "id": asset_id,
-                    "tool": tool,
-                    "params": params_json
-                }
-            except json.JSONDecodeError as e:
-                print(f"AVISO (AssetManager): Erro ao decodificar JSON para o ativo '{asset_id}'. Linha: {params_str}. Erro: {e}")
-                continue
+        # Tentar primeiro o arquivo JSON (novo formato)
+        json_path = self.data_path / "geracao_de_ativos.json"
+        md_path = self.data_path / "geracao_de_ativos.md"
         
-        self.asset_specs = specs
-        print(f"INFO (AssetManager): {len(specs)} especificações de ativos carregadas de '{specs_path.name}'.")
-        return self.asset_specs
+        if json_path.exists():
+            # Usar o novo formato JSON
+            with open(json_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            specs = {}
+            # Extrair ativos de todas as categorias
+            for category_name, category_data in data.get("categories", {}).items():
+                for asset in category_data.get("assets", []):
+                    asset_id = asset["id"]
+                    specs[asset_id] = {
+                        "id": asset_id,
+                        "tool": asset["tool"],
+                        "params": asset["params"],
+                        "category": category_name,
+                        "description": asset.get("description", "")
+                    }
+            
+            self.asset_specs = specs
+            print(f"INFO (AssetManager): {len(specs)} especificações de ativos carregadas de '{json_path.name}' (formato JSON).")
+            return self.asset_specs
+            
+        elif md_path.exists():
+            # Fallback para o formato antigo MD
+            print("AVISO (AssetManager): Usando formato antigo MD. Considere migrar para JSON.")
+            with open(md_path, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+
+            specs = {}
+            # Pula as duas primeiras linhas (cabeçalho da tabela)
+            for line in lines[2:]:
+                line = line.strip()
+                if not line.startswith('|'):
+                    continue
+
+                parts = [p.strip() for p in line.split('|') if p.strip()]
+                if len(parts) < 3:
+                    continue
+
+                asset_id, tool, params_str = parts[0], parts[1], parts[2]
+                
+                try:
+                    # Remove as crases e converte a string JSON em um dicionário Python
+                    params_json = json.loads(params_str.strip('`'))
+                    specs[asset_id] = {
+                        "id": asset_id,
+                        "tool": tool,
+                        "params": params_json
+                    }
+                except json.JSONDecodeError as e:
+                    print(f"AVISO (AssetManager): Erro ao decodificar JSON para o ativo '{asset_id}'. Linha: {params_str}. Erro: {e}")
+                    continue
+            
+            self.asset_specs = specs
+            print(f"INFO (AssetManager): {len(specs)} especificações de ativos carregadas de '{md_path.name}'.")
+            return self.asset_specs
+        else:
+            raise FileNotFoundError(f"Arquivo de definição de ativos não encontrado em: {json_path} ou {md_path}")
 
     def get_specification(self, asset_id: str) -> Optional[Dict]:
         """Retorna a especificação completa de um ativo."""

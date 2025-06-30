@@ -1,0 +1,794 @@
+{
+  "version": "1.0",
+  "description": "Definição de geração de ativos digitais do app Professor Virtual",
+  "total_assets": 62,
+  "categories": {
+    "audio": {
+      "description": "Efeitos sonoros (SFX)",
+      "tool": "audio_generator",
+      "default_format": "MP3, 44.1kHz, Stereo, -3dB",
+      "assets": [
+        {
+          "id": "SFX-01",
+          "tool": "audio_generator",
+          "params": {
+            "filename": "button_tap.mp3",
+            "duration": 0.5,
+            "model": "stable-audio",
+            "prompt": "Professional sound design for children's educational app: gentle satisfying button tap sound, Material Design inspired UI feedback, soft but crisp tactile response, warm wooden percussion quality, child-friendly mobile interface sound, exactly 0.5 seconds, non-startling, encouraging interaction",
+            "negative_prompt": "loud, sharp, metallic, echo, harsh, aggressive, annoying, repetitive fatigue"
+          },
+          "description": "gentle satisfying button tap sound"
+        },
+        {
+          "id": "SFX-02",
+          "tool": "audio_generator",
+          "params": {
+            "filename": "success.mp3",
+            "duration": 1.5,
+            "model": "stable-audio",
+            "prompt": "Children's educational app success sound: bright cheerful completion chime, celebratory but not overwhelming, harmonious major chord progression, magical sparkle quality like Mario coin collection, Brazilian warmth and joy, encouraging achievement feeling, 1.5 seconds duration, mobile-optimized"
+          },
+          "description": "bright cheerful completion chime"
+        },
+        {
+          "id": "SFX-03",
+          "tool": "audio_generator",
+          "params": {
+            "filename": "error_gentle.mp3",
+            "duration": 1.0,
+            "model": "stable-audio",
+            "prompt": "Educational app gentle error indication: soft musical warning for children 7-11 years, helpful not startling, descending two-note melody with rounded smooth tone, xylophone or marimba quality, encouraging to try again, non-alarming supportive feedback, exactly 1 second"
+          },
+          "description": "soft musical warning for children 7-11 years"
+        },
+        {
+          "id": "SFX-04",
+          "tool": "audio_generator",
+          "params": {
+            "filename": "notification.mp3",
+            "duration": 1.0,
+            "model": "stable-audio",
+            "prompt": "Child-friendly notification bell for educational app: gentle school bell inspired but softer, pleasant triangular chime, warm resonance, attention-getting without startling, Brazilian school context, friendly reminder quality, exactly 1 second duration"
+          },
+          "description": "gentle school bell inspired but softer"
+        },
+        {
+          "id": "SFX-05",
+          "tool": "audio_generator",
+          "params": {
+            "filename": "achievement.mp3",
+            "duration": 2.5,
+            "model": "stable-audio",
+            "prompt": "Educational achievement celebration fanfare: triumphant orchestral sound for children, brief celebratory fanfare, positive reinforcement for learning milestones, uplifting major key progression, Brazilian festive spirit without stereotypes, encouraging continued learning, 2.5 seconds duration"
+          },
+          "description": "triumphant orchestral sound for children"
+        },
+        {
+          "id": "SFX-06",
+          "tool": "audio_generator",
+          "params": {
+            "filename": "camera_shutter.mp3",
+            "duration": 0.5,
+            "model": "stable-audio",
+            "prompt": "Modern smartphone camera capture sound for kids app: contemporary digital camera shutter click, crisp but not mechanical, friendly photo-taking feedback, familiar mobile phone camera sound, clean and satisfying, exactly 0.5 seconds",
+            "negative_prompt": "old mechanical camera, film advance, electronic beep, harsh click"
+          },
+          "description": "contemporary digital camera shutter click"
+        },
+        {
+          "id": "SFX-07",
+          "tool": "audio_generator",
+          "params": {
+            "filename": "page_transition.mp3",
+            "duration": 0.5,
+            "model": "stable-audio",
+            "prompt": "Smooth page turn transition for educational app: gentle paper sliding swoosh, airy page flip sound, book page turning quality, light and swift movement, story-time feeling, non-distracting navigation feedback, exactly 0.5 seconds",
+            "negative_prompt": "harsh whoosh, windy, noisy, heavy bass, sharp swoosh"
+          },
+          "description": "gentle paper sliding swoosh"
+        },
+        {
+          "id": "SFX-08",
+          "tool": "audio_generator",
+          "params": {
+            "filename": "pop_up.mp3",
+            "duration": 0.5,
+            "model": "stable-audio",
+            "prompt": "Playful bubble pop for children's interface: cartoon soap bubble bursting, light and delightful pop sound, fun interaction feedback, bouncy and soft quality, game-like satisfaction, child-appropriate playfulness, exactly 0.5 seconds",
+            "negative_prompt": "loud pop, aggressive burst, sharp crack, balloon pop"
+          },
+          "description": "cartoon soap bubble bursting"
+        },
+        {
+          "id": "SFX-09",
+          "tool": "audio_generator",
+          "params": {
+            "filename": "processing_loop.mp3",
+            "duration": 3.0,
+            "model": "stable-audio",
+            "prompt": "Ambient thinking/processing loop for educational app: soft electronic thinking sound, gentle pulsing hum, AI assistant processing indication, soothing continuous background, seamless 3-second loop, calming waiting music, child-friendly technology sound",
+            "negative_prompt": "harsh buzz, loud hum, distracting, annoying, anxiety-inducing"
+          },
+          "description": "soft electronic thinking sound"
+        }
+      ]
+    },
+    "mascot_static": {
+      "description": "Imagens estáticas do mascote Prof",
+      "tool": "image_generator",
+      "default_format": "PNG, 512x512px, transparent background",
+      "assets": [
+        {
+          "id": "MAS-01",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "happy",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof happy"
+        },
+        {
+          "id": "MAS-02",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "curious",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof curious"
+        },
+        {
+          "id": "MAS-03",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "encouraging",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof encouraging"
+        },
+        {
+          "id": "MAS-04",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "excited",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof excited"
+        },
+        {
+          "id": "MAS-05",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "explaining",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof explaining"
+        },
+        {
+          "id": "MAS-06",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "thinking",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof thinking"
+        },
+        {
+          "id": "MAS-07",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "welcoming",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof welcoming"
+        },
+        {
+          "id": "MAS-08",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "celebrating",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof celebrating"
+        },
+        {
+          "id": "MAS-09",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "sleeping",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof sleeping"
+        },
+        {
+          "id": "MAS-10",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "mascote",
+            "prompt_details": {
+              "action": "surprised",
+              "objects_location": "nearby",
+              "background_color": "a clean white background"
+            }
+          },
+          "description": "Prof surprised"
+        }
+      ]
+    },
+    "mascot_animations": {
+      "description": "Animações do mascote Prof",
+      "tool": "mascot_animator",
+      "default_format": "WebP animado",
+      "assets": [
+        {
+          "id": "MAS-ANI-01",
+          "tool": "mascot_animator",
+          "params": {
+            "animation_prompt": "subtle breathing motion, seamless loop, character is mostly still",
+            "prompt_details": {
+              "action": "standing still, friendly pose",
+              "objects_location": "book under arm"
+            },
+            "remove_background": false
+          },
+          "description": "subtle breathing motion"
+        },
+        {
+          "id": "MAS-ANI-02",
+          "tool": "mascot_animator",
+          "params": {
+            "animation_prompt": "a happy jump with a little squash and stretch",
+            "prompt_details": {
+              "action": "in a ready-to-jump pose",
+              "objects_location": "nearby"
+            },
+            "remove_background": false
+          },
+          "description": "a happy jump with a little squash and stretch"
+        },
+        {
+          "id": "MAS-ANI-03",
+          "tool": "mascot_animator",
+          "params": {
+            "animation_prompt": "a friendly wave to the user",
+            "prompt_details": {
+              "action": "with one arm raised",
+              "objects_location": "nearby"
+            },
+            "remove_background": false
+          },
+          "description": "a friendly wave to the user"
+        },
+        {
+          "id": "MAS-ANI-04",
+          "tool": "mascot_animator",
+          "params": {
+            "animation_prompt": "tapping chin thoughtfully, a lightbulb appears and glows above head",
+            "prompt_details": {
+              "action": "hand on chin, looking curious",
+              "objects_location": "nearby"
+            },
+            "remove_background": false
+          },
+          "description": "tapping chin thoughtfully"
+        },
+        {
+          "id": "MAS-ANI-05",
+          "tool": "mascot_animator",
+          "params": {
+            "animation_prompt": "jumping for joy, with confetti exploding around",
+            "prompt_details": {
+              "action": "with arms open wide",
+              "objects_location": "nearby"
+            },
+            "remove_background": false
+          },
+          "description": "jumping for joy"
+        }
+      ]
+    },
+    "ui_elements": {
+      "description": "Elementos de interface e fundos",
+      "tool": "mixed",
+      "assets": [
+        {
+          "id": "UI-01",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "pattern",
+            "style": "dots",
+            "size": [
+              100,
+              100
+            ]
+          },
+          "description": "Dots"
+        },
+        {
+          "id": "UI-02",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "pattern",
+            "style": "stars",
+            "size": [
+              100,
+              100
+            ]
+          },
+          "description": "Stars"
+        },
+        {
+          "id": "UI-03",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "pattern",
+            "style": "clouds",
+            "size": [
+              100,
+              100
+            ]
+          },
+          "description": "Clouds"
+        },
+        {
+          "id": "UI-04",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "pattern",
+            "style": "school",
+            "size": [
+              100,
+              100
+            ]
+          },
+          "description": "School"
+        },
+        {
+          "id": "UI-05",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "generico",
+            "prompt_details": {
+              "description": "Smooth, soft, blue-purple gradient mesh background (1920x1080)"
+            }
+          }
+        },
+        {
+          "id": "UI-06",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "generico",
+            "prompt_details": {
+              "description": "Smooth, soft, orange-pink gradient mesh background (1920x1080)"
+            }
+          }
+        },
+        {
+          "id": "UI-07",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "generico",
+            "prompt_details": {
+              "description": "single, bright, sparkling star particle, on a transparent background (64x64)"
+            }
+          }
+        },
+        {
+          "id": "UI-08",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "generico",
+            "prompt_details": {
+              "description": "A spritesheet of colorful confetti pieces, various shapes and colors, on a transparent background (512x512)"
+            }
+          }
+        },
+        {
+          "id": "UI-09",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "decorative",
+            "style": "bubble",
+            "size": [
+              100,
+              100
+            ]
+          },
+          "description": "Bubble"
+        },
+        {
+          "id": "UI-10",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "decorative",
+            "style": "rainbow",
+            "size": [
+              100,
+              100
+            ]
+          },
+          "description": "Rainbow"
+        }
+      ]
+    },
+    "loading_animations": {
+      "description": "Animações de carregamento",
+      "tool": "lottie_programmatic",
+      "default_format": "Lottie JSON, 200x200px",
+      "assets": [
+        {
+          "id": "LOAD-01",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "loading",
+            "style": "spinner",
+            "duration": 2.0,
+            "loop": true
+          },
+          "description": "Spinner"
+        },
+        {
+          "id": "LOAD-02",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "loading",
+            "style": "bounce",
+            "duration": 1.5,
+            "loop": true
+          },
+          "description": "Bounce"
+        },
+        {
+          "id": "LOAD-03",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "loading",
+            "style": "wave",
+            "duration": 2.0,
+            "loop": true
+          },
+          "description": "Wave"
+        },
+        {
+          "id": "LOAD-04",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "loading",
+            "style": "thinking",
+            "duration": 3.0,
+            "loop": true
+          },
+          "description": "Thinking"
+        },
+        {
+          "id": "LOAD-05",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "loading",
+            "style": "camera",
+            "duration": 1.5,
+            "loop": true
+          },
+          "description": "Camera"
+        },
+        {
+          "id": "LOAD-06",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "loading",
+            "style": "ai",
+            "duration": 2.5,
+            "loop": true
+          },
+          "description": "Ai"
+        }
+      ]
+    },
+    "achievements": {
+      "description": "Sistema de conquistas",
+      "tool": "mixed",
+      "assets": [
+        {
+          "id": "ACH-01",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "achievement",
+            "style": "unlock",
+            "duration": 2.0
+          },
+          "description": "Unlock"
+        },
+        {
+          "id": "ACH-02",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "achievement",
+            "style": "level_up",
+            "duration": 3.0
+          },
+          "description": "Level Up"
+        },
+        {
+          "id": "ACH-03",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "achievement",
+            "style": "star_burst",
+            "duration": 1.5
+          },
+          "description": "Star Burst"
+        },
+        {
+          "id": "ACH-04",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "frame",
+            "style": "badge_frame",
+            "custom_params": {
+              "level": "bronze"
+            }
+          },
+          "description": "Badge Frame"
+        },
+        {
+          "id": "ACH-05",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "frame",
+            "style": "badge_frame",
+            "custom_params": {
+              "level": "silver"
+            }
+          },
+          "description": "Badge Frame"
+        },
+        {
+          "id": "ACH-06",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "frame",
+            "style": "badge_frame",
+            "custom_params": {
+              "level": "gold"
+            }
+          },
+          "description": "Badge Frame"
+        },
+        {
+          "id": "ACH-07",
+          "tool": "image_generator",
+          "params": {
+            "asset_type": "generico",
+            "prompt_details": {
+              "description": "a soft, circular, golden glow effect for a badge, on a transparent background"
+            }
+          }
+        }
+      ]
+    },
+    "themed_elements": {
+      "description": "Elementos temáticos e sazonais",
+      "tool": "svg_generator",
+      "default_format": "SVG",
+      "assets": [
+        {
+          "id": "THM-01",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "themed",
+            "style": "holiday_decorations"
+          },
+          "description": "Holiday Decorations"
+        },
+        {
+          "id": "THM-02",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "themed",
+            "style": "seasonal_pattern_spring"
+          },
+          "description": "Seasonal Pattern Spring"
+        },
+        {
+          "id": "THM-03",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "themed",
+            "style": "seasonal_pattern_autumn"
+          },
+          "description": "Seasonal Pattern Autumn"
+        },
+        {
+          "id": "THM-04",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "themed",
+            "style": "birthday_elements"
+          },
+          "description": "Birthday Elements"
+        },
+        {
+          "id": "THM-05",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "themed",
+            "style": "space_theme"
+          },
+          "description": "Space Theme"
+        }
+      ]
+    },
+    "feedback_animations": {
+      "description": "Animações de feedback interativo",
+      "tool": "lottie_programmatic",
+      "default_format": "Lottie JSON",
+      "assets": [
+        {
+          "id": "FBK-01",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "feedback",
+            "style": "ripple",
+            "duration": 0.5,
+            "loop": false
+          },
+          "description": "Ripple"
+        },
+        {
+          "id": "FBK-02",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "feedback",
+            "style": "checkmark",
+            "duration": 1.0,
+            "loop": false
+          },
+          "description": "Checkmark"
+        },
+        {
+          "id": "FBK-03",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "feedback",
+            "style": "shake",
+            "duration": 0.5,
+            "loop": false
+          },
+          "description": "Shake"
+        },
+        {
+          "id": "FBK-04",
+          "tool": "lottie_programmatic",
+          "params": {
+            "animation_type": "feedback",
+            "style": "pulse",
+            "duration": 2.0,
+            "loop": true
+          },
+          "description": "Pulse"
+        }
+      ]
+    },
+    "navigation_icons": {
+      "description": "Ícones de navegação",
+      "tool": "svg_generator",
+      "default_format": "SVG, 24x24dp",
+      "assets": [
+        {
+          "id": "ICO-01",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "icon",
+            "style": "camera_fun",
+            "size": [
+              24,
+              24
+            ]
+          },
+          "description": "Camera Fun"
+        },
+        {
+          "id": "ICO-02",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "icon",
+            "style": "microphone_fun",
+            "size": [
+              24,
+              24
+            ]
+          },
+          "description": "Microphone Fun"
+        },
+        {
+          "id": "ICO-03",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "icon",
+            "style": "history_fun",
+            "size": [
+              24,
+              24
+            ]
+          },
+          "description": "History Fun"
+        },
+        {
+          "id": "ICO-04",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "icon",
+            "style": "achievements_fun",
+            "size": [
+              24,
+              24
+            ]
+          },
+          "description": "Achievements Fun"
+        },
+        {
+          "id": "ICO-05",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "icon",
+            "style": "settings_fun",
+            "size": [
+              24,
+              24
+            ]
+          },
+          "description": "Settings Fun"
+        },
+        {
+          "id": "ICO-06",
+          "tool": "svg_generator",
+          "params": {
+            "svg_type": "icon",
+            "style": "help_fun",
+            "size": [
+              24,
+              24
+            ]
+          },
+          "description": "Help Fun"
+        }
+      ]
+    }
+  }
+}
