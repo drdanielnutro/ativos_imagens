@@ -125,7 +125,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "happy",
+              "action": "PROF mascot extremely happy and smiling, with joyful and welcoming expression, bright eyes, animated and inviting posture, in child-friendly cartoon style, vibrant colors, on clean white background",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -138,7 +138,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "curious",
+              "action": "PROF mascot with curious and interested expression, wide eyes shining with discovery, slightly arched eyebrows, head subtly tilted, body posture leaning forward as if investigating something nearby, in friendly and educational cartoon style for children, vibrant colors, clean white background",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -151,7 +151,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "encouraging",
+              "action": "PROF mascot in encouraging pose, smiling warmly with open arms in welcoming gesture, bright eyes conveying confidence, posture slightly leaning forward demonstrating interest and support, friendly and colorful cartoon style suitable for children, clean white background, centered composition with space for nearby elements",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -164,7 +164,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "excited",
+              "action": "PROF mascot extremely animated and enthusiastic, with eyes shining with excitement, wide contagious smile, arms raised in celebration, dynamic posture transmitting positive energy, in child-friendly cartoon style, on clean white and neutral background",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -177,7 +177,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "explaining",
+              "action": "PROF mascot explaining educational concept with didactic hand gestures, attentive and friendly facial expression, engaged teacher posture, educational objects nearby (books, blackboard or learning elements), in colorful cartoon style suitable for children, clean white background",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -190,7 +190,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "thinking",
+              "action": "PROF mascot in thoughtful pose, hand on chin, contemplative gaze directed upward, concentrated but friendly expression, small thinking symbols (lightbulbs, gears or question marks) floating near head, educational cartoon style for children, vibrant colors, clean white background",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -203,7 +203,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "welcoming",
+              "action": "PROF mascot in welcoming and inviting pose, open arms in welcome gesture, warm and friendly smile, bright eyes expressing kindness, open and receptive body posture, colorful cartoon style suitable for children, clean and minimalist white background, centered composition with balanced negative space",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -216,7 +216,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "celebrating",
+              "action": "PROF mascot celebrating enthusiastically, arms raised in victory, extremely happy and proud facial expression, jumping with joy, colorful confetti around, in child-friendly cartoon style, vibrant and cheerful colors, clean white background, centered composition with space for dynamic movement",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -229,7 +229,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "sleeping",
+              "action": "PROF mascot sleeping peacefully, closed eyes with serene and relaxed expression, breathing softly, comfortable and cozy position, small 'Zzz' floating above head, child-friendly cartoon style, soft and calming colors, clean white background",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -242,7 +242,7 @@
           "params": {
             "asset_type": "mascote",
             "prompt_details": {
-              "action": "surprised",
+              "action": "PROF mascot with positive and delighted surprise expression, wide eyes shining with curiosity, mouth open in 'O' shape, raised eyebrows, hands near face in admiration gesture, body posture slightly leaning forward demonstrating genuine interest, in friendly and expressive cartoon style for children, vibrant and cheerful colors, clean and crisp white background",
               "objects_location": "nearby",
               "background_color": "a clean white background"
             }
@@ -262,7 +262,7 @@
           "params": {
             "animation_prompt": "subtle breathing motion, seamless loop, character is mostly still",
             "prompt_details": {
-              "action": "standing still, friendly pose",
+              "action": "PROF mascot in friendly pose, standing still with book under arm, performing subtle and continuous natural breathing movement, chest expanding and contracting gently, perfect and imperceptible loop, character mostly static except for breathing, educational cartoon style for children",
               "objects_location": "book under arm"
             },
             "remove_background": false
@@ -275,7 +275,7 @@
           "params": {
             "animation_prompt": "a happy jump with a little squash and stretch",
             "prompt_details": {
-              "action": "in a ready-to-jump pose",
+              "action": "PROF mascot performing a joyful and expressive jump with smooth squash and stretch, starting from a crouched preparatory pose, propelling with contagious childlike energy, arms open in celebration during jump, landing with slight elastic compression, radiant smile throughout movement, fluid animation suitable for children 7-11 years, optional loop",
               "objects_location": "nearby"
             },
             "remove_background": false
@@ -288,7 +288,7 @@
           "params": {
             "animation_prompt": "a friendly wave to the user",
             "prompt_details": {
-              "action": "with one arm raised",
+              "action": "PROF mascot waving friendly to the user with one raised arm, smooth and welcoming movement, warm smile, gaze directed forward establishing visual connection, fluid 2-3 second animation with natural loop, educational cartoon style appropriate for children",
               "objects_location": "nearby"
             },
             "remove_background": false
@@ -301,7 +301,7 @@
           "params": {
             "animation_prompt": "tapping chin thoughtfully, a lightbulb appears and glows above head",
             "prompt_details": {
-              "action": "hand on chin, looking curious",
+              "action": "PROF mascot tapping chin thoughtfully with curious and concentrated expression, eyes slightly looking upward, then a bright yellow lightbulb magically appears above head with 'eureka' effect, glowing and pulsing softly to indicate a brilliant idea, fluid and educational animation suitable for children",
               "objects_location": "nearby"
             },
             "remove_background": false
@@ -314,7 +314,7 @@
           "params": {
             "animation_prompt": "jumping for joy, with confetti exploding around",
             "prompt_details": {
-              "action": "with arms open wide",
+              "action": "PROF mascot jumping for joy with arms wide open, colorful confetti exploding around in celebration, energetic and expressive movement, radiant smile, fluid animation suitable for children, friendly and educational cartoon style",
               "objects_location": "nearby"
             },
             "remove_background": false
@@ -331,12 +331,9 @@
           "id": "UI-01",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "pattern",
-            "style": "dots",
-            "size": [
-              100,
-              100
-            ]
+            "prompt": "Pattern of colorful dots for children's educational app background. Vectorized, cartoon style, tileable pattern with playful dots in multiple bright colors",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Dots"
         },
@@ -344,12 +341,9 @@
           "id": "UI-02",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "pattern",
-            "style": "stars",
-            "size": [
-              100,
-              100
-            ]
+            "prompt": "Pattern of cute stars for children's educational app background. Vectorized, cartoon style, tileable pattern with smiling stars in yellow and gold colors",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Stars"
         },
@@ -357,12 +351,9 @@
           "id": "UI-03",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "pattern",
-            "style": "clouds",
-            "size": [
-              100,
-              100
-            ]
+            "prompt": "Pattern of soft fluffy clouds for children's educational app background. Vectorized, cartoon style, tileable pattern with cute white clouds on light blue sky",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Clouds"
         },
@@ -370,12 +361,9 @@
           "id": "UI-04",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "pattern",
-            "style": "school",
-            "size": [
-              100,
-              100
-            ]
+            "prompt": "School theme pattern for children's educational app. Vectorized, cartoon style, tileable pattern with pencils, books, rulers and ABC letters in bright colors",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "School"
         },
@@ -405,7 +393,7 @@
           "params": {
             "asset_type": "generico",
             "prompt_details": {
-              "description": "single, bright, sparkling star particle, on a transparent background (64x64)"
+              "description": "single, bright, sparkling star particle, golden yellow with white core, radiating soft light rays, glowing effect with subtle shimmer animation feel, clean vector-style design suitable for UI, on fully transparent background, 64x64 pixels, PNG format with alpha channel"
             }
           }
         },
@@ -423,12 +411,9 @@
           "id": "UI-09",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "decorative",
-            "style": "bubble",
-            "size": [
-              100,
-              100
-            ]
+            "prompt": "Decorative speech bubble shapes for children's app. Vectorized, cartoon style, friendly rounded bubble shapes with soft edges and playful design",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Bubble"
         },
@@ -436,12 +421,9 @@
           "id": "UI-10",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "decorative",
-            "style": "rainbow",
-            "size": [
-              100,
-              100
-            ]
+            "prompt": "Decorative rainbow arc for children's educational app. Vectorized, cartoon style, colorful rainbow with clouds at the ends, bright and cheerful design",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Rainbow"
         }
@@ -558,37 +540,31 @@
           "id": "ACH-04",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "frame",
-            "style": "badge_frame",
-            "custom_params": {
-              "level": "bronze"
-            }
+            "prompt": "Achievement badge frame in bronze for children's educational app. Vectorized, cartoon style, circular badge with decorative bronze border, shiny metallic effect",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
-          "description": "Badge Frame"
+          "description": "Badge Frame Bronze"
         },
         {
           "id": "ACH-05",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "frame",
-            "style": "badge_frame",
-            "custom_params": {
-              "level": "silver"
-            }
+            "prompt": "Achievement badge frame in silver for children's educational app. Vectorized, cartoon style, circular badge with decorative silver border, shiny metallic effect",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
-          "description": "Badge Frame"
+          "description": "Badge Frame Silver"
         },
         {
           "id": "ACH-06",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "frame",
-            "style": "badge_frame",
-            "custom_params": {
-              "level": "gold"
-            }
+            "prompt": "Achievement badge frame in gold for children's educational app. Vectorized, cartoon style, circular badge with decorative gold border, stars decoration, shiny metallic effect",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
-          "description": "Badge Frame"
+          "description": "Badge Frame Gold"
         },
         {
           "id": "ACH-07",
@@ -611,8 +587,9 @@
           "id": "THM-01",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "themed",
-            "style": "holiday_decorations"
+            "prompt": "Holiday decorations for children's educational app. Vectorized, cartoon style, festive ornaments, gift boxes, candy canes and holiday lights in bright colors",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Holiday Decorations"
         },
@@ -620,8 +597,9 @@
           "id": "THM-02",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "themed",
-            "style": "seasonal_pattern_spring"
+            "prompt": "Spring seasonal pattern for children's educational app. Vectorized, cartoon style, flowers, butterflies, bees and green leaves in pastel colors",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Seasonal Pattern Spring"
         },
@@ -629,8 +607,9 @@
           "id": "THM-03",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "themed",
-            "style": "seasonal_pattern_autumn"
+            "prompt": "Autumn seasonal pattern for children's educational app. Vectorized, cartoon style, fall leaves, pumpkins, acorns in warm orange and brown colors",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Seasonal Pattern Autumn"
         },
@@ -638,8 +617,9 @@
           "id": "THM-04",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "themed",
-            "style": "birthday_elements"
+            "prompt": "Birthday party elements for children's educational app. Vectorized, cartoon style, birthday cake, balloons, party hats, confetti in bright festive colors",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Birthday Elements"
         },
@@ -647,8 +627,9 @@
           "id": "THM-05",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "themed",
-            "style": "space_theme"
+            "prompt": "Space theme elements for children's educational app. Vectorized, cartoon style, cute planets, stars, rockets, astronauts and aliens in bright colors",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Space Theme"
         }
@@ -714,12 +695,9 @@
           "id": "ICO-01",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "icon",
-            "style": "camera_fun",
-            "size": [
-              24,
-              24
-            ]
+            "prompt": "Icon of a camera for a educational kids educational app. Vectorized, cartoon, 3d, colorized.",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Camera Fun"
         },
@@ -727,12 +705,9 @@
           "id": "ICO-02",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "icon",
-            "style": "microphone_fun",
-            "size": [
-              24,
-              24
-            ]
+            "prompt": "Icon of a microphone for children's educational app. Vectorized, cartoon, 3d, colorful, fun design with musical notes",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Microphone Fun"
         },
@@ -740,12 +715,9 @@
           "id": "ICO-03",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "icon",
-            "style": "history_fun",
-            "size": [
-              24,
-              24
-            ]
+            "prompt": "Icon of a clock showing history for children's educational app. Vectorized, cartoon, 3d, colorful, smiling clock face design",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "History Fun"
         },
@@ -753,12 +725,9 @@
           "id": "ICO-04",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "icon",
-            "style": "achievements_fun",
-            "size": [
-              24,
-              24
-            ]
+            "prompt": "Icon of a trophy for achievements in children's educational app. Vectorized, cartoon, 3d, golden trophy with stars, colorful design",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Achievements Fun"
         },
@@ -766,12 +735,9 @@
           "id": "ICO-05",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "icon",
-            "style": "settings_fun",
-            "size": [
-              24,
-              24
-            ]
+            "prompt": "Icon of a gear for settings in children's educational app. Vectorized, cartoon, 3d, colorful gear with smiling face, friendly design",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Settings Fun"
         },
@@ -779,12 +745,9 @@
           "id": "ICO-06",
           "tool": "svg_generator",
           "params": {
-            "svg_type": "icon",
-            "style": "help_fun",
-            "size": [
-              24,
-              24
-            ]
+            "prompt": "Icon of a question mark for help in children's educational app. Vectorized, cartoon, 3d, colorful question mark with friendly character design",
+            "size": "1024x1024",
+            "aspect_ratio": "1:1"
           },
           "description": "Help Fun"
         }

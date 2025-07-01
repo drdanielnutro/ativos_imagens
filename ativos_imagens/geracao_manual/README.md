@@ -1,7 +1,7 @@
 
 # Gerador Manual de Ativos
 
-Este diretório contém um script para gerar manualmente os ativos do projeto "Professor Virtual" com base nas especificações definidas em `docs/definicoes/ativos_a_serem_criados.md`.
+Este diretório contém um script para gerar manualmente os ativos do projeto "Professor Virtual" com base nas especificações definidas em `docs/definicoes/ativos_a_serem_criados.md` (o novo arquivo fonte da verdade é `docs/definicoes/geracao_de_ativos.json` ).
 
 ## Pré-requisitos
 

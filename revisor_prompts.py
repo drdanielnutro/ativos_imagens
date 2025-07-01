@@ -43,7 +43,7 @@ class AssetDocument(BaseModel):
     id: str  # ID do ativo (ex: "SFX-01", "MAS-02")
     tool: str  # Ferramenta geradora
     params: Dict[str, Any]  # Parâmetros incluindo prompt
-    description: str  # Descrição do ativo
+    description: str = ""  # Descrição do ativo
     
     def get_prompt(self) -> Optional[str]:
         """Extrai o prompt atual dos parâmetros"""

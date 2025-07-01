@@ -1,0 +1,301 @@
+{
+  "total_analisados": 49,
+  "total_otimizados": 16,
+  "total_mantidos": 33,
+  "resultados": [
+    {
+      "id": "SFX-01",
+      "prompt_original": "Professional sound design for children's educational app: gentle satisfying button tap sound, Material Design inspired UI feedback, soft but crisp tactile response, warm wooden percussion quality, child-friendly mobile interface sound, exactly 0.5 seconds, non-startling, encouraging interaction",
+      "prompt_otimizado": "Professional sound design for children's educational app: gentle satisfying button tap sound, Material Design inspired UI feedback, soft but crisp tactile response, warm wooden percussion quality, child-friendly mobile interface sound, exactly 0.5 seconds, non-startling, encouraging interaction",
+      "modificado": false
+    },
+    {
+      "id": "SFX-02",
+      "prompt_original": "Children's educational app success sound: bright cheerful completion chime, celebratory but not overwhelming, harmonious major chord progression, magical sparkle quality like Mario coin collection, Brazilian warmth and joy, encouraging achievement feeling, 1.5 seconds duration, mobile-optimized",
+      "prompt_otimizado": "Children's educational app success sound: bright cheerful completion chime, celebratory but not overwhelming, harmonious major chord progression, magical sparkle quality like Mario coin collection, Brazilian warmth and joy, encouraging achievement feeling, 1.5 seconds duration, mobile-optimized",
+      "modificado": false
+    },
+    {
+      "id": "SFX-03",
+      "prompt_original": "Educational app gentle error indication: soft musical warning for children 7-11 years, helpful not startling, descending two-note melody with rounded smooth tone, xylophone or marimba quality, encouraging to try again, non-alarming supportive feedback, exactly 1 second",
+      "prompt_otimizado": "Educational app gentle error indication: soft musical warning for children 7-11 years, helpful not startling, descending two-note melody with rounded smooth tone, xylophone or marimba quality, encouraging to try again, non-alarming supportive feedback, exactly 1 second",
+      "modificado": false
+    },
+    {
+      "id": "SFX-04",
+      "prompt_original": "Child-friendly notification bell for educational app: gentle school bell inspired but softer, pleasant triangular chime, warm resonance, attention-getting without startling, Brazilian school context, friendly reminder quality, exactly 1 second duration",
+      "prompt_otimizado": "Child-friendly notification bell for educational app: gentle school bell inspired but softer, pleasant triangular chime, warm resonance, attention-getting without startling, Brazilian school context, friendly reminder quality, exactly 1 second duration",
+      "modificado": false
+    },
+    {
+      "id": "SFX-05",
+      "prompt_original": "Educational achievement celebration fanfare: triumphant orchestral sound for children, brief celebratory fanfare, positive reinforcement for learning milestones, uplifting major key progression, Brazilian festive spirit without stereotypes, encouraging continued learning, 2.5 seconds duration",
+      "prompt_otimizado": "Educational achievement celebration fanfare: triumphant orchestral sound for children, brief celebratory fanfare, positive reinforcement for learning milestones, uplifting major key progression, Brazilian festive spirit without stereotypes, encouraging continued learning, 2.5 seconds duration",
+      "modificado": false
+    },
+    {
+      "id": "SFX-06",
+      "prompt_original": "Modern smartphone camera capture sound for kids app: contemporary digital camera shutter click, crisp but not mechanical, friendly photo-taking feedback, familiar mobile phone camera sound, clean and satisfying, exactly 0.5 seconds",
+      "prompt_otimizado": "Modern smartphone camera capture sound for kids app: contemporary digital camera shutter click, crisp but not mechanical, friendly photo-taking feedback, familiar mobile phone camera sound, clean and satisfying, exactly 0.5 seconds",
+      "modificado": false
+    },
+    {
+      "id": "SFX-07",
+      "prompt_original": "Smooth page turn transition for educational app: gentle paper sliding swoosh, airy page flip sound, book page turning quality, light and swift movement, story-time feeling, non-distracting navigation feedback, exactly 0.5 seconds",
+      "prompt_otimizado": "Smooth page turn transition for educational app: gentle paper sliding swoosh, airy page flip sound, book page turning quality, light and swift movement, story-time feeling, non-distracting navigation feedback, exactly 0.5 seconds",
+      "modificado": false
+    },
+    {
+      "id": "SFX-08",
+      "prompt_original": "Playful bubble pop for children's interface: cartoon soap bubble bursting, light and delightful pop sound, fun interaction feedback, bouncy and soft quality, game-like satisfaction, child-appropriate playfulness, exactly 0.5 seconds",
+      "prompt_otimizado": "Playful bubble pop for children's interface: cartoon soap bubble bursting, light and delightful pop sound, fun interaction feedback, bouncy and soft quality, game-like satisfaction, child-appropriate playfulness, exactly 0.5 seconds",
+      "modificado": false
+    },
+    {
+      "id": "SFX-09",
+      "prompt_original": "Ambient thinking/processing loop for educational app: soft electronic thinking sound, gentle pulsing hum, AI assistant processing indication, soothing continuous background, seamless 3-second loop, calming waiting music, child-friendly technology sound",
+      "prompt_otimizado": "Ambient thinking/processing loop for educational app: soft electronic thinking sound, gentle pulsing hum, AI assistant processing indication, soothing continuous background, seamless 3-second loop, calming waiting music, child-friendly technology sound",
+      "modificado": false
+    },
+    {
+      "id": "MAS-01",
+      "prompt_original": "happy",
+      "prompt_otimizado": "PROF mascot extremely happy and smiling, with joyful and welcoming expression, bright eyes, animated and inviting posture, in child-friendly cartoon style, vibrant colors, on clean white background",
+      "modificado": true
+    },
+    {
+      "id": "MAS-02",
+      "prompt_original": "curious",
+      "prompt_otimizado": "PROF mascot with curious and interested expression, wide eyes shining with discovery, slightly arched eyebrows, head subtly tilted, body posture leaning forward as if investigating something nearby, in friendly and educational cartoon style for children, vibrant colors, clean white background",
+      "modificado": true
+    },
+    {
+      "id": "MAS-03",
+      "prompt_original": "encouraging",
+      "prompt_otimizado": "PROF mascot in encouraging pose, smiling warmly with open arms in welcoming gesture, bright eyes conveying confidence, posture slightly leaning forward demonstrating interest and support, friendly and colorful cartoon style suitable for children, clean white background, centered composition with space for nearby elements",
+      "modificado": true
+    },
+    {
+      "id": "MAS-04",
+      "prompt_original": "excited",
+      "prompt_otimizado": "PROF mascot extremely animated and enthusiastic, with eyes shining with excitement, wide contagious smile, arms raised in celebration, dynamic posture transmitting positive energy, in child-friendly cartoon style, on clean white and neutral background",
+      "modificado": true
+    },
+    {
+      "id": "MAS-05",
+      "prompt_original": "explaining",
+      "prompt_otimizado": "PROF mascot explaining educational concept with didactic hand gestures, attentive and friendly facial expression, engaged teacher posture, educational objects nearby (books, blackboard or learning elements), in colorful cartoon style suitable for children, clean white background",
+      "modificado": true
+    },
+    {
+      "id": "MAS-06",
+      "prompt_original": "thinking",
+      "prompt_otimizado": "PROF mascot in thoughtful pose, hand on chin, contemplative gaze directed upward, concentrated but friendly expression, small thinking symbols (lightbulbs, gears or question marks) floating near head, educational cartoon style for children, vibrant colors, clean white background",
+      "modificado": true
+    },
+    {
+      "id": "MAS-07",
+      "prompt_original": "welcoming",
+      "prompt_otimizado": "PROF mascot in welcoming and inviting pose, open arms in welcome gesture, warm and friendly smile, bright eyes expressing kindness, open and receptive body posture, colorful cartoon style suitable for children, clean and minimalist white background, centered composition with balanced negative space",
+      "modificado": true
+    },
+    {
+      "id": "MAS-08",
+      "prompt_original": "celebrating",
+      "prompt_otimizado": "PROF mascot celebrating enthusiastically, arms raised in victory, extremely happy and proud facial expression, jumping with joy, colorful confetti around, in child-friendly cartoon style, vibrant and cheerful colors, clean white background, centered composition with space for dynamic movement",
+      "modificado": true
+    },
+    {
+      "id": "MAS-09",
+      "prompt_original": "sleeping",
+      "prompt_otimizado": "PROF mascot sleeping peacefully, closed eyes with serene and relaxed expression, breathing softly, comfortable and cozy position, small 'Zzz' floating above head, child-friendly cartoon style, soft and calming colors, clean white background",
+      "modificado": true
+    },
+    {
+      "id": "MAS-10",
+      "prompt_original": "surprised",
+      "prompt_otimizado": "PROF mascot with positive and delighted surprise expression, wide eyes shining with curiosity, mouth open in 'O' shape, raised eyebrows, hands near face in admiration gesture, body posture slightly leaning forward demonstrating genuine interest, in friendly and expressive cartoon style for children, vibrant and cheerful colors, clean and crisp white background",
+      "modificado": true
+    },
+    {
+      "id": "MAS-ANI-01",
+      "prompt_original": "standing still, friendly pose",
+      "prompt_otimizado": "PROF mascot in friendly pose, standing still with book under arm, performing subtle and continuous natural breathing movement, chest expanding and contracting gently, perfect and imperceptible loop, character mostly static except for breathing, educational cartoon style for children",
+      "modificado": true
+    },
+    {
+      "id": "MAS-ANI-02",
+      "prompt_original": "in a ready-to-jump pose",
+      "prompt_otimizado": "PROF mascot performing a joyful and expressive jump with smooth squash and stretch, starting from a crouched preparatory pose, propelling with contagious childlike energy, arms open in celebration during jump, landing with slight elastic compression, radiant smile throughout movement, fluid animation suitable for children 7-11 years, optional loop",
+      "modificado": true
+    },
+    {
+      "id": "MAS-ANI-03",
+      "prompt_original": "with one arm raised",
+      "prompt_otimizado": "PROF mascot waving friendly to the user with one raised arm, smooth and welcoming movement, warm smile, gaze directed forward establishing visual connection, fluid 2-3 second animation with natural loop, educational cartoon style appropriate for children",
+      "modificado": true
+    },
+    {
+      "id": "MAS-ANI-04",
+      "prompt_original": "hand on chin, looking curious",
+      "prompt_otimizado": "PROF mascot tapping chin thoughtfully with curious and concentrated expression, eyes slightly looking upward, then a bright yellow lightbulb magically appears above head with 'eureka' effect, glowing and pulsing softly to indicate a brilliant idea, fluid and educational animation suitable for children",
+      "modificado": true
+    },
+    {
+      "id": "MAS-ANI-05",
+      "prompt_original": "with arms open wide",
+      "prompt_otimizado": "PROF mascot jumping for joy with arms wide open, colorful confetti exploding around in celebration, energetic and expressive movement, radiant smile, fluid animation suitable for children, friendly and educational cartoon style",
+      "modificado": true
+    },
+    {
+      "id": "UI-01",
+      "prompt_original": "Pattern of colorful dots for children's educational app background. Vectorized, cartoon style, tileable pattern with playful dots in multiple bright colors",
+      "prompt_otimizado": "Pattern of colorful dots for children's educational app background. Vectorized, cartoon style, tileable pattern with playful dots in multiple bright colors",
+      "modificado": false
+    },
+    {
+      "id": "UI-02",
+      "prompt_original": "Pattern of cute stars for children's educational app background. Vectorized, cartoon style, tileable pattern with smiling stars in yellow and gold colors",
+      "prompt_otimizado": "Pattern of cute stars for children's educational app background. Vectorized, cartoon style, tileable pattern with smiling stars in yellow and gold colors",
+      "modificado": false
+    },
+    {
+      "id": "UI-03",
+      "prompt_original": "Pattern of soft fluffy clouds for children's educational app background. Vectorized, cartoon style, tileable pattern with cute white clouds on light blue sky",
+      "prompt_otimizado": "Pattern of soft fluffy clouds for children's educational app background. Vectorized, cartoon style, tileable pattern with cute white clouds on light blue sky",
+      "modificado": false
+    },
+    {
+      "id": "UI-04",
+      "prompt_original": "School theme pattern for children's educational app. Vectorized, cartoon style, tileable pattern with pencils, books, rulers and ABC letters in bright colors",
+      "prompt_otimizado": "School theme pattern for children's educational app. Vectorized, cartoon style, tileable pattern with pencils, books, rulers and ABC letters in bright colors",
+      "modificado": false
+    },
+    {
+      "id": "UI-05",
+      "prompt_original": "Smooth, soft, blue-purple gradient mesh background (1920x1080)",
+      "prompt_otimizado": "Smooth, soft, blue-purple gradient mesh background (1920x1080)",
+      "modificado": false
+    },
+    {
+      "id": "UI-06",
+      "prompt_original": "Smooth, soft, orange-pink gradient mesh background (1920x1080)",
+      "prompt_otimizado": "Smooth, soft, orange-pink gradient mesh background (1920x1080)",
+      "modificado": false
+    },
+    {
+      "id": "UI-07",
+      "prompt_original": "single, bright, sparkling star particle, on a transparent background (64x64)",
+      "prompt_otimizado": "single, bright, sparkling star particle, golden yellow with white core, radiating soft light rays, glowing effect with subtle shimmer animation feel, clean vector-style design suitable for UI, on fully transparent background, 64x64 pixels, PNG format with alpha channel",
+      "modificado": true
+    },
+    {
+      "id": "UI-08",
+      "prompt_original": "A spritesheet of colorful confetti pieces, various shapes and colors, on a transparent background (512x512)",
+      "prompt_otimizado": "A spritesheet of colorful confetti pieces, various shapes and colors, on a transparent background (512x512)",
+      "modificado": false
+    },
+    {
+      "id": "UI-09",
+      "prompt_original": "Decorative speech bubble shapes for children's app. Vectorized, cartoon style, friendly rounded bubble shapes with soft edges and playful design",
+      "prompt_otimizado": "Decorative speech bubble shapes for children's app. Vectorized, cartoon style, friendly rounded bubble shapes with soft edges and playful design",
+      "modificado": false
+    },
+    {
+      "id": "UI-10",
+      "prompt_original": "Decorative rainbow arc for children's educational app. Vectorized, cartoon style, colorful rainbow with clouds at the ends, bright and cheerful design",
+      "prompt_otimizado": "Decorative rainbow arc for children's educational app. Vectorized, cartoon style, colorful rainbow with clouds at the ends, bright and cheerful design",
+      "modificado": false
+    },
+    {
+      "id": "ACH-04",
+      "prompt_original": "Achievement badge frame in bronze for children's educational app. Vectorized, cartoon style, circular badge with decorative bronze border, shiny metallic effect",
+      "prompt_otimizado": "Achievement badge frame in bronze for children's educational app. Vectorized, cartoon style, circular badge with decorative bronze border, shiny metallic effect",
+      "modificado": false
+    },
+    {
+      "id": "ACH-05",
+      "prompt_original": "Achievement badge frame in silver for children's educational app. Vectorized, cartoon style, circular badge with decorative silver border, shiny metallic effect",
+      "prompt_otimizado": "Achievement badge frame in silver for children's educational app. Vectorized, cartoon style, circular badge with decorative silver border, shiny metallic effect",
+      "modificado": false
+    },
+    {
+      "id": "ACH-06",
+      "prompt_original": "Achievement badge frame in gold for children's educational app. Vectorized, cartoon style, circular badge with decorative gold border, stars decoration, shiny metallic effect",
+      "prompt_otimizado": "Achievement badge frame in gold for children's educational app. Vectorized, cartoon style, circular badge with decorative gold border, stars decoration, shiny metallic effect",
+      "modificado": false
+    },
+    {
+      "id": "ACH-07",
+      "prompt_original": "a soft, circular, golden glow effect for a badge, on a transparent background",
+      "prompt_otimizado": "a soft, circular, golden glow effect for a badge, on a transparent background",
+      "modificado": false
+    },
+    {
+      "id": "THM-01",
+      "prompt_original": "Holiday decorations for children's educational app. Vectorized, cartoon style, festive ornaments, gift boxes, candy canes and holiday lights in bright colors",
+      "prompt_otimizado": "Holiday decorations for children's educational app. Vectorized, cartoon style, festive ornaments, gift boxes, candy canes and holiday lights in bright colors",
+      "modificado": false
+    },
+    {
+      "id": "THM-02",
+      "prompt_original": "Spring seasonal pattern for children's educational app. Vectorized, cartoon style, flowers, butterflies, bees and green leaves in pastel colors",
+      "prompt_otimizado": "Spring seasonal pattern for children's educational app. Vectorized, cartoon style, flowers, butterflies, bees and green leaves in pastel colors",
+      "modificado": false
+    },
+    {
+      "id": "THM-03",
+      "prompt_original": "Autumn seasonal pattern for children's educational app. Vectorized, cartoon style, fall leaves, pumpkins, acorns in warm orange and brown colors",
+      "prompt_otimizado": "Autumn seasonal pattern for children's educational app. Vectorized, cartoon style, fall leaves, pumpkins, acorns in warm orange and brown colors",
+      "modificado": false
+    },
+    {
+      "id": "THM-04",
+      "prompt_original": "Birthday party elements for children's educational app. Vectorized, cartoon style, birthday cake, balloons, party hats, confetti in bright festive colors",
+      "prompt_otimizado": "Birthday party elements for children's educational app. Vectorized, cartoon style, birthday cake, balloons, party hats, confetti in bright festive colors",
+      "modificado": false
+    },
+    {
+      "id": "THM-05",
+      "prompt_original": "Space theme elements for children's educational app. Vectorized, cartoon style, cute planets, stars, rockets, astronauts and aliens in bright colors",
+      "prompt_otimizado": "Space theme elements for children's educational app. Vectorized, cartoon style, cute planets, stars, rockets, astronauts and aliens in bright colors",
+      "modificado": false
+    },
+    {
+      "id": "ICO-01",
+      "prompt_original": "Icon of a camera for a educational kids educational app. Vectorized, cartoon, 3d, colorized.",
+      "prompt_otimizado": "Icon of a camera for a educational kids educational app. Vectorized, cartoon, 3d, colorized.",
+      "modificado": false
+    },
+    {
+      "id": "ICO-02",
+      "prompt_original": "Icon of a microphone for children's educational app. Vectorized, cartoon, 3d, colorful, fun design with musical notes",
+      "prompt_otimizado": "Icon of a microphone for children's educational app. Vectorized, cartoon, 3d, colorful, fun design with musical notes",
+      "modificado": false
+    },
+    {
+      "id": "ICO-03",
+      "prompt_original": "Icon of a clock showing history for children's educational app. Vectorized, cartoon, 3d, colorful, smiling clock face design",
+      "prompt_otimizado": "Icon of a clock showing history for children's educational app. Vectorized, cartoon, 3d, colorful, smiling clock face design",
+      "modificado": false
+    },
+    {
+      "id": "ICO-04",
+      "prompt_original": "Icon of a trophy for achievements in children's educational app. Vectorized, cartoon, 3d, golden trophy with stars, colorful design",
+      "prompt_otimizado": "Icon of a trophy for achievements in children's educational app. Vectorized, cartoon, 3d, golden trophy with stars, colorful design",
+      "modificado": false
+    },
+    {
+      "id": "ICO-05",
+      "prompt_original": "Icon of a gear for settings in children's educational app. Vectorized, cartoon, 3d, colorful gear with smiling face, friendly design",
+      "prompt_otimizado": "Icon of a gear for settings in children's educational app. Vectorized, cartoon, 3d, colorful gear with smiling face, friendly design",
+      "modificado": false
+    },
+    {
+      "id": "ICO-06",
+      "prompt_original": "Icon of a question mark for help in children's educational app. Vectorized, cartoon, 3d, colorful question mark with friendly character design",
+      "prompt_otimizado": "Icon of a question mark for help in children's educational app. Vectorized, cartoon, 3d, colorful question mark with friendly character design",
+      "modificado": false
+    }
+  ]
+}

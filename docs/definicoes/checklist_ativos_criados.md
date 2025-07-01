@@ -16,11 +16,13 @@
 ### 🎵 Efeitos Sonoros (SFX) (0/9)
 **Local:** `assets/sounds/feedback/` | **Formato:** MP3, 44.1kHz, Stereo, -3dB
 
-- [ ] **SFX-01: `button_tap.mp3`**
+- [x] **SFX-01: `button_tap.mp3`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Som de toque em botão suave e satisfatório (~0.5s).
   
 
-- [ ] **SFX-02: `success.mp3`**
+- [x] **SFX-02: `success.mp3`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Som alegre de conclusão/sucesso (1.5s).
   
 
@@ -280,7 +282,8 @@
 ### 🎮 Ícones de Navegação (ICO) (0/6)
 **Local:** `assets/icons/navigation/` | **Formato:** SVG, 24x24dp
 
-- [ ] **ICO-01: `icon_camera_fun.svg`**
+- [x] **ICO-01: `icon_camera_fun.svg`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Ícone de câmera divertido e amigável.
   
 
