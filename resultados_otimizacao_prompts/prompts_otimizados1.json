@@ -1,7 +1,7 @@
 {
   "total_analisados": 49,
-  "total_otimizados": 16,
-  "total_mantidos": 33,
+  "total_otimizados": 11,
+  "total_mantidos": 38,
   "resultados": [
     {
       "id": "SFX-01",
@@ -59,92 +59,92 @@
     },
     {
       "id": "MAS-01",
-      "prompt_original": "happy",
-      "prompt_otimizado": "mascote PROF extremamente feliz e sorridente, com expressão alegre e acolhedora, olhos brilhantes, postura animada e convidativa, em estilo cartoon amigável para crianças, cores vibrantes, sobre fundo branco limpo",
+      "prompt_original": "PROF mascot extremely happy and smiling, with joyful and welcoming expression, bright eyes, animated and inviting posture, in child-friendly cartoon style, vibrant colors, on clean white background",
+      "prompt_otimizado": "PROF mascot standing upright with feet shoulder-width apart in confident welcoming pose, extremely happy with wide open-mouthed smile showing upper teeth in genuine joy, eyes large and bright with crescent shape from happiness and small sparkles of excitement, eyebrows raised high in friendly arches, both arms spread wide open at chest level with palms facing forward in enthusiastic greeting gesture, slight forward lean of 15 degrees showing eagerness to engage, bouncing slightly on toes with one foot barely lifted suggesting energetic movement, vibrant saturated colors with smooth gradients, child-friendly cartoon style with rounded features and soft edges, clean pure white background with subtle drop shadow beneath feet for grounding",
       "modificado": true
     },
     {
       "id": "MAS-02",
-      "prompt_original": "curious",
-      "prompt_otimizado": "mascote PROF com expressão curiosa e interessada, olhos arregalados brilhando com descoberta, sobrancelhas levemente arqueadas, cabeça sutilmente inclinada, postura corporal inclinada para frente como se investigando algo próximo, em estilo cartoon amigável e educativo para crianças, cores vibrantes, fundo branco limpo",
+      "prompt_original": "PROF mascot with curious and interested expression, wide eyes shining with discovery, slightly arched eyebrows, head subtly tilted, body posture leaning forward as if investigating something nearby, in friendly and educational cartoon style for children, vibrant colors, clean white background",
+      "prompt_otimizado": "PROF mascot standing with feet together, body leaning forward 20 degrees from waist showing intense curiosity, wide circular eyes fully open with dilated pupils and small white sparkles reflecting wonder, eyebrows raised high in symmetric arches of interest, mouth slightly open in an 'o' shape of fascination with visible pink tongue tip, head tilted 15 degrees to the right in questioning gesture, both arms bent at elbows with hands raised to chest level, fingers spread wide as if about to touch something amazing, one index finger pointing forward tentatively, weight shifted to balls of feet suggesting readiness to explore, subtle bounce in posture conveying excitement, bright saturated colors with soft shadows, child-friendly cartoon style with rounded features, clean white background",
       "modificado": true
     },
     {
       "id": "MAS-03",
-      "prompt_original": "encouraging",
-      "prompt_otimizado": "mascote PROF em pose encorajadora, sorrindo calorosamente com braços abertos em gesto acolhedor, olhos brilhantes transmitindo confiança, postura inclinada levemente para frente demonstrando interesse e apoio, estilo cartoon amigável e colorido adequado para crianças, fundo branco limpo, composição centralizada com espaço para elementos próximos",
-      "modificado": true
+      "prompt_original": "PROF mascot in encouraging pose, smiling warmly with open arms in welcoming gesture, bright eyes conveying confidence, posture slightly leaning forward demonstrating interest and support, friendly and colorful cartoon style suitable for children, clean white background, centered composition with space for nearby elements",
+      "prompt_otimizado": "PROF mascot in encouraging pose, smiling warmly with open arms in welcoming gesture, bright eyes conveying confidence, posture slightly leaning forward demonstrating interest and support, friendly and colorful cartoon style suitable for children, clean white background, centered composition with space for nearby elements",
+      "modificado": false
     },
     {
       "id": "MAS-04",
-      "prompt_original": "excited",
-      "prompt_otimizado": "mascote PROF extremamente animado e entusiasmado, com olhos brilhando de empolgação, sorriso largo e contagiante, braços levantados em celebração, postura dinâmica transmitindo energia positiva, em estilo cartoon amigável para crianças, sobre fundo branco limpo e neutro",
-      "modificado": true
+      "prompt_original": "PROF mascot extremely animated and enthusiastic, with eyes shining with excitement, wide contagious smile, arms raised in celebration, dynamic posture transmitting positive energy, in child-friendly cartoon style, on clean white and neutral background",
+      "prompt_otimizado": "PROF mascot extremely animated and enthusiastic, with eyes shining with excitement, wide contagious smile, arms raised in celebration, dynamic posture transmitting positive energy, in child-friendly cartoon style, on clean white and neutral background",
+      "modificado": false
     },
     {
       "id": "MAS-05",
-      "prompt_original": "explaining",
-      "prompt_otimizado": "mascote PROF explicando conceito educacional com gestos didáticos das mãos, expressão facial atenciosa e amigável, postura de professor engajado, objetos educacionais próximos (livros, quadro ou elementos de aprendizagem), em estilo cartoon colorido adequado para crianças, fundo branco limpo",
+      "prompt_original": "PROF mascot explaining educational concept with didactic hand gestures, attentive and friendly facial expression, engaged teacher posture, educational objects nearby (books, blackboard or learning elements), in colorful cartoon style suitable for children, clean white background",
+      "prompt_otimizado": "PROF mascot standing upright with slight forward lean showing engagement, right arm extended forward with index finger pointing up in explanatory gesture while left hand holds an open colorful book at waist level, mouth open mid-speech with visible upper teeth in friendly teaching expression, eyes wide and bright with raised attentive eyebrows conveying enthusiasm, small chalk pieces and mathematical symbols floating around head suggesting active thinking, miniature blackboard with simple equation visible to the left side, stack of three colorful books on the right, warm spotlight effect from above creating soft shadows, vibrant cartoon style with rounded edges suitable for children aged 7-11, clean white background",
       "modificado": true
     },
     {
       "id": "MAS-06",
-      "prompt_original": "thinking",
-      "prompt_otimizado": "mascote PROF em pose pensativa, mão no queixo, olhar contemplativo direcionado para cima, expressão concentrada mas amigável, pequenos símbolos de pensamento (lâmpadas, engrenagens ou pontos de interrogação) flutuando próximos à cabeça, estilo cartoon educativo para crianças, cores vibrantes, fundo branco limpo",
+      "prompt_original": "PROF mascot in thoughtful pose, hand on chin, contemplative gaze directed upward, concentrated but friendly expression, small thinking symbols (lightbulbs, gears or question marks) floating near head, educational cartoon style for children, vibrant colors, clean white background",
+      "prompt_otimizado": "PROF mascot standing with slight forward lean, right hand raised to chin with index finger extended touching lower lip in classic thinking pose, left arm bent at elbow supporting right arm, thoughtful expression with mouth slightly pursed in concentration, eyes looking upward to the right with pupils visible showing deep contemplation, eyebrows slightly furrowed but maintaining friendly appearance, small animated thought bubbles containing miniature lightbulbs glowing softly, mechanical gears turning slowly, and question marks in alternating pattern floating in semicircle above head, each symbol approximately 20% of mascot's head size with soft glow effect, educational cartoon style with thick outlines, vibrant saturated colors maintaining child-friendly appeal, clean pure white background with subtle drop shadow beneath feet for grounding, overall conveying curiosity and intellectual engagement while remaining approachable",
       "modificado": true
     },
     {
       "id": "MAS-07",
-      "prompt_original": "welcoming",
-      "prompt_otimizado": "mascote PROF em pose acolhedora e convidativa, braços abertos em gesto de boas-vindas, sorriso caloroso e amigável, olhos brilhantes expressando gentileza, postura corporal aberta e receptiva, estilo cartoon colorido adequado para crianças, fundo branco limpo e minimalista, composição centralizada com espaço negativo equilibrado",
+      "prompt_original": "PROF mascot in welcoming and inviting pose, open arms in welcome gesture, warm and friendly smile, bright eyes expressing kindness, open and receptive body posture, colorful cartoon style suitable for children, clean and minimalist white background, centered composition with balanced negative space",
+      "prompt_otimizado": "PROF mascot standing upright with feet shoulder-width apart in confident welcoming stance, arms spread wide open at 45-degree angles from body with palms facing forward in universal welcome gesture, fingers relaxed and slightly curved naturally, broad genuine smile with mouth open showing upper teeth in joyful expression, eyes wide and bright with crescent-shaped lower lids from happiness, small sparkles in pupils conveying warmth, eyebrows raised in friendly arches showing openness, slight forward lean of torso at 10 degrees expressing eagerness to greet, weight balanced on balls of feet suggesting readiness to move forward, subtle bounce in posture implying energy and enthusiasm, soft shadows beneath feet grounding the character, vibrant saturated colors with smooth gradients, child-friendly cartoon style with rounded edges and soft lines, clean pure white background with no distractions, character perfectly centered with generous breathing room on all sides, balanced composition with figure occupying 60% of frame height",
       "modificado": true
     },
     {
       "id": "MAS-08",
-      "prompt_original": "celebrating",
-      "prompt_otimizado": "mascote PROF celebrando com entusiasmo, braços erguidos em vitória, expressão facial extremamente feliz e orgulhosa, pulando de alegria, confetes coloridos ao redor, em estilo cartoon amigável para crianças, cores vibrantes e alegres, fundo branco limpo, composição centralizada com espaço para movimento dinâmico",
-      "modificado": true
+      "prompt_original": "PROF mascot celebrating enthusiastically, arms raised in victory, extremely happy and proud facial expression, jumping with joy, colorful confetti around, in child-friendly cartoon style, vibrant and cheerful colors, clean white background, centered composition with space for dynamic movement",
+      "prompt_otimizado": "PROF mascot celebrating enthusiastically, arms raised in victory, extremely happy and proud facial expression, jumping with joy, colorful confetti around, in child-friendly cartoon style, vibrant and cheerful colors, clean white background, centered composition with space for dynamic movement",
+      "modificado": false
     },
     {
       "id": "MAS-09",
-      "prompt_original": "sleeping",
-      "prompt_otimizado": "mascote PROF dormindo pacificamente, olhos fechados com expressão serena e relaxada, respirando suavemente, posição confortável e aconchegante, pequenos 'Zzz' flutuando acima da cabeça, estilo cartoon amigável para crianças, cores suaves e calmantes, fundo branco limpo",
+      "prompt_original": "PROF mascot sleeping peacefully, closed eyes with serene and relaxed expression, breathing softly, comfortable and cozy position, small 'Zzz' floating above head, child-friendly cartoon style, soft and calming colors, clean white background",
+      "prompt_otimizado": "PROF mascot lying on his right side on a soft blue cushion on the floor, curled in cozy fetal position, eyes gently closed with long eyelashes visible resting peacefully, mouth slightly open breathing softly with serene smile, one arm tucked under his head as makeshift pillow while the other hugs a closed book against his chest, covered with a light purple starry blanket up to shoulders, small 'Zzz' letters floating gently above his head, soft moonlight streaming from top-left corner creating gentle shadows, warm night atmosphere with tiny stars twinkling in the dark background, child-friendly cartoon style with soft pastel colors",
       "modificado": true
     },
     {
       "id": "MAS-10",
-      "prompt_original": "surprised",
-      "prompt_otimizado": "mascote PROF com expressão de surpresa positiva e encantada, olhos arregalados brilhando de curiosidade, boca aberta em formato de 'O', sobrancelhas levantadas, mãos próximas ao rosto em gesto de admiração, postura corporal inclinada levemente para frente demonstrando interesse genuíno, em estilo cartoon amigável e expressivo para crianças, cores vibrantes e alegres, fundo branco limpo e nítido",
-      "modificado": true
+      "prompt_original": "PROF mascot with positive and delighted surprise expression, wide eyes shining with curiosity, mouth open in 'O' shape, raised eyebrows, hands near face in admiration gesture, body posture slightly leaning forward demonstrating genuine interest, in friendly and expressive cartoon style for children, vibrant and cheerful colors, clean and crisp white background",
+      "prompt_otimizado": "PROF mascot with positive and delighted surprise expression, wide eyes shining with curiosity, mouth open in 'O' shape, raised eyebrows, hands near face in admiration gesture, body posture slightly leaning forward demonstrating genuine interest, in friendly and expressive cartoon style for children, vibrant and cheerful colors, clean and crisp white background",
+      "modificado": false
     },
     {
       "id": "MAS-ANI-01",
-      "prompt_original": "standing still, friendly pose",
-      "prompt_otimizado": "mascote PROF em pose amigável, parado em pé com livro embaixo do braço, realizando movimento sutil de respiração natural e contínua, peito expandindo e contraindo suavemente, loop perfeito e imperceptível, personagem majoritariamente estático exceto pela respiração, estilo cartoon educativo para crianças",
+      "prompt_original": "PROF mascot in friendly pose, standing still with book under arm, performing subtle and continuous natural breathing movement, chest expanding and contracting gently, perfect and imperceptible loop, character mostly static except for breathing, educational cartoon style for children",
+      "prompt_otimizado": "PROF mascot standing upright in relaxed confident pose, feet shoulder-width apart planted firmly on ground, holding thick blue book tucked securely under left arm against torso, right arm hanging naturally at side with hand slightly open, friendly warm smile with closed lips showing contentment, eyes open and alert looking straight ahead with gentle sparkle, eyebrows in neutral relaxed position, performing subtle continuous breathing animation where chest expands outward 3-5% on inhale over 2 seconds then contracts smoothly on exhale over 2 seconds, slight shoulder rise of 1-2 pixels accompanying breath cycle, book and arms remain perfectly still throughout breathing motion, head completely static, only torso shows gentle expansion/contraction, seamless infinite loop with imperceptible transition point, bright clean background, vibrant colors, educational cartoon style optimized for children 7-11 years",
       "modificado": true
     },
     {
       "id": "MAS-ANI-02",
-      "prompt_original": "in a ready-to-jump pose",
-      "prompt_otimizado": "mascote PROF realizando um pulo alegre e expressivo com squash and stretch suave, iniciando de uma pose preparatória agachada, impulsionando-se com energia infantil contagiante, braços abertos em celebração durante o salto, aterrissando com leve compressão elástica, sorriso radiante durante todo movimento, animação fluida adequada para crianças 7-11 anos, loop opcional",
+      "prompt_original": "PROF mascot performing a joyful and expressive jump with smooth squash and stretch, starting from a crouched preparatory pose, propelling with contagious childlike energy, arms open in celebration during jump, landing with slight elastic compression, radiant smile throughout movement, fluid animation suitable for children 7-11 years, optional loop",
+      "prompt_otimizado": "PROF mascot performing energetic happy jump with exaggerated squash and stretch animation, starting in crouched position with knees bent 90 degrees and arms pulled back for momentum, face showing anticipation with raised eyebrows and slight open-mouth smile, then launching upward with explosive joy - arms spreading wide above head in Y-shape celebration pose, legs extending fully with toes pointed down, mouth opening in huge delighted grin showing upper teeth, eyes squinting into happy crescents with sparkles, body stretching vertically 20% longer at peak height, hair and clothes flowing upward from momentum, then descending with arms still outstretched, landing with knees bending deeply for cushioned impact creating 30% vertical squash effect, body compressing like soft rubber ball, face maintaining joyful expression throughout, finishing with small bounce back to standing position, smooth elastic cartoon physics, 2-second duration, optional seamless loop at end, bright cheerful colors, child-friendly animation style",
       "modificado": true
     },
     {
       "id": "MAS-ANI-03",
-      "prompt_original": "with one arm raised",
-      "prompt_otimizado": "mascote PROF acenando amigavelmente para o usuário com um braço levantado, movimento suave e acolhedor, sorriso caloroso, olhar direcionado para frente estabelecendo conexão visual, animação fluida de 2-3 segundos com loop natural, estilo cartoon educativo apropriado para crianças",
+      "prompt_original": "PROF mascot waving friendly to the user with one raised arm, smooth and welcoming movement, warm smile, gaze directed forward establishing visual connection, fluid 2-3 second animation with natural loop, educational cartoon style appropriate for children",
+      "prompt_otimizado": "PROF mascot standing upright with feet shoulder-width apart in stable stance, right arm raised high above head at 140-degree angle performing smooth welcoming wave motion with open palm facing forward, fingers slightly spread in friendly gesture, left arm relaxed at side with slight outward angle for balance, warm genuine smile showing upper teeth, eyes bright and crescent-shaped from joy with small sparkles, eyebrows raised in friendly arches, slight 10-degree forward lean of torso showing enthusiasm and engagement, head tilted 5 degrees to right adding warmth, smooth pendulum wave motion of raised hand moving 30 degrees side-to-side in 0.8 second intervals, subtle bounce in knees synchronized with wave creating lively energy, gaze locked forward maintaining direct eye contact with viewer, 2-3 second seamless loop animation, vibrant colors with soft shadows, clean gradient background transitioning from light blue top to white bottom, child-friendly educational cartoon style with rounded features and approachable design",
       "modificado": true
     },
     {
       "id": "MAS-ANI-04",
-      "prompt_original": "hand on chin, looking curious",
-      "prompt_otimizado": "mascote PROF tapando o queixo pensativamente com expressão curiosa e concentrada, olhos levemente voltados para cima, então uma lâmpada amarela brilhante aparece magicamente acima da cabeça com efeito de 'eureka', brilhando e pulsando suavemente para indicar uma ideia genial, animação fluida e educativa adequada para crianças",
+      "prompt_original": "PROF mascot tapping chin thoughtfully with curious and concentrated expression, eyes slightly looking upward, then a bright yellow lightbulb magically appears above head with 'eureka' effect, glowing and pulsing softly to indicate a brilliant idea, fluid and educational animation suitable for children",
+      "prompt_otimizado": "PROF mascot standing upright with feet shoulder-width apart, right hand raised with index finger gently tapping his chin in thoughtful gesture, head tilted slightly upward at 15-degree angle, eyes looking up and to the right with pupils visible in thinking position, eyebrows slightly furrowed in concentration, mouth closed in small contemplative pout with lips pressed together, left arm relaxed at side with hand on hip, subtle swaying motion of body showing active thinking, then eyes suddenly widen with excitement as eyebrows raise high, mouth opens in 'O' shape of realization, a bright golden-yellow lightbulb materializes 20cm above his head with magical sparkle effect, the bulb glows warmly and pulses gently 3 times with soft radial light rays emanating outward, small star particles float around the bulb celebrating the eureka moment, PROF's expression transforms to delighted smile showing upper teeth, both arms raise slightly with palms up in 'aha!' gesture, educational and child-friendly animation style with smooth transitions over 3-4 seconds",
       "modificado": true
     },
     {
       "id": "MAS-ANI-05",
-      "prompt_original": "with arms open wide",
-      "prompt_otimizado": "mascote PROF pulando de alegria com braços abertos amplamente, confete colorido explodindo ao redor em celebração, movimento energético e expressivo, sorriso radiante, animação fluida adequada para crianças, estilo cartoon amigável e educativo",
+      "prompt_original": "PROF mascot jumping for joy with arms wide open, colorful confetti exploding around in celebration, energetic and expressive movement, radiant smile, fluid animation suitable for children, friendly and educational cartoon style",
+      "prompt_otimizado": "PROF mascot jumping high in the air with both feet off the ground at peak of jump, knees slightly bent, arms stretched wide open at shoulder height with palms facing forward in celebratory gesture, huge open-mouthed smile showing upper teeth in pure joy, eyes squeezed into happy crescents with small sparkles, eyebrows raised high in excitement, body leaning slightly forward with momentum, colorful confetti (red, yellow, blue, green, purple pieces) exploding outward from behind the mascot in a radial burst pattern, some confetti pieces in mid-air rotation showing both sides, motion lines beneath feet suggesting upward movement, bright energetic atmosphere, dynamic pose capturing the exact moment of peak celebration, child-friendly cartoon style with smooth fluid animation loops, vibrant colors against clean background",
       "modificado": true
     },
     {
@@ -185,9 +185,9 @@
     },
     {
       "id": "UI-07",
-      "prompt_original": "single, bright, sparkling star particle, on a transparent background (64x64)",
+      "prompt_original": "single, bright, sparkling star particle, golden yellow with white core, radiating soft light rays, glowing effect with subtle shimmer animation feel, clean vector-style design suitable for UI, on fully transparent background, 64x64 pixels, PNG format with alpha channel",
       "prompt_otimizado": "single, bright, sparkling star particle, golden yellow with white core, radiating soft light rays, glowing effect with subtle shimmer animation feel, clean vector-style design suitable for UI, on fully transparent background, 64x64 pixels, PNG format with alpha channel",
-      "modificado": true
+      "modificado": false
     },
     {
       "id": "UI-08",

@@ -12,7 +12,7 @@ import re
 import sys
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field, ValidationError
-from typing import Optional, Dict, Any, Union
+from typing import Optional, Dict, Any, Union, List
 import anthropic
 
 # Carrega variáveis de ambiente
@@ -40,14 +40,20 @@ anthropic_client = anthropic.Anthropic(api_key=anthropic_api_key)
 
 # --- Definição do Modelo Pydantic para Ativo ---
 class AssetDocument(BaseModel):
-    id: str  # ID do ativo (ex: "SFX-01", "MAS-02")
-    tool: str  # Ferramenta geradora
-    params: Dict[str, Any]  # Parâmetros incluindo prompt
+    id: Union[str, int]  # ID do ativo pode ser string ou int
+    prompt: Optional[str] = None  # Prompt direto no objeto
+    alimento: Optional[str] = None  # Nome do alimento
+    nome_cotidiano: Optional[str] = None  # Nome cotidiano
+    tool: str = "image_generator"  # Ferramenta geradora padrão
+    params: Dict[str, Any] = Field(default_factory=dict)  # Parâmetros opcionais
     description: str = ""  # Descrição do ativo
     
     def get_prompt(self) -> Optional[str]:
-        """Extrai o prompt atual dos parâmetros"""
-        # Para áudio
+        """Extrai o prompt atual"""
+        # Primeiro tenta o prompt direto
+        if self.prompt:
+            return self.prompt
+        # Depois tenta nos parâmetros (compatibilidade antiga)
         if 'prompt' in self.params:
             return self.params['prompt']
         # Para imagens com prompt_details
@@ -77,9 +83,6 @@ Você é o **Engenheiro de Prompts para Otimização de Ativos**, um especialist
 **CORE_MISSION:**
 Analisar criticamente prompts existentes para geração de ativos e determinar, com precisão cirúrgica, se necessitam otimização ou se já atingiram seu potencial máximo. Você opera no delicado equilíbrio entre aperfeiçoamento técnico e preservação da intenção original, garantindo que cada prompt maximize a probabilidade de gerar o ativo exato especificado.
 
-**LANGUAGE_REQUIREMENT:**
-ALL prompts MUST be written in English. This is non-negotiable. Even when analyzing prompts in Portuguese or other languages, the optimized output prompt MUST always be in English. This ensures maximum compatibility with AI generation models and consistent results.
-
 **CRITICAL_PRINCIPLE:**
 Modificação não é sinônimo de melhoria. Um prompt tecnicamente adequado deve ser preservado. Sua expertise reside em reconhecer quando a intervenção agregará valor real versus quando criará complexidade desnecessária ou desviará da intenção original.
 
@@ -98,7 +101,7 @@ Você possui domínio especializado em:
 ### 2.1 Framework de Análise PRESERVE
 - **P**reservar intenção original
 - **R**econhecer elementos centrais
-- **E**nriquecer com contexto relevante (ESPECIALMENTE detalhes faciais e corporais para mascote PROF)
+- **E**nriquecer com contexto relevante
 - **S**implificar complexidade desnecessária
 - **E**specificar parâmetros técnicos
 - **R**espeitar limitações do modelo gerador
@@ -112,7 +115,6 @@ Um prompt deve ser modificado APENAS quando:
 - Carece de contexto essencial para o público-alvo
 - Contém elementos contraditórios ou confusos
 - Omite características fundamentais do ativo esperado
-- Para mascote PROF: falta detalhes de expressão facial (boca, olhos, sobrancelhas), postura corporal específica ou contexto ambiental rico
 
 Um prompt deve ser MANTIDO quando:
 - Já contém todos elementos necessários para geração adequada
@@ -144,14 +146,6 @@ Siga este processo rigoroso para cada ativo analisado:
    - Acessar regras específicas para o tipo de ativo identificado
    - Comparar prompt atual com padrões de excelência
    - Identificar gaps críticos ou redundâncias
-
-3.1 **Verificação Especial para Mascote PROF**
-   SE (asset_type == "mascote" OU tool == "mascot_animator"):
-      - Verificar presença de descrição facial completa (boca, olhos, sobrancelhas)
-      - Verificar especificação de postura corporal detalhada
-      - Avaliar riqueza de contexto ambiental e objetos
-      - Considerar oportunidades de storytelling visual
-      - Garantir que emoções sejam expressas através de detalhes físicos específicos
 
 ### FASE 2: AVALIAÇÃO ESTRATÉGICA
 
@@ -207,7 +201,6 @@ O assistente **DEVE**:
 - ✓ Retornar EXATAMENTE o formato JSON especificado
 - ✓ Analisar APENAS o documento JSON fornecido
 - ✓ Consultar boas práticas ANTES de qualquer decisão
-- ✓ SEMPRE retornar prompts otimizados em INGLÊS, independentemente do idioma de entrada
 
 O assistente **NÃO DEVE**:
 - ✗ Alterar a ação ou comportamento central descrito
@@ -228,20 +221,6 @@ Original: "mascote dançando feliz"
 Original: "som de clique suave"
 ✓ Otimizado: "som de clique suave e satisfatório para interface infantil, não-alarmante, feedback tátil agradável, 0.5 segundos"
 ✗ Incorreto: "som de sino tocando suavemente" (mudou tipo de som)
-
-**Exemplo Mascote PROF - Enriquecimento Correto:**
-Original: "PROF mascot sleeping peacefully, closed eyes with serene expression"
-✓ Otimizado: "PROF mascot lying on his right side on a soft blue cushion on the floor, curled in cozy fetal position, eyes gently closed with long eyelashes visible resting peacefully, mouth slightly open breathing softly with serene smile, one arm tucked under his head as makeshift pillow while the other hugs a closed book against his chest, covered with a light purple starry blanket up to shoulders, small 'Zzz' letters floating gently above his head, soft moonlight streaming from top-left corner creating gentle shadows, warm night atmosphere with tiny stars twinkling in the dark background, child-friendly cartoon style with soft pastel colors"
-✗ Incorreto: "PROF mascot standing and waving happily" (mudou ação de dormir para acenar)
-
-Original: "PROF mascot happy and smiling"
-✓ Otimizado: "PROF mascot standing upright with feet shoulder-width apart in confident pose, broad open-mouthed smile showing upper teeth in genuine joy, eyes crescent-shaped from happiness with small sparkles, eyebrows raised in friendly arches, arms open wide at 45-degree angles with palms facing forward in welcoming gesture, slight forward lean of 10 degrees showing enthusiasm, bouncing slightly on toes suggesting energy, bright and vibrant colors, clean white background"
-✗ Incorreto: "PROF mascot sitting quietly" (mudou postura e energia)
-
-**Exemplo de Tradução Obrigatória para Inglês:**
-Original (PT): "Mascote PROF dormindo tranquilamente, olhos fechados, expressão serena"
-✓ Otimizado (EN): "PROF mascot sleeping peacefully on soft cushion, eyes gently closed with visible eyelashes, serene expression with slight smile, curled in comfortable position with book as pillow, covered with starry blanket, moonlight creating soft shadows, child-friendly cartoon style"
-✗ Incorreto: "Mascote PROF dormindo tranquilamente..." (manteve português)
 
 ## 5. CRITÉRIOS DE QUALIDADE POR TIPO DE ATIVO
 
@@ -264,26 +243,6 @@ Original (PT): "Mascote PROF dormindo tranquilamente, olhos fechados, expressão
 - Dimensões e formato quando específicos
 - Background (transparente, sólido, ambiente)
 
-### 5.2.1 Mascote PROF - Requisitos Especiais
-**Elementos OBRIGATÓRIOS para imagens do mascote:**
-- **Postura Corporal Detalhada**: Especificar se está em pé, sentado, deitado, inclinado, com descrição precisa da posição
-- **Expressão Facial Completa**:
-  - Formato e expressão da boca (sorriso aberto mostrando dentes superiores, fechado gentil, formato "O" de surpresa, levemente aberta respirando, etc.)
-  - Estado dos olhos (abertos e brilhantes, semicerrados de alegria, fechados suavemente, arregalados de surpresa, com forma crescente de felicidade, etc.)
-  - Posição das sobrancelhas (arqueadas em curiosidade, relaxadas, levantadas em surpresa, levemente franzidas pensando)
-- **Gestos e Posição dos Membros**: Detalhar posição exata de braços, mãos, pernas, inclinação do corpo
-- **Objetos e Contexto Narrativo**: 
-  - Para sono: especificar superfície (cama com lençol, chão com tapete, almofada fofa), cobertor (cor, textura, até onde cobre), travesseiro ou substituto (livro, braço)
-  - Para estudo: posição de livros, lápis, óculos, caderno
-  - Para celebração: confetes, estrelas, elementos festivos e sua disposição
-- **Ambiente Enriquecido**: Quando apropriado, incluir:
-  - Iluminação (luz suave, raios de sol, brilho de estrelas, luz de lua)
-  - Elementos de fundo contextuais (nuvens para sonho, estrelas para noite, plantas para natureza)
-  - Atmosfera e mood através de detalhes visuais
-- **Detalhes de Movimento Implícito**: Mesmo em imagens estáticas, sugerir movimento através de poses dinâmicas, cabelo/roupa em movimento, linhas de ação
-
-**IMPORTANTE**: Prompts do mascote devem sempre transmitir emoção e personalidade através de detalhes específicos. A falta desses detalhes resulta em expressões genéricas e sem vida.
-
 ### 5.3 Vetores (SVG)
 **Elementos Essenciais:**
 - Tipo de elemento (ícone, padrão, decorativo)
@@ -305,10 +264,8 @@ Original (PT): "Mascote PROF dormindo tranquilamente, olhos fechados, expressão
 **OUTPUT_FORMAT:**
 {
   "id": "string - ID exato conforme recebido na entrada",
-  "prompt": "string - Prompt original OU versão otimizada (ALWAYS IN ENGLISH)"
+  "prompt": "string - Prompt original OU versão otimizada"
 }
-
-**CRITICAL:** The "prompt" field MUST ALWAYS contain English text, regardless of the input language. If the original prompt is in another language, it must be translated to English while preserving the semantic meaning.
 
 ### 6.1 Lógica de Decisão para Output
 
@@ -424,7 +381,7 @@ def append_processed_id_sync(doc_id: str, ids_file: str):
 
 # --- Função de Caminho de Saída ---
 def get_next_output_path():
-    directory = "resultados_otimizacao_prompts"
+    directory = "dados"
     if not os.path.exists(directory):
         os.makedirs(directory)
     files = os.listdir(directory)
@@ -443,8 +400,11 @@ def preparar_input_para_api(doc: AssetDocument) -> str:
     asset_data = {
         "id": doc.id,
         "tool": doc.tool,
-        "params": doc.params,
-        "description": doc.description
+        "params": doc.params if doc.params else {},
+        "description": doc.description,
+        "prompt": doc.get_prompt(),
+        "alimento": getattr(doc, 'alimento', ''),
+        "nome_cotidiano": getattr(doc, 'nome_cotidiano', '')
     }
     return json.dumps(asset_data, ensure_ascii=False, indent=2)
 
@@ -475,7 +435,7 @@ async def chamada_api_claude(doc: AssetDocument, parametros_api: dict):
     async def fazer_chamada():
         # Prepara os argumentos para a API
         kwargs = {
-            "model": parametros_api.get("claude_model", "claude-opus-4-20250514"),
+            "model": parametros_api.get("claude_model", "claude-sonnet-4-20250514"),
             "system": system_instructions,
             "messages": [
                 {
@@ -600,22 +560,34 @@ async def processar_item(asset_data: dict, parametros_api: dict, ids_file: str):
     return resultado
 
 # --- Função de Extração de Ativos do JSON ---
-def extrair_ativos_do_inventario(inventory_data: dict) -> list:
-    """Extrai todos os ativos de todas as categorias do inventário"""
+def extrair_ativos_do_inventario(inventory_data: Union[dict, List]) -> list:
+    """Extrai todos os ativos do JSON"""
     all_assets = []
     
-    if 'categories' not in inventory_data:
-        logger.error("Arquivo não contém 'categories'")
+    # Se for uma lista (formato dados_com_id.json)
+    if isinstance(inventory_data, list):
+        for item in inventory_data:
+            if isinstance(item, dict) and 'id' in item and 'prompt' in item:
+                # Converte ID para string se necessário
+                item['id'] = str(item['id'])
+                all_assets.append(item)
+        logger.info(f"Extraídos {len(all_assets)} ativos da lista")
         return all_assets
     
-    for category_name, category_data in inventory_data['categories'].items():
-        if 'assets' in category_data and isinstance(category_data['assets'], list):
-            for asset in category_data['assets']:
-                if isinstance(asset, dict) and 'id' in asset:
-                    # Adiciona informação da categoria
-                    asset['category'] = category_name
-                    all_assets.append(asset)
-                    
+    # Se for um dicionário com categorias (formato antigo)
+    if isinstance(inventory_data, dict):
+        if 'categories' not in inventory_data:
+            logger.error("Arquivo não contém 'categories' nem é uma lista")
+            return all_assets
+        
+        for category_name, category_data in inventory_data['categories'].items():
+            if 'assets' in category_data and isinstance(category_data['assets'], list):
+                for asset in category_data['assets']:
+                    if isinstance(asset, dict) and 'id' in asset:
+                        # Adiciona informação da categoria
+                        asset['category'] = category_name
+                        all_assets.append(asset)
+                        
     logger.info(f"Extraídos {len(all_assets)} ativos do inventário")
     return all_assets
 
@@ -705,15 +677,15 @@ async def main_async(args):
 # --- Configuração de Argumentos CLI ---
 def parse_args():
     parser = argparse.ArgumentParser(description="Análise e Otimização de Prompts de Ativos usando Claude API")
-    parser.add_argument("--input", type=str, default="/Users/institutorecriare/VSCodeProjects/criador_agentes/ativos_imagens/docs/definicoes/geracao_de_ativos.json", 
+    parser.add_argument("--input", type=str, default="/Users/institutorecriare/VSCodeProjects/criador_agentes/ativos_imagens/dados/dados_com_id.json", 
                        help="Arquivo JSON com inventário de ativos")
     parser.add_argument("--ids", type=str, default="ids_ativos_analisados.txt", 
                        help="Arquivo de controle de IDs processados")
-    parser.add_argument("--max_items", type=int, default=100, 
+    parser.add_argument("--max_items", type=int, default=1000, 
                        help="Número máximo de ativos a processar")
     parser.add_argument("--max_concurrent", type=int, default=1, 
                        help="Número máximo de requisições concorrentes")
-    parser.add_argument("--claude_model", type=str, default="claude-opus-4-20250514", 
+    parser.add_argument("--claude_model", type=str, default="claude-sonnet-4-20250514", 
                        help="Modelo do Claude a usar")
     parser.add_argument("--temperature", type=float, default=0.4, 
                        help="Temperature para a API")

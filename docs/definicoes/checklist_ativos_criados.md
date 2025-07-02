@@ -18,39 +18,49 @@
 
 - [x] **SFX-01: `button_tap.mp3`**
   > **Status:**✅ Gerado via script
+  > **Status:**✅ Gerado via script
   > **Descrição:** Som de toque em botão suave e satisfatório (~0.5s).
   
 
 - [x] **SFX-02: `success.mp3`**
   > **Status:**✅ Gerado via script
+  > **Status:**✅ Gerado via script
   > **Descrição:** Som alegre de conclusão/sucesso (1.5s).
   
 
 - [ ] **SFX-03: `error_gentle.mp3`**
+  > **Status:**✅ Gerado via script
+  > **Status:**✅ Gerado via script
   > **Descrição:** Indicação de erro suave e encorajadora (1s).
   
 
-- [ ] **SFX-04: `notification.mp3`**
+- [x] **SFX-04: `notification.mp3`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Som de notificação tipo sino escolar suave (1s).
   
 
-- [ ] **SFX-05: `achievement.mp3`**
+- [x] **SFX-05: `achievement.mp3`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Fanfarra de conquista educacional (2.5s).
   
 
-- [ ] **SFX-06: `camera_shutter.mp3`**
+- [x] **SFX-06: `camera_shutter.mp3`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Som de captura de câmera digital moderna (~0.5s).
   
 
-- [ ] **SFX-07: `page_transition.mp3`**
+- [x] **SFX-07: `page_transition.mp3`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Som suave de transição/virada de página (~0.5s).
   
 
-- [ ] **SFX-08: `pop_up.mp3`**
+- [x] **SFX-08: `pop_up.mp3`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Som divertido de bolha estourando (~0.5s).
   
 
-- [ ] **SFX-09: `processing_loop.mp3`**
+- [x] **SFX-09: `processing_loop.mp3`**
+  > **Status:**✅ Gerado via script
   > **Descrição:** Loop ambiente de processamento/pensamento (3s loop).
   
 
@@ -60,42 +70,52 @@
 **Local:** `assets/images/mascot/` | **Formato:** PNG, 512x512px, Fundo Transparente
 
 - [ ] **MAS-01: `prof_happy.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor feliz com sorriso acolhedor.
   
 
 - [ ] **MAS-02: `prof_curious.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor curioso e interessado.
   
 
 - [ ] **MAS-03: `prof_encouraging.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor encorajador e motivador.
   
 
 - [ ] **MAS-04: `prof_excited.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor empolgado e animado.
   
 
 - [ ] **MAS-05: `prof_explaining.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor explicando com gesto didático.
   
 
 - [ ] **MAS-06: `prof_thinking.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor pensativo e reflexivo.
   
 
 - [ ] **MAS-07: `prof_welcoming.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor acolhedor dando boas-vindas.
   
 
 - [ ] **MAS-08: `prof_celebrating.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor celebrando conquistas.
   
 
 - [ ] **MAS-09: `prof_sleeping.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor dormindo tranquilamente.
   
 
 - [ ] **MAS-10: `prof_surprised.png`**
+  > **Status:** Pendente
   > **Descrição:** Professor surpreso positivamente.
   
 

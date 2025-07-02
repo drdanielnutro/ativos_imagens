@@ -1,0 +1,506 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-07-02T07:58:38.045819",
+  "total_assets": 62,
+  "completed": 4,
+  "in_progress": 0,
+  "pending": 58,
+  "assets": {
+    "SFX-01": {
+      "status": "completed",
+      "completed_date": "2025-07-01T13:48:08.876577",
+      "tool": "audio_generator",
+      "file": "button_tap.mp3",
+      "category": "audio",
+      "description": "Som de toque em botão suave e satisfatório (~0.5s)."
+    },
+    "SFX-02": {
+      "status": "completed",
+      "completed_date": "2025-07-01T13:48:08.876593",
+      "tool": "audio_generator",
+      "file": "success.mp3",
+      "category": "audio",
+      "description": "Som alegre de conclusão/sucesso (1.5s)."
+    },
+    "SFX-03": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "audio_generator",
+      "file": "error_gentle.mp3",
+      "category": "audio",
+      "description": "Indicação de erro suave e encorajadora (1s)."
+    },
+    "SFX-04": {
+      "status": "completed",
+      "completed_date": "2025-07-01T13:48:08.876610",
+      "tool": "audio_generator",
+      "file": "notification.mp3",
+      "category": "audio",
+      "description": "Som de notificação tipo sino escolar suave (1s)."
+    },
+    "SFX-05": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "audio_generator",
+      "file": "achievement.mp3",
+      "category": "audio",
+      "description": "Fanfarra de conquista educacional (2.5s)."
+    },
+    "SFX-06": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "audio_generator",
+      "file": "camera_shutter.mp3",
+      "category": "audio",
+      "description": "Som de captura de câmera digital moderna (~0.5s)."
+    },
+    "SFX-07": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "audio_generator",
+      "file": "page_transition.mp3",
+      "category": "audio",
+      "description": "Som suave de transição/virada de página (~0.5s)."
+    },
+    "SFX-08": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "audio_generator",
+      "file": "pop_up.mp3",
+      "category": "audio",
+      "description": "Som divertido de bolha estourando (~0.5s)."
+    },
+    "SFX-09": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "audio_generator",
+      "file": "processing_loop.mp3",
+      "category": "audio",
+      "description": "Loop ambiente de processamento/pensamento (3s loop)."
+    },
+    "MAS-01": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_happy.png",
+      "category": "mascot_static",
+      "description": "Professor feliz com sorriso acolhedor."
+    },
+    "MAS-02": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_curious.png",
+      "category": "mascot_static",
+      "description": "Professor curioso e interessado."
+    },
+    "MAS-03": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_encouraging.png",
+      "category": "mascot_static",
+      "description": "Professor encorajador e motivador."
+    },
+    "MAS-04": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_excited.png",
+      "category": "mascot_static",
+      "description": "Professor empolgado e animado."
+    },
+    "MAS-05": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_explaining.png",
+      "category": "mascot_static",
+      "description": "Professor explicando com gesto didático."
+    },
+    "MAS-06": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_thinking.png",
+      "category": "mascot_static",
+      "description": "Professor pensativo e reflexivo."
+    },
+    "MAS-07": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_welcoming.png",
+      "category": "mascot_static",
+      "description": "Professor acolhedor dando boas-vindas."
+    },
+    "MAS-08": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_celebrating.png",
+      "category": "mascot_static",
+      "description": "Professor celebrando conquistas."
+    },
+    "MAS-09": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_sleeping.png",
+      "category": "mascot_static",
+      "description": "Professor dormindo tranquilamente."
+    },
+    "MAS-10": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "prof_surprised.png",
+      "category": "mascot_static",
+      "description": "Professor surpreso positivamente."
+    },
+    "MAS-ANI-01": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "mascot_animator",
+      "file": "mascot_idle.webp",
+      "category": "mascot_animations",
+      "description": "Animação idle com respiração sutil (loop)."
+    },
+    "MAS-ANI-02": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "mascot_animator",
+      "file": "mascot_bounce.webp",
+      "category": "mascot_animations",
+      "description": "Pulo feliz com squash and stretch."
+    },
+    "MAS-ANI-03": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "mascot_animator",
+      "file": "mascot_wave.webp",
+      "category": "mascot_animations",
+      "description": "Aceno amigável para o usuário."
+    },
+    "MAS-ANI-04": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "mascot_animator",
+      "file": "mascot_thinking.webp",
+      "category": "mascot_animations",
+      "description": "Pensando com lâmpada aparecendo acima da cabeça."
+    },
+    "MAS-ANI-05": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "mascot_animator",
+      "file": "mascot_celebration.webp",
+      "category": "mascot_animations",
+      "description": "Pulando de alegria com confetes explodindo."
+    },
+    "UI-01": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "pattern_dots.svg",
+      "category": "ui_elements",
+      "description": "Padrão tileable de pontos coloridos (100x100)."
+    },
+    "UI-02": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "pattern_stars.svg",
+      "category": "ui_elements",
+      "description": "Padrão tileable de estrelas (100x100)."
+    },
+    "UI-03": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "pattern_clouds.svg",
+      "category": "ui_elements",
+      "description": "Padrão tileable de nuvens suaves (100x100)."
+    },
+    "UI-04": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "pattern_school.svg",
+      "category": "ui_elements",
+      "description": "Padrão tileable com tema escolar (100x100)."
+    },
+    "UI-05": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "gradient_mesh_1.png",
+      "category": "ui_elements",
+      "description": "Gradiente suave azul-roxo (1920x1080)."
+    },
+    "UI-06": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "gradient_mesh_2.png",
+      "category": "ui_elements",
+      "description": "Gradiente suave laranja-rosa (1920x1080)."
+    },
+    "UI-07": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "sparkle_particle.png",
+      "category": "ui_elements",
+      "description": "Partícula de brilho única (64x64)."
+    },
+    "UI-08": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "confetti_pieces.png",
+      "category": "ui_elements",
+      "description": "Spritesheet de confetes coloridos (512x512)."
+    },
+    "UI-09": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "bubble_decoration.svg",
+      "category": "ui_elements",
+      "description": "Elemento decorativo tipo bolha (100x100)."
+    },
+    "UI-10": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "rainbow_arc.svg",
+      "category": "ui_elements",
+      "description": "Elemento decorativo arco-íris (100x100)."
+    },
+    "LOAD-01": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "loading_spinner.json",
+      "category": "loading_animations",
+      "description": "Spinner circular animado (2s loop)."
+    },
+    "LOAD-02": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "loading_bounce.json",
+      "category": "loading_animations",
+      "description": "Animação de pontos pulando (1.5s loop)."
+    },
+    "LOAD-03": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "loading_wave.json",
+      "category": "loading_animations",
+      "description": "Animação de onda fluida (2s loop)."
+    },
+    "LOAD-04": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "loading_thinking.json",
+      "category": "loading_animations",
+      "description": "Animação de pensamento/processamento (3s loop)."
+    },
+    "LOAD-05": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "loading_camera.json",
+      "category": "loading_animations",
+      "description": "Animação de câmera processando (1.5s loop)."
+    },
+    "LOAD-06": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "loading_ai.json",
+      "category": "loading_animations",
+      "description": "Animação de IA/rede neural (2.5s loop)."
+    },
+    "ACH-01": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "achievement_unlock.json",
+      "category": "achievements",
+      "description": "Animação de desbloqueio de conquista (2s)."
+    },
+    "ACH-02": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "level_up.json",
+      "category": "achievements",
+      "description": "Animação de subida de nível (3s)."
+    },
+    "ACH-03": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "star_burst.json",
+      "category": "achievements",
+      "description": "Explosão de estrelas celebratória (1.5s)."
+    },
+    "ACH-04": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "badge_frame_bronze.svg",
+      "category": "achievements",
+      "description": "Moldura de badge nível bronze."
+    },
+    "ACH-05": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "badge_frame_silver.svg",
+      "category": "achievements",
+      "description": "Moldura de badge nível prata."
+    },
+    "ACH-06": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "badge_frame_gold.svg",
+      "category": "achievements",
+      "description": "Moldura de badge nível ouro."
+    },
+    "ACH-07": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "image_generator",
+      "file": "badge_glow.png",
+      "category": "achievements",
+      "description": "Efeito de brilho dourado circular para badges."
+    },
+    "THM-01": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "holiday_decorations.svg",
+      "category": "themed_elements",
+      "description": "Decorações de feriados genéricas."
+    },
+    "THM-02": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "seasonal_pattern_spring.svg",
+      "category": "themed_elements",
+      "description": "Padrão sazonal de primavera."
+    },
+    "THM-03": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "seasonal_pattern_autumn.svg",
+      "category": "themed_elements",
+      "description": "Padrão sazonal de outono."
+    },
+    "THM-04": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "birthday_elements.svg",
+      "category": "themed_elements",
+      "description": "Elementos de aniversário festivos."
+    },
+    "THM-05": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "space_theme.svg",
+      "category": "themed_elements",
+      "description": "Tema espacial com planetas e estrelas."
+    },
+    "FBK-01": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "touch_ripple.json",
+      "category": "feedback_animations",
+      "description": "Efeito ripple de toque (0.5s)."
+    },
+    "FBK-02": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "success_checkmark.json",
+      "category": "feedback_animations",
+      "description": "Checkmark de sucesso animado (1s)."
+    },
+    "FBK-03": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "error_shake.json",
+      "category": "feedback_animations",
+      "description": "Animação de tremor para erro (0.5s)."
+    },
+    "FBK-04": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "lottie_programmatic",
+      "file": "hint_pulse.json",
+      "category": "feedback_animations",
+      "description": "Pulso de dica/sugestão (2s loop)."
+    },
+    "ICO-01": {
+      "status": "completed",
+      "completed_date": "2025-07-01T13:48:08.876788",
+      "tool": "svg_generator",
+      "file": "icon_camera_fun.svg",
+      "category": "navigation_icons",
+      "description": "Ícone de câmera divertido e amigável."
+    },
+    "ICO-02": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "icon_microphone_fun.svg",
+      "category": "navigation_icons",
+      "description": "Ícone de microfone divertido."
+    },
+    "ICO-03": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "icon_history_fun.svg",
+      "category": "navigation_icons",
+      "description": "Ícone de histórico divertido."
+    },
+    "ICO-04": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "icon_achievements_fun.svg",
+      "category": "navigation_icons",
+      "description": "Ícone de conquistas divertido."
+    },
+    "ICO-05": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "icon_settings_fun.svg",
+      "category": "navigation_icons",
+      "description": "Ícone de configurações divertido."
+    },
+    "ICO-06": {
+      "status": "pending",
+      "completed_date": null,
+      "tool": "svg_generator",
+      "file": "icon_help_fun.svg",
+      "category": "navigation_icons",
+      "description": "Ícone de ajuda divertido."
+    }
+  }
+}

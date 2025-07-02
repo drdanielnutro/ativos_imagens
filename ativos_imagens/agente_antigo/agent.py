@@ -287,6 +287,166 @@ def get_asset_details(asset_id: str) -> str:
         return f"❌ Erro ao obter detalhes: {str(e)}"
 
 
+def get_next_pending_asset() -> str:
+    """
+    Retorna informações sobre o próximo ativo pendente a ser criado
+    
+    Returns:
+        str: Detalhes do próximo ativo ou mensagem informando que todos estão completos
+    """
+    try:
+        asset_manager = AssetManager(project_root=str(project_root))
+        asset_manager.load_specifications()
+        asset_manager.load_checklist_status()
+        
+        # Obter próximo ativo pendente
+        next_asset_id = asset_manager.get_next_pending_asset()
+        
+        if not next_asset_id:
+            # Verificar se há algum em progresso
+            in_progress = []
+            json_path = project_root / "docs" / "definicoes" / "checklist_ativos_criados.json"
+            if json_path.exists():
+                with open(json_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                for asset_id, info in data.get("assets", {}).items():
+                    if info["status"] == "in_progress":
+                        in_progress.append(asset_id)
+            
+            if in_progress:
+                return f"""🚧 **Não há ativos pendentes, mas existem {len(in_progress)} em progresso:**
+{', '.join(in_progress)}
+
+Use `get_asset_details()` para ver o status destes ativos."""
+            else:
+                return """🎉 **Parabéns! Todos os ativos foram criados com sucesso!**
+
+Não há mais ativos pendentes no projeto.
+
+Use `check_inventory()` para ver o resumo completo."""
+        
+        # Obter detalhes do próximo ativo
+        spec = asset_manager.get_specification(next_asset_id)
+        pending_assets = asset_manager.get_pending_assets(limit=5)
+        
+        response = f"""📌 **Próximo Ativo Pendente: {next_asset_id}**
+
+🛠️ **Ferramenta:** {spec.get('tool')}
+📁 **Categoria:** {spec.get('category')}
+📝 **Descrição:** {spec.get('description', 'N/A')}
+
+**Para criar este ativo:**
+```
+create_asset('{next_asset_id}')
+```
+
+**Outros ativos pendentes (próximos 4):**"""
+        
+        for i, asset in enumerate(pending_assets[1:5], 1):
+            response += f"\n{i}. {asset['id']} - {asset.get('description', asset['tool'])}"
+        
+        response += f"\n\n💡 **Dica:** Use `create_next_assets(5)` para criar múltiplos ativos de uma vez!"
+        
+        return response
+        
+    except Exception as e:
+        return f"❌ Erro ao obter próximo ativo: {str(e)}"
+
+
+def create_next_assets(count: int = 5) -> str:
+    """
+    Cria os próximos N ativos pendentes automaticamente
+    
+    Args:
+        count: Número de ativos a criar (padrão: 5, máximo: 10)
+        
+    Returns:
+        str: Relatório de criação dos ativos
+    """
+    try:
+        # Limitar a 10 para evitar sobrecarga
+        count = min(count, 10)
+        
+        asset_manager = AssetManager(project_root=str(project_root))
+        asset_manager.load_specifications()
+        asset_manager.load_checklist_status()
+        
+        # Obter lista de ativos pendentes
+        pending_assets = asset_manager.get_pending_assets(limit=count)
+        
+        if not pending_assets:
+            return """🎉 **Todos os ativos já foram criados!**
+
+Não há ativos pendentes para processar."""
+        
+        # Relatório inicial
+        report = f"""🚀 **Iniciando criação em lote de {len(pending_assets)} ativos**
+
+**Ativos a serem criados:**
+"""
+        for i, asset in enumerate(pending_assets, 1):
+            report += f"{i}. {asset['id']} ({asset['tool']})\n"
+        
+        report += "\n---\n\n"
+        
+        # Processar cada ativo
+        success_count = 0
+        error_count = 0
+        
+        for i, asset in enumerate(pending_assets, 1):
+            asset_id = asset['id']
+            report += f"**[{i}/{len(pending_assets)}] Processando {asset_id}...**\n"
+            
+            try:
+                # Usar a função create_asset existente
+                result = create_asset(asset_id)
+                
+                if "✅" in result:
+                    success_count += 1
+                    report += f"✅ Sucesso\n"
+                else:
+                    error_count += 1
+                    report += f"❌ Erro\n"
+                    
+            except Exception as e:
+                error_count += 1
+                report += f"❌ Erro: {str(e)}\n"
+            
+            report += "\n"
+        
+        # Resumo final
+        report += f"""---
+
+📊 **Resumo da Operação:**
+- ✅ Criados com sucesso: {success_count}
+- ❌ Erros: {error_count}
+- 📁 Total processado: {len(pending_assets)}
+
+"""
+        
+        if error_count > 0:
+            report += "⚠️ **Atenção:** Alguns ativos falharam. Use `check_inventory()` para ver detalhes.\n"
+        
+        if success_count == len(pending_assets):
+            report += "🎉 **Todos os ativos foram criados com sucesso!**\n"
+            
+        # Verificar se há mais ativos pendentes
+        remaining = asset_manager.get_pending_assets(limit=1)
+        if remaining:
+            report += f"\n💡 Ainda há ativos pendentes. Use `get_next_pending_asset()` para ver o próximo."
+        
+        return report
+        
+    except Exception as e:
+        import traceback
+        return f"""❌ Erro ao criar ativos em lote: {str(e)}
+
+Detalhes:
+```
+{traceback.format_exc()}
+```"""
+
+
 def get_project_status() -> str:
     """
     Retorna o status geral do projeto de geração de ativos
@@ -331,27 +491,33 @@ Sua função é ajudar a criar os ativos digitais definidos no projeto usando as
 
 **Suas capacidades principais:**
 1. **check_inventory()** - Verificar o status de todos os ativos
-2. **create_asset(asset_id)** - Criar um ativo específico pelo seu ID
-3. **get_asset_details(asset_id)** - Ver detalhes de um ativo
-4. **get_project_status()** - Ver informações gerais do projeto
+2. **get_next_pending_asset()** - Ver qual é o próximo ativo a ser criado
+3. **create_asset(asset_id)** - Criar um ativo específico pelo seu ID
+4. **create_next_assets(count)** - Criar múltiplos ativos de uma vez (até 10)
+5. **get_asset_details(asset_id)** - Ver detalhes de um ativo
+6. **get_project_status()** - Ver informações gerais do projeto
 
 **Fluxo típico de trabalho:**
-1. Use check_inventory() para ver o que precisa ser criado
-2. Use create_asset() para gerar ativos específicos
-3. Use get_asset_details() para verificar se foi criado corretamente
+1. Use get_next_pending_asset() para ver o próximo ativo pendente
+2. Use create_asset() para criar um ativo específico OU
+3. Use create_next_assets(5) para criar vários de uma vez
+4. Use check_inventory() para ver o progresso geral
 
 **Exemplos de uso:**
-- "Crie o ativo SFX-01"
+- "Qual é o próximo ativo a ser criado?"
+- "Crie os próximos 5 ativos"
+- "Crie o ativo SFX-05"
 - "Mostre o status do inventário"
 - "Quais ativos de áudio ainda faltam criar?"
-- "Crie todas as animações de loading"
 
 Sempre forneça feedback claro sobre o progresso e qualquer erro que ocorra.""",
         tools=[
             FunctionTool(create_asset),
             FunctionTool(check_inventory),
             FunctionTool(get_asset_details),
-            FunctionTool(get_project_status)
+            FunctionTool(get_project_status),
+            FunctionTool(get_next_pending_asset),
+            FunctionTool(create_next_assets)
         ]
     )
     print("✅ Agente de produção de ativos criado com sucesso!")
