@@ -267,7 +267,7 @@ class LottieProgrammaticGenerator:
     def generate_animation(self, animation_type: str, style: str, 
                          duration: float = 1.0, loop: bool = False,
                          colors: Optional[list] = None, 
-                         custom_params: Optional[Dict] = None) -> str:
+                         custom_params: Optional[Dict] = None, **kwargs) -> str:
         """
         Gera uma animação de forma genérica baseada em tipo e estilo.
         
@@ -285,6 +285,10 @@ class LottieProgrammaticGenerator:
         Raises:
             ValueError: Se tipo/estilo não for suportado
         """
+        # Ignorar parâmetros extras como 'prompt' que podem vir do JSON
+        if kwargs:
+            print(f"INFO: Ignorando parâmetros não utilizados: {list(kwargs.keys())}")
+        
         # Mapear tipo+estilo para método apropriado
         if animation_type == "loading":
             if style == "spinner":
@@ -711,7 +715,7 @@ class LottieProgrammaticGenerator:
         group = text_layer.add_shape(objects.Group())
         rect = group.add_shape(objects.Rect())
         rect.size.value = Point(150, 40)
-        rect.corner_radius.value = 20
+        # corner_radius não é suportado em Rect, usar retângulo simples
         
         fill = group.add_shape(objects.Fill())
         fill.color.value = self.colors.get(colors[0] if colors else "primary", self.colors["primary"])

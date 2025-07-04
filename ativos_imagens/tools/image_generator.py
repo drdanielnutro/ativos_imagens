@@ -49,10 +49,56 @@ class ImageGenerator:
 
     def _generate_generic_image(self, prompt: str, model_name: str) -> list:
         """Lida com a geração de imagens genéricas."""
+        # Determinar dimensões baseado no tipo de asset
+        width, height = 512, 512  # Padrão otimizado para mobile
+        
+        # Detectar tipo de asset pelo conteúdo do prompt
+        prompt_lower = prompt.lower()
+        if 'gradient' in prompt_lower or 'background' in prompt_lower:
+            # Gradientes podem ser menores e escalados
+            width, height = 512, 512
+        elif 'particle' in prompt_lower or 'sparkle' in prompt_lower:
+            # Partículas pequenas
+            width, height = 128, 128
+        elif 'spritesheet' in prompt_lower:
+            # Spritesheets precisam de mais espaço
+            width, height = 512, 512
+        
+        # Procurar dimensões específicas no prompt (ex: "1920x1080")
+        import re
+        dim_match = re.search(r'(\d{2,4})x(\d{2,4})', prompt)
+        if dim_match:
+            requested_width = int(dim_match.group(1))
+            requested_height = int(dim_match.group(2))
+            # Limitar dimensões máximas para economia
+            width = min(requested_width, 768)
+            height = min(requested_height, 768)
+            # Remover dimensões do prompt
+            prompt = re.sub(r'\s*\(?\d{2,4}x\d{2,4}\)?\s*', ' ', prompt).strip()
+        
         print(f"INFO: Usando modelo genérico: '{model_name}'")
         print(f"INFO: Gerando imagem com prompt: '{prompt[:100]}...'")
+        print(f"INFO: Dimensões: {width}x{height}")
         
-        return replicate.run(model_name, input={"prompt": prompt})
+        # Usar a versão completa do modelo SDXL se for o padrão
+        if model_name == "stability-ai/sdxl":
+            model_name = "stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc"
+        
+        input_params = {
+            "prompt": prompt,
+            "width": width,
+            "height": height,
+            "num_outputs": 1,
+            "guidance_scale": 7.5,
+            "apply_watermark": False,
+            "num_inference_steps": 25,
+            "refine": "expert_ensemble_refiner",
+            "high_noise_frac": 0.8,
+            "output_format": "png",
+            "output_quality": 75  # Reduzir qualidade para economizar espaço
+        }
+        
+        return replicate.run(model_name, input=input_params)
 
     def _remove_background(self, image_url: str) -> str:
         """

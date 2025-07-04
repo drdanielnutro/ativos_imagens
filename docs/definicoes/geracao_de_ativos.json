@@ -262,7 +262,7 @@
           "params": {
             "animation_prompt": "subtle breathing motion, seamless loop, character is mostly still",
             "prompt_details": {
-              "action": "PROF mascot in friendly pose, standing still with book under arm, performing subtle and continuous natural breathing movement, chest expanding and contracting gently, perfect and imperceptible loop, character mostly static except for breathing, educational cartoon style for children",
+              "action": "PROF mascot standing in friendly pose with book under arm, chest expanding and contracting gently in breathing movement, body mostly still except for subtle rise and fall of chest, eyes blinking occasionally",
               "objects_location": "book under arm"
             },
             "remove_background": false
@@ -275,7 +275,7 @@
           "params": {
             "animation_prompt": "a happy jump with a little squash and stretch",
             "prompt_details": {
-              "action": "PROF mascot performing a joyful and expressive jump with smooth squash and stretch, starting from a crouched preparatory pose, propelling with contagious childlike energy, arms open in celebration during jump, landing with slight elastic compression, radiant smile throughout movement, fluid animation suitable for children 7-11 years, optional loop",
+              "action": "PROF mascot crouching down, then jumping upward with arms spread wide open, body stretching vertically during ascent, compressing slightly upon landing, wide smile on face, eyes closed in joy during jump peak",
               "objects_location": "nearby"
             },
             "remove_background": false
@@ -288,7 +288,7 @@
           "params": {
             "animation_prompt": "a friendly wave to the user",
             "prompt_details": {
-              "action": "PROF mascot waving friendly to the user with one raised arm, smooth and welcoming movement, warm smile, gaze directed forward establishing visual connection, fluid 2-3 second animation with natural loop, educational cartoon style appropriate for children",
+              "action": "PROF mascot raising right arm, hand moving side to side in waving motion, warm smile on face, eyes looking forward making eye contact, left arm relaxed at side, slight head tilt accompanying the wave",
               "objects_location": "nearby"
             },
             "remove_background": false
@@ -301,7 +301,7 @@
           "params": {
             "animation_prompt": "tapping chin thoughtfully, a lightbulb appears and glows above head",
             "prompt_details": {
-              "action": "PROF mascot tapping chin thoughtfully with curious and concentrated expression, eyes slightly looking upward, then a bright yellow lightbulb magically appears above head with 'eureka' effect, glowing and pulsing softly to indicate a brilliant idea, fluid and educational animation suitable for children",
+              "action": "PROF mascot with hand on chin, index finger tapping, eyes looking upward, eyebrows slightly furrowed in concentration, then a bright yellow lightbulb appearing above head, lightbulb glowing and pulsing with soft light rays emanating outward",
               "objects_location": "nearby"
             },
             "remove_background": false
@@ -314,7 +314,7 @@
           "params": {
             "animation_prompt": "jumping for joy, with confetti exploding around",
             "prompt_details": {
-              "action": "PROF mascot jumping for joy with arms wide open, colorful confetti exploding around in celebration, energetic and expressive movement, radiant smile, fluid animation suitable for children, friendly and educational cartoon style",
+              "action": "PROF mascot jumping high with both arms raised above head, legs bent during jump, huge smile showing teeth, eyes squeezed shut in happiness, multicolored confetti pieces falling around the character, body slightly tilted backward in enthusiastic pose",
               "objects_location": "nearby"
             },
             "remove_background": false
@@ -647,9 +647,10 @@
             "animation_type": "feedback",
             "style": "ripple",
             "duration": 0.5,
-            "loop": false
+            "loop": false,
+            "prompt": "Touch feedback ripple effect for children's educational app: circular expanding waves emanating from touch point, soft pastel colors (light blue or purple), smooth material design inspired animation, gentle opacity fade from center to edges, child-friendly visual feedback, 0.5 second duration"
           },
-          "description": "Ripple"
+          "description": "Touch ripple effect - circular expanding waves for button feedback"
         },
         {
           "id": "FBK-02",
@@ -658,9 +659,10 @@
             "animation_type": "feedback",
             "style": "checkmark",
             "duration": 1.0,
-            "loop": false
+            "loop": false,
+            "prompt": "Success checkmark animation for children's educational app: green checkmark drawing itself from left to right, bouncy elastic finish, surrounded by small celebratory sparkles or stars, cheerful and encouraging design, smooth stroke animation with rounded edges, 1 second total duration"
           },
-          "description": "Checkmark"
+          "description": "Success checkmark - animated green check with celebratory sparkles"
         },
         {
           "id": "FBK-03",
@@ -669,9 +671,10 @@
             "animation_type": "feedback",
             "style": "shake",
             "duration": 0.5,
-            "loop": false
+            "loop": false,
+            "prompt": "Gentle error shake animation for children's educational app: subtle horizontal wiggle movement, small amplitude side-to-side motion, non-alarming and encouraging, red or orange tint overlay that fades, designed to indicate 'try again' without being discouraging, smooth easing, 0.5 second duration"
           },
-          "description": "Shake"
+          "description": "Error shake - gentle wiggle animation for incorrect answers"
         },
         {
           "id": "FBK-04",
@@ -680,9 +683,10 @@
             "animation_type": "feedback",
             "style": "pulse",
             "duration": 2.0,
-            "loop": true
+            "loop": true,
+            "prompt": "Hint pulse animation for children's educational app: glowing pulsating effect around UI element, soft breathing rhythm, warm yellow or light blue glow, expanding and contracting smoothly, draws attention without being distracting, perfect seamless loop, friendly visual hint indicator, 2 second loop duration"
           },
-          "description": "Pulse"
+          "description": "Hint pulse - glowing breathing effect for suggestions and tips"
         }
       ]
     },
@@ -695,11 +699,11 @@
           "id": "ICO-01",
           "tool": "svg_generator",
           "params": {
-            "prompt": "Icon of a camera for a educational kids educational app. Vectorized, cartoon, 3d, colorized.",
+            "prompt": "Icon of a camera for children's educational app. Vectorized, cartoon, 3d, colorized.",
             "size": "1024x1024",
             "aspect_ratio": "1:1"
           },
-          "description": "Camera Fun"
+          "description": "Fun camera icon for photo capture"
         },
         {
           "id": "ICO-02",
@@ -709,7 +713,7 @@
             "size": "1024x1024",
             "aspect_ratio": "1:1"
           },
-          "description": "Microphone Fun"
+          "description": "Colorful microphone icon with musical notes"
         },
         {
           "id": "ICO-03",
@@ -719,7 +723,7 @@
             "size": "1024x1024",
             "aspect_ratio": "1:1"
           },
-          "description": "History Fun"
+          "description": "Smiling clock icon for history/timeline"
         },
         {
           "id": "ICO-04",
@@ -729,7 +733,7 @@
             "size": "1024x1024",
             "aspect_ratio": "1:1"
           },
-          "description": "Achievements Fun"
+          "description": "Golden trophy icon with stars"
         },
         {
           "id": "ICO-05",
@@ -739,7 +743,7 @@
             "size": "1024x1024",
             "aspect_ratio": "1:1"
           },
-          "description": "Settings Fun"
+          "description": "Friendly gear icon for settings"
         },
         {
           "id": "ICO-06",
@@ -749,7 +753,7 @@
             "size": "1024x1024",
             "aspect_ratio": "1:1"
           },
-          "description": "Help Fun"
+          "description": "Helpful question mark character icon"
         }
       ]
     }
